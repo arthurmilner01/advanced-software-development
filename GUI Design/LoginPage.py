@@ -11,7 +11,7 @@ class App(Tk):
         self.configure(bg="#181818")
         self.style = ttk.Style(self)
         self.style.configure('TLabel', font=('Helvetica bold', 15), background="#181818", foreground="#b3b3b3")
-        self.style.configure('TButton', font=("Helvetica bold", 10),foreground="#121212")
+        self.style.configure('TButton', font=("Helvetica bold", 10),foreground="#121212", height=40, width=25)
         self.rowconfigure(0, weight=1)
         self.rowconfigure(5, weight=1)
         self.columnconfigure(0, weight=1)
