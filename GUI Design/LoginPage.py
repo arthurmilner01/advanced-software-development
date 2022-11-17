@@ -5,7 +5,7 @@ from tkinter import ttk
 class App(Tk):
     def __init__(self):
         super().__init__()
-        self.geometry("1000x500")
+        self.geometry("1366x768")
         self.title("Login")
         self.resizable(0,0)
         self.configure(bg="#181818")
