@@ -1,7 +1,6 @@
 from tkinter import *
 from tkinter import ttk
 
-
 class App(Tk):
     def __init__(self):
         super().__init__()
@@ -34,12 +33,11 @@ class App(Tk):
     def login(self, username, password, username_entry, password_entry):
         username_entry.configure(foreground="red")
         password_entry.configure(foreground="red")
-        failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue. If you are an admin who has forgotten their password please contact a manager immediately.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
-
+        failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue.")
 
 
 
 
 if __name__ == "__main__":
-    app = App()    
+    app = App()
     app.mainloop()
