@@ -49,7 +49,7 @@ class BookingStaffLoginFrame(ttk.Frame):
         username_entry.configure(foreground="red")
         password_entry.configure(foreground="red")
         failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
-        homeFrame.place(height=768, width=1366)
+        homeFrame.tkraise()
 
 class HomeFrame(ttk.Frame):
     def __init__(self, container):
@@ -87,4 +87,6 @@ if __name__ == "__main__":
     bookingStaffLoginFrame = BookingStaffLoginFrame(app)
     homeFrame = HomeFrame(app)
     bookingStaffLoginFrame.place(height=768, width=1366)
+    homeFrame.place(height=768, width=1366)
+    bookingStaffLoginFrame.tkraise()
     app.mainloop()
