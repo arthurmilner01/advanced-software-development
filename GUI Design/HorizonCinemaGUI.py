@@ -1,8 +1,8 @@
-from tkinter import *
+import tkinter as tk
 from tkinter import ttk
 
 
-class App(Tk):
+class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Horizon Cinema Booking System")
@@ -15,7 +15,7 @@ class App(Tk):
         self.style.configure('TFrame', font=('Helvetica bold', 15), background="#181818", foreground="#b3b3b3")
         try:
             self.attributes('-toolwindow', True)
-        except TclError:
+        except tk.TclError:
             print("Windows Only")
 
 
@@ -30,18 +30,18 @@ class BookingStaffLoginFrame(ttk.Frame):
         self.__createWidgets()
 
     def __createWidgets(self):
-        username = StringVar()
-        password = StringVar()
+        username = tk.StringVar()
+        password = tk.StringVar()
         login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
         login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
         username_label = ttk.Label(self, text="Username:")
-        username_label.grid(column=0, row=1, padx=5, pady=5, sticky=E)
+        username_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
         username_entry = ttk.Entry(self, textvariable=username)
-        username_entry.grid(column=1, row=1, padx=10, pady=10, sticky=W)
+        username_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
         password_label = ttk.Label(self, text="Password:")
-        password_label.grid(column=0, row=2, padx=5, pady=5, sticky=E)
+        password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
         password_entry = ttk.Entry(self, textvariable=password, show="*")
-        password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=W)
+        password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
         login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(username, password, username_entry, password_entry))
         login_button.grid(columnspan=2, row=3, padx=10, pady=10)
     
@@ -66,21 +66,21 @@ class HomeFrame(ttk.Frame):
         current_user_label = ttk.Label(self, text="Staff Name [Staff Type]", font=('Helvetica bold', 15))
         current_user_label.grid(column=0,row=2)
         listings_button = ttk.Button(self, text="View Film Listings")
-        listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=W)
+        listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
         create_booking_button = ttk.Button(self, text="Create Booking")
         create_booking_button.grid(column=2, row=1, padx=10, pady=20)
         cancel_booking_button = ttk.Button(self, text="Cancel Booking")
         cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
         generate_report_button = ttk.Button(self, text="Generate Report")
-        generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=E)
+        generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
         view_booking_staff_button = ttk.Button(self, text="View Booking Staff")
-        view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=W)
+        view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
         view_admin_button = ttk.Button(self, text="View Admin Staff")
         view_admin_button.grid(column=2, row=2, padx=10, pady=20)
         view_cinema_button = ttk.Button(self, text="View Cinemas")
         view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
         view_film_button = ttk.Button(self, text="View Film")
-        view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=E)
+        view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
 
 if __name__ == "__main__":
     app = App()
