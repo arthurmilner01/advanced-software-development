@@ -18,6 +18,7 @@ class App(tk.Tk):
         except tk.TclError:
             print("Windows Only")
 
+        # Creating all the frames, inserting them into a dictionary for access later
         self.frames = {}
 
         for F in (BookingStaffLoginFrame, HomeFrame, SelectLoginTypePage, AdminLoginFrame, ManagerLoginFrame):
@@ -25,13 +26,12 @@ class App(tk.Tk):
             frame = F(self)
             self.frames[frameName] = frame
 
-            # put all of the pages in the same location;
-            # the one on the top of the stacking order
-            # will be the one that is visible.
+            #Placing each frame so that they are ready to be used with tkraise as appropriate
             frame.place(height=768, width=1366)
 
         self.showFrame("SelectLoginTypePage")
 
+    # Function which will raise the given frame to the front of the GUI
     def showFrame(self, frameName):
         frame = self.frames[frameName]
         frame.tkraise()

@@ -3,6 +3,8 @@ from DatabaseAccess import *
 cur = getCursor()
 conn = getConn()
 
+
+
 # Dropping tables if they exist
 cur.execute('''
 DROP TABLE if exists BookingStaff
@@ -19,6 +21,16 @@ DROP TABLE if exists Manager
 cur.execute('''
 DROP TABLE if exists Bookings
 ''')
+
+cur.execute('''
+DROP TABLE if exists Films
+''')
+
+cur.execute('''
+DROP TABLE if exists FilmScreenings
+''')
+
+
 
 # Creating tables
 cur.execute('''
@@ -42,3 +54,16 @@ CREATE TABLE Bookings
 price REAL NOT NULL, customer_name varchar(120) NOT NULL, customer_email varchar(120) NOT NULL, 
 customer_phone INTEGER NOT NULL, number_of_tickets INTEGER NOT NULL)
 ''')
+
+cur.execute('''
+CREATE TABLE Films
+(filmID INTEGER PRIMARY KEY, film_name varchar(120) NOT NULL, film_description varchar(120) NOT NULL, 
+film_actors varchar(120) NOT NULL, film_genre varchar(120) NOT NULL, film_age INTEGER NOT NULL, film_rating REAL NOT NULL)
+''')
+
+cur.execute('''
+CREATE TABLE FilmScreenings
+(screeningID INTEGER PRIMARY KEY, screening_time varchar(120) NOT NULL, screening_screen INTEGER NOT NULL, film_name varchar(120) NOT NULL, 
+lower_hall_tickets_left INTEGER NOT NULL, upper_hall_tickets_left INTEGER NOT NULL, VIP_tickets_left INTEGER NOT NULL)
+''')
+
