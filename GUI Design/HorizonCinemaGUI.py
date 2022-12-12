@@ -18,6 +18,23 @@ class App(tk.Tk):
         except tk.TclError:
             print("Windows Only")
 
+        self.frames = {}
+
+        for F in (BookingStaffLoginFrame, HomeFrame, SelectLoginTypePage, AdminLoginFrame, ManagerLoginFrame):
+            frameName = F.__name__
+            frame = F(self)
+            self.frames[frameName] = frame
+
+            # put all of the pages in the same location;
+            # the one on the top of the stacking order
+            # will be the one that is visible.
+            frame.place(height=768, width=1366)
+
+        self.showFrame("SelectLoginTypePage")
+
+    def showFrame(self, frameName):
+        frame = self.frames[frameName]
+        frame.tkraise()
 
 class BookingStaffLoginFrame(ttk.Frame):
     def __init__(self, container):
@@ -30,26 +47,90 @@ class BookingStaffLoginFrame(ttk.Frame):
         self.__createWidgets()
 
     def __createWidgets(self):
-        username = tk.StringVar()
+        email = tk.StringVar()
         password = tk.StringVar()
         login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
         login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
-        username_label = ttk.Label(self, text="Username:")
-        username_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
-        username_entry = ttk.Entry(self, textvariable=username)
-        username_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
+        email_label = ttk.Label(self, text="Username:")
+        email_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
+        email_entry = ttk.Entry(self, textvariable=email)
+        email_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
         password_label = ttk.Label(self, text="Password:")
         password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
         password_entry = ttk.Entry(self, textvariable=password, show="*")
         password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
-        login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(username, password, username_entry, password_entry))
+        login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(email, password, email_entry, password_entry))
         login_button.grid(columnspan=2, row=3, padx=10, pady=10)
     
-    def validateLogin(self, username, password, username_entry, password_entry):
-        username_entry.configure(foreground="red")
+    def validateLogin(self, email, password, email_entry, password_entry):
+        email_entry.configure(foreground="red")
         password_entry.configure(foreground="red")
         failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
-        homeFrame.tkraise()
+        app.showFrame("HomeFrame")
+
+class AdminLoginFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(5, weight=1)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+
+        self.__createWidgets()
+
+    def __createWidgets(self):
+        email = tk.StringVar()
+        password = tk.StringVar()
+        login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
+        login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
+        email_label = ttk.Label(self, text="Username:")
+        email_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
+        email_entry = ttk.Entry(self, textvariable=email)
+        email_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
+        password_label = ttk.Label(self, text="Password:")
+        password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
+        password_entry = ttk.Entry(self, textvariable=password, show="*")
+        password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
+        login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(email, password, email_entry, password_entry))
+        login_button.grid(columnspan=2, row=3, padx=10, pady=10)
+    
+    def validateLogin(self, email, password, email_entry, password_entry):
+        email_entry.configure(foreground="red")
+        password_entry.configure(foreground="red")
+        failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
+        app.showFrame("HomeFrame")
+
+class ManagerLoginFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(5, weight=1)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(1, weight=1)
+
+        self.__createWidgets()
+
+    def __createWidgets(self):
+        email = tk.StringVar()
+        password = tk.StringVar()
+        login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
+        login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
+        email_label = ttk.Label(self, text="Username:")
+        email_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
+        email_entry = ttk.Entry(self, textvariable=email)
+        email_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
+        password_label = ttk.Label(self, text="Password:")
+        password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
+        password_entry = ttk.Entry(self, textvariable=password, show="*")
+        password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
+        login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(email, password, email_entry, password_entry))
+        login_button.grid(columnspan=2, row=3, padx=10, pady=10)
+    
+    def validateLogin(self, email, password, email_entry, password_entry):
+        email_entry.configure(foreground="red")
+        password_entry.configure(foreground="red")
+        failed_login_label = ttk.Label(self, text="Incorrect details, perhaps you meant to login as admin/booking staff? If not please contact your software provider.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
+        app.showFrame("HomeFrame")
 
 class HomeFrame(ttk.Frame):
     def __init__(self, container):
@@ -82,11 +163,26 @@ class HomeFrame(ttk.Frame):
         view_film_button = ttk.Button(self, text="View Film")
         view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
 
+class SelectLoginTypePage(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(5, weight=1)
+        self.columnconfigure(0, weight=1)
+        self.columnconfigure(2, weight=1)
+        self.__createWidgets()
+
+    def __createWidgets(self):
+        title_label = ttk.Label(self, text="Please Select User Type:", font=('Helvetica bold', 15))
+        title_label.grid(column=1,row=1)
+        booking_staff_login_button = ttk.Button(self, command=lambda : app.showFrame("BookingStaffLoginFrame"), text="Booking Staff")
+        booking_staff_login_button.grid(column=1, row=2, padx=10, pady=20)
+        admin_login_button = ttk.Button(self, command=lambda : app.showFrame("AdminLoginFrame"), text="Admin")
+        admin_login_button.grid(column=1, row=3, padx=10, pady=20)
+        manager_login_button = ttk.Button(self, command=lambda : app.showFrame("ManagerLoginFrame"), text="Manager")
+        manager_login_button.grid(column=1, row=4, padx=10, pady=20)
+
+
 if __name__ == "__main__":
     app = App()
-    bookingStaffLoginFrame = BookingStaffLoginFrame(app)
-    homeFrame = HomeFrame(app)
-    bookingStaffLoginFrame.place(height=768, width=1366)
-    homeFrame.place(height=768, width=1366)
-    bookingStaffLoginFrame.tkraise()
     app.mainloop()
