@@ -397,7 +397,8 @@ class GenerateReportFrame(ttk.Frame):
         report_parameter_label.grid(row=2, column=0, pady=10, padx=10)
         report_parameter_entry = ttk.Entry(content, textvariable=reportParameter)
         report_parameter_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
-        # TODO: ADD A PLACE TO DISPLAY RESULTS OF GENERATING REPORTS, LIST BOX MAYBE?
+        # TODO: ADD A PLACE TO DISPLAY RESULTS OF GENERATING REPORTS, SIDE BY SIDE LIST BOXES MAYBE?
+        
         
 
 
