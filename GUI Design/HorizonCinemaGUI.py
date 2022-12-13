@@ -382,22 +382,35 @@ class GenerateReportFrame(ttk.Frame):
         content.grid(row=1)
         reportType = tk.StringVar()
         reportParameter = tk.StringVar()
+        filler_label = ttk.Label(content, text="""
+        
+        
+        
+        
+        
+        """)
+        filler_label.grid(row=0, column=0)
         report_information_label = ttk.Label(content, text="""
         Report ID 1: List of Staff and The Number of Bookings They Have Created for the Month. (Parameter = Desired Month)
         Report ID 2: Number of Bookings for a Screening. (Parameter: Screening ID)
         Report ID 3: Total Monthly Revenue for Each Cinema. (Parameter: N/A)
         Report ID 4: Film Generating the Most Revenue.
         """, font=('Helvetica bold', 10))
-        report_information_label.grid(row=0, column=0, columnspan=3, sticky=tk.N)
+        report_information_label.grid(row=1, column=0, columnspan=3, sticky=tk.N)
         generate_report_label = ttk.Label(content, text="Enter Report ID:")
-        generate_report_label.grid(row=1, column=0, pady=10, padx=10)
+        generate_report_label.grid(row=2, column=0, pady=10, padx=10)
         generate_report_entry = ttk.Entry(content, textvariable=reportType)
-        generate_report_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+        generate_report_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
         report_parameter_label = ttk.Label(content, text="Enter Report Parameter:")
-        report_parameter_label.grid(row=2, column=0, pady=10, padx=10)
+        report_parameter_label.grid(row=3, column=0, pady=10, padx=10)
         report_parameter_entry = ttk.Entry(content, textvariable=reportParameter)
-        report_parameter_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
-        # TODO: ADD A PLACE TO DISPLAY RESULTS OF GENERATING REPORTS, SIDE BY SIDE LIST BOXES MAYBE?
+        report_parameter_entry.grid(row=3, column=1, columnspan=2, padx=10, pady=10)
+        generate_report_button = ttk.Button(content, text="Generate Report")
+        generate_report_button.grid(row=4, column=0, columnspan=3)
+        report_listbox = tk.Listbox(self)
+        report_listbox.place(height=200, width=200, x=500, y=200)
+        report_listbox1 = tk.Listbox(self)
+        report_listbox1.place(height=200, width=200, x=700, y=200)
         
         
 
