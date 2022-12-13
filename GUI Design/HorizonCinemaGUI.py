@@ -22,7 +22,7 @@ class App(tk.Tk):
         # Creating all the frames, inserting them into a dictionary for access later
         self.frames = {}
 
-        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame):
+        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame):
             frameName = F.__name__
             frame = F(self)
             self.frames[frameName] = frame
@@ -103,7 +103,7 @@ class HomeFrame(ttk.Frame):
         view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
         view_screenings_button = ttk.Button(self, text="View Cinema Screenings")
         view_screenings_button.grid(column=1, row=3, padx=10, pady=20, sticky=tk.W)
-        generate_report_button = ttk.Button(self, text="Generate Report")
+        generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
         generate_report_button.grid(column=2, row=3, padx=10, pady=20)
         logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
         logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
@@ -354,6 +354,51 @@ class ViewCinemasFrame(ttk.Frame):
         city_evening_price_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
         add_city_button = ttk.Button(content, text="Add City")
         add_city_button.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
+
+class GenerateReportFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=10)
+        self.columnconfigure(0, weight=1)
+        self.__createHeaderWithWidgets()
+        self.__createContentWithWidgets()
+        
+    
+    def __createHeaderWithWidgets(self):
+        header = ttk.Frame(self)
+        header.grid(row=0)
+        current_page_label = ttk.Label(header, text="Generate Report", font=('Helvetica bold', 20))
+        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+
+    def __createContentWithWidgets(self):
+        content = ttk.Frame(self)
+        content.grid(row=1)
+        reportType = tk.StringVar()
+        reportParameter = tk.StringVar()
+        report_information_label = ttk.Label(content, text="""
+        Report ID 1: List of Staff and The Number of Bookings They Have Created for the Month. (Parameter = Desired Month)
+        Report ID 2: Number of Bookings for a Screening. (Parameter: Screening ID)
+        Report ID 3: Total Monthly Revenue for Each Cinema. (Parameter: N/A)
+        Report ID 4: Film Generating the Most Revenue.
+        """, font=('Helvetica bold', 10))
+        report_information_label.grid(row=0, column=0, columnspan=3, sticky=tk.N)
+        generate_report_label = ttk.Label(content, text="Enter Report ID:")
+        generate_report_label.grid(row=1, column=0, pady=10, padx=10)
+        generate_report_entry = ttk.Entry(content, textvariable=reportType)
+        generate_report_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+        report_parameter_label = ttk.Label(content, text="Enter Report Parameter:")
+        report_parameter_label.grid(row=2, column=0, pady=10, padx=10)
+        report_parameter_entry = ttk.Entry(content, textvariable=reportParameter)
+        report_parameter_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
+        # TODO: ADD A PLACE TO DISPLAY RESULTS OF GENERATING REPORTS, LIST BOX MAYBE?
+        
 
 
 
