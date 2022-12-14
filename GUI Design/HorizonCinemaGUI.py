@@ -27,7 +27,7 @@ class App(tk.Tk):
             frame = F(self)
             self.frames[frameName] = frame
 
-            #Placing each frame so that they are ready to be used with tkraise as appropriate
+            #Placing each frame at the same size so that they are ready to be used with tkraise as appropriate
             frame.place(height=768, width=1366)
 
         self.showFrame("LoginFrame")
