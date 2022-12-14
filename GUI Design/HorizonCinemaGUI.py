@@ -22,7 +22,7 @@ class App(tk.Tk):
         # Creating all the frames, inserting them into a dictionary for access later
         self.frames = {}
 
-        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame):
+        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame, ViewFilmListingsFrame):
             frameName = F.__name__
             frame = F(self)
             self.frames[frameName] = frame
@@ -85,13 +85,13 @@ class HomeFrame(ttk.Frame):
         horizon_cinema_label.grid(column=0,row=1)
         current_user_label = ttk.Label(self, text="Staff Name [Staff Type]", font=('Helvetica bold', 15))
         current_user_label.grid(column=0,row=2)
-        listings_button = ttk.Button(self, text="View Film Listings")
+        listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Film Listings")
         listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
         create_booking_button = ttk.Button(self, text="Create Booking")
         create_booking_button.grid(column=2, row=1, padx=10, pady=20)
         cancel_booking_button = ttk.Button(self, text="Cancel Booking")
         cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
-        generate_report_button = ttk.Button(self, text="Generate Report")
+        generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
         generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
         view_booking_staff_button = ttk.Button(self, command=lambda : app.showFrame("ViewBookingStaffFrame"), text="View Booking Staff")
         view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
@@ -103,8 +103,6 @@ class HomeFrame(ttk.Frame):
         view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
         view_screenings_button = ttk.Button(self, text="View Cinema Screenings")
         view_screenings_button.grid(column=1, row=3, padx=10, pady=20, sticky=tk.W)
-        generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
-        generate_report_button.grid(column=2, row=3, padx=10, pady=20)
         logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
         logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
 
@@ -291,6 +289,13 @@ class ViewFilmFrame(ttk.Frame):
         search_title_entry.grid(row=9, column=2, columnspan=2, pady=20, padx=10)
         search_title_button = ttk.Button(content, text="Search")
         search_title_button.grid(row=10, column=0, columnspan=3, pady=10, padx=10)
+        text_fill_label = ttk.Label(content, text="""
+        
+
+
+
+        """)
+        text_fill_label.grid(row=11, column=0, columnspan=3)
 
 class ViewCinemasFrame(ttk.Frame):
     def __init__(self, container):
@@ -413,8 +418,64 @@ class GenerateReportFrame(ttk.Frame):
         report_listbox1.place(height=200, width=200, x=700, y=200)
         
         
+class ViewFilmListingsFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=10)
+        self.columnconfigure(0, weight=1)
+        self.__createHeaderWithWidgets()
+        self.__createContentWithWidgets()
+        
+    
+    def __createHeaderWithWidgets(self):
+        header = ttk.Frame(self)
+        header.grid(row=0)
+        current_page_label = ttk.Label(header, text="View Film Listings", font=('Helvetica bold', 20))
+        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+
+    def __createContentWithWidgets(self):
+        content = ttk.Frame(self)
+        content.grid(row=1)
+        filmName = tk.StringVar()
+        cinemaName = tk.StringVar()
+  
+        film_name_label = ttk.Label(content, text="Film Name:")
+        film_name_label.grid(row=0, column=0, padx=10, pady=10)
+        film_name_entry = ttk.Entry(content, textvariable=filmName)
+        film_name_entry.grid(row=0, column=1, columnspan=2, padx=10, pady=10)
+        cinema_name_label = ttk.Label(content, text="Cinema Name:")
+        cinema_name_label.grid(row=1, column=0, padx=10, pady=10)
+        cinema_name_entry = ttk.Entry(content, textvariable=cinemaName)
+        cinema_name_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+
+        show_listings_button = ttk.Button(content, text="Show Listings")
+        show_listings_button.grid(row=2, column=0, columnspan=3)
+        text_fill_label = ttk.Label(content, text="""
+        
 
 
+
+
+
+
+        
+
+
+        """)
+        text_fill_label.grid(row=3, column=0, columnspan=3)
+        listings_listbox = tk.Listbox(self)
+        listings_listbox.place(height=300, width=200, x=200, y=400)
+        listings_listbox1 = tk.Listbox(self)
+        listings_listbox1.place(height=300, width=200, x=400, y=400)
+        listings_listbox2 = tk.Listbox(self)
+        listings_listbox2.place(height=300, width=500, x=600, y=400)
 
 if __name__ == "__main__":
     app = App()
