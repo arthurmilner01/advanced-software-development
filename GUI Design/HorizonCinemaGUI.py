@@ -22,7 +22,7 @@ class App(tk.Tk):
         # Creating all the frames, inserting them into a dictionary for access later
         self.frames = {}
 
-        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame, ViewFilmListingsFrame):
+        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame, ViewFilmListingsFrame, CreateBookingFrame):
             frameName = F.__name__
             frame = F(self)
             self.frames[frameName] = frame
@@ -87,7 +87,7 @@ class HomeFrame(ttk.Frame):
         current_user_label.grid(column=0,row=2)
         listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Film Listings")
         listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
-        create_booking_button = ttk.Button(self, text="Create Booking")
+        create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
         create_booking_button.grid(column=2, row=1, padx=10, pady=20)
         cancel_booking_button = ttk.Button(self, text="Cancel Booking")
         cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
@@ -476,6 +476,80 @@ class ViewFilmListingsFrame(ttk.Frame):
         listings_listbox1.place(height=300, width=200, x=400, y=400)
         listings_listbox2 = tk.Listbox(self)
         listings_listbox2.place(height=300, width=500, x=600, y=400)
+
+class CreateBookingFrame(ttk.Frame):
+    def __init__(self, container):
+        super().__init__(container)
+        self.rowconfigure(0, weight=1)
+        self.rowconfigure(1, weight=10)
+        self.columnconfigure(0, weight=1)
+        self.__createHeaderWithWidgets()
+        self.__createContentWithWidgets()
+        
+    
+    def __createHeaderWithWidgets(self):
+        header = ttk.Frame(self)
+        header.grid(row=0)
+        current_page_label = ttk.Label(header, text="Create Booking", font=('Helvetica bold', 20))
+        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+
+    def __createContentWithWidgets(self):
+        content = ttk.Frame(self)
+        content.grid(row=1)
+        bookingDate = tk.StringVar()
+        bookingFilm = tk.StringVar()
+        bookingShowing = tk.StringVar()
+        bookingNumOfTickets = tk.IntVar()
+        bookingCustomerName = tk.StringVar()
+        bookingCustomerPhone = tk.StringVar()
+        bookingCustomerCardNum = tk.IntVar()
+        bookingCustomerExpiry = tk.StringVar()
+        bookingCustomerCVV = tk.IntVar()
+
+        # TODO: WHEN GETTING OPTIONS FROM DATABASE/CLASSES
+        # TODO: PUT RESULT OF FETCH IN LIST AND USE LIST AS OPTIONS
+        # TODO: WHEN ONE COMBOBOX CHANGES UPDATE OTHER COMBO BOX OPTIONS ACCORDINGLY
+        dates = ('15/05/2000', '15/02/2001', '20/07/1990') 
+        select_date_label = ttk.Label(content, text="Select Date:")
+        select_date_label.grid(row=0, column=0, padx=5, pady=5)
+        select_date_combobox = ttk.Combobox(content, textvariable=bookingDate)
+        select_date_combobox.grid(row=0, column=1, padx=5, pady=5)
+        select_date_combobox['values'] = dates
+        select_date_combobox['state'] = 'readonly'
+
+        films = ('Film1', 'Film2', 'Film3')
+        select_film_label = ttk.Label(content, text="Select Film:")
+        select_film_label.grid(row=0, column=2, padx=10, pady=5)
+        select_film_combobox = ttk.Combobox(content, textvariable=bookingFilm)
+        select_film_combobox.grid(row=0, column=3, padx=5, pady=5)
+        select_film_combobox['values'] = films
+        select_film_combobox['state'] = 'readonly'
+
+        showings = ('Showing1', 'Showing2', 'Showing3')
+        select_showing_label = ttk.Label(content, text="Select Showing:")
+        select_showing_label.grid(row=0, column=4, padx=10, pady=5)
+        select_showing_combobox = ttk.Combobox(content, textvariable=bookingShowing)
+        select_showing_combobox.grid(row=0, column=5, padx=5, pady=5)
+        select_showing_combobox['values'] = showings
+        select_showing_combobox['state'] = 'readonly'
+
+        select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
+        select_ticket_type_label.grid(row=1, column=0, padx=5, pady=5)
+        lower_hall_ticket_radio_button = ttk.Radiobutton(content, text="Lower Hall", variable="Lower Hall")
+        lower_hall_ticket_radio_button.grid(row=1, column=1, pady=5)
+        upper_hall_ticket_radio_button = ttk.Radiobutton(content, text="Upper Hall", variable="Upper Hall")
+        upper_hall_ticket_radio_button.grid(row=1, column=2, pady=5)
+        VIP_ticket_radio_button = ttk.Radiobutton(content, text="VIP", variable="VIP")
+        VIP_ticket_radio_button.grid(row=1, column=3, pady=5)
+
+        # TODO: CHECK AVAILABILITY / PRICE BUTTON
+
 
 if __name__ == "__main__":
     app = App()
