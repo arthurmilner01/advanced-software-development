@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb
 
+# TODO: ADD VIEW CINEMAS FRAME
+
 
 class App(tk.Tk):
     def __init__(self):
@@ -22,7 +24,7 @@ class App(tk.Tk):
         # Creating all the frames, inserting them into a dictionary for access later
         self.frames = {}
 
-        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, ViewCinemasFrame, GenerateReportFrame, ViewFilmListingsFrame, CreateBookingFrame, CancelBookingFrame, ViewCinemaScreeningsFrame):
+        for F in (LoginFrame, HomeFrame, ViewBookingStaffFrame, ViewAdminFrame, ViewFilmFrame, AddCinemasFrame, GenerateReportFrame, ViewFilmListingsFrame, CreateBookingFrame, CancelBookingFrame, ViewCinemaScreeningsFrame):
             frameName = F.__name__
             frame = F(self)
             self.frames[frameName] = frame
@@ -97,7 +99,7 @@ class HomeFrame(ttk.Frame):
         view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
         view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
         view_admin_button.grid(column=2, row=2, padx=10, pady=20)
-        view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("ViewCinemasFrame"), text="View Cinemas")
+        view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
         view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
         view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
         view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
@@ -297,7 +299,7 @@ class ViewFilmFrame(ttk.Frame):
         """)
         text_fill_label.grid(row=11, column=0, columnspan=3)
 
-class ViewCinemasFrame(ttk.Frame):
+class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):
         super().__init__(container)
         self.rowconfigure(0, weight=1)
@@ -310,7 +312,7 @@ class ViewCinemasFrame(ttk.Frame):
     def __createHeaderWithWidgets(self):
         header = ttk.Frame(self)
         header.grid(row=0)
-        current_page_label = ttk.Label(header, text="View Cinemas", font=('Helvetica bold', 20))
+        current_page_label = ttk.Label(header, text="Add Cinema/City", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
         staff_name_label = ttk.Label(header, text="Staff Name:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
@@ -322,7 +324,6 @@ class ViewCinemasFrame(ttk.Frame):
     def __createContentWithWidgets(self):
         content = ttk.Frame(self)
         content.grid(row=1)
-        email = tk.StringVar()
         cinemaCity = tk.StringVar()
         cinemaName = tk.StringVar()
         addCityName = tk.StringVar()
