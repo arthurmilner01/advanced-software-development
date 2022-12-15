@@ -30,22 +30,34 @@ cur.execute('''
 DROP TABLE if exists FilmScreenings
 ''')
 
+cur.execute('''
+DROP TABLE if exists CinemaScreens
+''')
+
+cur.execute('''
+DROP TABLE if exists Cinemas
+''')
+
+cur.execute('''
+DROP TABLE if exists Cities
+''')
+
 
 
 # Creating tables
 cur.execute('''
 CREATE TABLE BookingStaff
-(email varchar(120) PRIMARY KEY, password varchar(120) NOT NULL, cinema_name varchar(120) NOT NULL)
+(booking_staffID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL, cinema_name varchar(120) NOT NULL)
 ''')
 
 cur.execute('''
 CREATE TABLE Admin
-(email varchar(120) PRIMARY KEY, password varchar(120) NOT NULL)
+(adminID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL)
 ''')
 
 cur.execute('''
 CREATE TABLE Manager
-(email varchar(120) PRIMARY KEY, password varchar(120) NOT NULL)
+(managerID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL)
 ''')
 
 cur.execute('''
@@ -67,3 +79,23 @@ CREATE TABLE FilmScreenings
 lower_hall_tickets_left INTEGER NOT NULL, upper_hall_tickets_left INTEGER NOT NULL, VIP_tickets_left INTEGER NOT NULL)
 ''')
 
+cur.execute('''
+CREATE TABLE CinemaScreens
+(cinema_screenID INTEGER PRIMARY KEY, lower_hall_capacity INTEGER, upper_hall_capacity INTEGER, VIP_capacity INTEGER)
+''')
+
+cur.execute('''
+CREATE TABLE Cinemas
+(cinemaID INTEGER PRIMARY KEY, cinema_name varchar(120), city_name varchar(120))
+''')
+
+cur.execute('''
+CREATE TABLE Cities
+(cityID INTERGER PRIMARY KEY, city_name varchar(120), morning_price REAL, afternoon_price REAL, evening_price REAL)
+''')
+
+# Insert mock data
+cur.execute('''
+INSERT INTO BookingStaff(email, password, cinema_name)
+VALUES ('arthur@gmail.com', '123', 'Cabot Circus')
+''')
