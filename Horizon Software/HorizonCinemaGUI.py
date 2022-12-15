@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb
 
-# TODO: ADD VIEW CINEMAS FRAME
+# TODO: ADD VIEW CINEMAS FRAME FOR BOTH MANAGER AND ADMIN VIEW
 
 
 class App(tk.Tk):
