@@ -2,9 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb
 
-# TODO: ADD VIEW CINEMAS FRAME FOR BOTH MANAGER AND ADMIN VIEW
-
-
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -654,8 +651,6 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
     def __createContentWithWidgets(self):
         content = ttk.Frame(self)
         content.grid(row=1)
-        
-
 
 
 
