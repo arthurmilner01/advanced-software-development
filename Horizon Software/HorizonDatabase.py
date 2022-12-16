@@ -7,15 +7,7 @@ conn = getConn()
 
 # Dropping tables if they exist
 cur.execute('''
-DROP TABLE if exists BookingStaff
-''')
-
-cur.execute('''
-DROP TABLE if exists Admin
-''')
-
-cur.execute('''
-DROP TABLE if exists Manager
+DROP TABLE if exists Users
 ''')
 
 cur.execute('''
@@ -46,18 +38,8 @@ DROP TABLE if exists Cities
 
 # Creating tables
 cur.execute('''
-CREATE TABLE BookingStaff
-(booking_staffID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL, cinema_name varchar(120) NOT NULL)
-''')
-
-cur.execute('''
-CREATE TABLE Admin
-(adminID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL)
-''')
-
-cur.execute('''
-CREATE TABLE Manager
-(managerID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL)
+CREATE TABLE Users
+(userID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL, user_type INT NOT NULL)
 ''')
 
 cur.execute('''
@@ -96,8 +78,8 @@ CREATE TABLE Cities
 
 # Insert mock data
 cur.execute('''
-INSERT INTO BookingStaff(email, password, cinema_name)
-VALUES ('arthur@gmail.com', '123', 'Cabot Circus')
+INSERT INTO Users(email, password, user_type)
+VALUES ('arthur@gmail.com', '123', 0)
 ''')
 
 conn.commit()
