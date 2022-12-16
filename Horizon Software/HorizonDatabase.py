@@ -99,3 +99,5 @@ cur.execute('''
 INSERT INTO BookingStaff(email, password, cinema_name)
 VALUES ('arthur@gmail.com', '123', 'Cabot Circus')
 ''')
+
+conn.commit()
