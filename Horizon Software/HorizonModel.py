@@ -50,7 +50,7 @@ class LoginModel:
             return 0
 
     def checkAccountInDB(self, email, password):
-        query = 'SELECT email, password FROM BookingStaff WHERE email = ? AND password = ?'
+        query = 'SELECT email, password FROM Users WHERE email = ? AND password = ?'
         cur.execute(query, (email, password))
         record = cur.fetchall()
         if len(record) > 0:
