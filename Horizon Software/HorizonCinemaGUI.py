@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb
+from HorizonController import *
+from DatabaseAccess import *
 
 class App(tk.Tk):
     def __init__(self):
@@ -44,29 +46,68 @@ class LoginFrame(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
+        model = LoginModel
+        view = LoginFrame
+        controller = LoginController(model, view)
+
+        self.controller = controller
+        
+
         self.__createWidgets()
 
     def __createWidgets(self):
-        email = tk.StringVar()
-        password = tk.StringVar()
-        login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
-        login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
-        email_label = ttk.Label(self, text="Username:")
-        email_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
-        email_entry = ttk.Entry(self, textvariable=email)
-        email_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
-        password_label = ttk.Label(self, text="Password:")
-        password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
-        password_entry = ttk.Entry(self, textvariable=password, show="*")
-        password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
-        login_button = ttk.Button(self, text="Login", command=lambda : self.validateLogin(email, password, email_entry, password_entry))
-        login_button.grid(columnspan=2, row=3, padx=10, pady=10)
+        self.__email = tk.StringVar()
+        self.__password = tk.StringVar()
+
+        self.login_title_label = ttk.Label(self, text="Login", font=('Helvetica bold', 26), foreground="white")
+        self.login_title_label.grid(columnspan=3, row=0, padx=5, pady=5)
+
+        self.email_label = ttk.Label(self, text="Username:")
+        self.email_label.grid(column=0, row=1, padx=5, pady=5, sticky=tk.E)
+        self.email_entry = ttk.Entry(self, textvariable=self.__email)
+        self.email_entry.grid(column=1, row=1, padx=10, pady=10, sticky=tk.W)
+
+        self.password_label = ttk.Label(self, text="Password:")
+        self.password_label.grid(column=0, row=2, padx=5, pady=5, sticky=tk.E)
+        self.password_entry = ttk.Entry(self, textvariable=self.__password, show="*")
+        self.password_entry.grid(column=1, row=2, padx=10, pady=10, sticky=tk.W)
+
+        self.login_button = ttk.Button(self, text="Login", command=self.login)
+        self.login_button.grid(columnspan=2, row=3, padx=10, pady=10)
+
+        self.login_message = ttk.Label(self, text="               ")
+        self.login_message.grid(row=4, column=0, columnspan=2, padx=5, pady=5)
     
-    def validateLogin(self, email, password, email_entry, password_entry):
-        email_entry.configure(foreground="red")
-        password_entry.configure(foreground="red")
-        failed_login_label = ttk.Label(self, text="Forgotten your password? Please call over an admin to mediate this issue.", font=("Helvetica bold itallic", 8)).grid(columnspan=2, row=4, padx=10, pady=10)
+    def getEmail(self):
+        return self.__email
+
+    def getPassword(self):
+        return self.__password
+
+    def loginSuccess(self, message):
+        #Resetting entry fields and email and password variables
+        self.email_entry.delete(0, 'end')
+        self.password_entry.delete(0, 'end')
+        self.email_entry['foreground'] = 'black'
+        self.password_entry['foreground'] = 'black'
+        self.__email.set('')
+        self.__password.set('')
+        mb.showinfo(title="Logged In", message=message)
         app.showFrame("HomeFrame")
+    
+    def loginFailed(self, message):
+        self.login_message['text'] = message
+        self.login_message['foreground'] = 'red'
+        self.email_entry['foreground'] = 'red'
+        self.password_entry['foreground'] = 'red'
+        self.login_message.after(3000, self.hideLoginMessage)
+
+    def hideLoginMessage(self):
+        self.login_message['text'] = ''
+
+    def login(self):
+        if self.controller:
+            self.controller.login(self.__email.get(), self.__password.get())
 
 
 
