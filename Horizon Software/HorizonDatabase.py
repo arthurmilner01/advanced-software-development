@@ -79,7 +79,7 @@ CREATE TABLE Cities
 # Insert mock data
 cur.execute('''
 INSERT INTO Users(email, password, user_type)
-VALUES ('arthur@gmail.com', '123', 0)
+VALUES ('arthur@gmail.com', '12345', 0)
 ''')
 
 conn.commit()

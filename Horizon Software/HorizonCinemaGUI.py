@@ -37,6 +37,7 @@ class App(tk.Tk):
     def showFrame(self, frameName):
         frame = self.frames[frameName]
         frame.tkraise()
+    
 
 class LoginFrame(ttk.Frame):
     def __init__(self, container):
@@ -46,7 +47,7 @@ class LoginFrame(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
-        model = LoginModel
+        model = LoginModel()
         view = LoginFrame
         controller = LoginController(model, view)
 
