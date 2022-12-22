@@ -37,6 +37,10 @@ class App(tk.Tk):
     def showFrame(self, frameName):
         frame = self.frames[frameName]
         frame.tkraise()
+
+    def getFrame(self, frameName):
+        frame = self.frames[frameName]
+        return frame
     
 
 class LoginFrame(ttk.Frame):
@@ -47,11 +51,11 @@ class LoginFrame(ttk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
-        model = LoginModel()
-        view = LoginFrame
-        controller = LoginController(model, view)
-
-        self.controller = controller
+        self.model = LoginModel()
+        #TODO: MAKE IT PASS TO LOGIN FRAME CORRECTLY, SUSPECT THIS ISN'T SETTING CORRECTLY
+        #TODO: TRYING TO MAKE IT SET TO frames["LoginFrame"]
+        self.view =  self
+        self.controller = LoginController(self.model, self.view)
         
 
         self.__createWidgets()
