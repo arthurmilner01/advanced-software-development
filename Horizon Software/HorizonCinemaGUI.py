@@ -36,6 +36,7 @@ class App(tk.Tk):
     # Function which will raise the given frame to the front of the GUI
     def showFrame(self, frameName):
         frame = self.frames[frameName]
+        frame.createWidgets()
         frame.tkraise()
 
     def getFrame(self, frameName):
@@ -52,15 +53,13 @@ class LoginFrame(ttk.Frame):
         self.columnconfigure(1, weight=1)
 
         self.model = LoginModel()
-        #TODO: MAKE IT PASS TO LOGIN FRAME CORRECTLY, SUSPECT THIS ISN'T SETTING CORRECTLY
-        #TODO: TRYING TO MAKE IT SET TO frames["LoginFrame"]
         self.view =  self
         self.controller = LoginController(self.model, self.view)
         
 
-        self.__createWidgets()
+        # self.createWidgets()
 
-    def __createWidgets(self):
+    def createWidgets(self):
         self.__email = tk.StringVar()
         self.__password = tk.StringVar()
 
@@ -89,8 +88,14 @@ class LoginFrame(ttk.Frame):
     def getPassword(self):
         return self.__password
 
-    def loginSuccess(self, message):
+    def loginSuccess(self, message, userType, accountCinema):
         #Resetting entry fields and email and password variables
+        currentUser.setEmail(self.__email.get())
+        currentUser.setAccountType(userType)
+        if accountCinema != None:
+            currentUser.setAccountCinema(accountCinema)
+        print(currentUser.accountType)
+        print(currentUser.accountCinema)
         self.email_entry.delete(0, 'end')
         self.password_entry.delete(0, 'end')
         self.email_entry['foreground'] = 'black'
@@ -123,33 +128,44 @@ class HomeFrame(ttk.Frame):
         self.rowconfigure(4, weight=1)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(5, weight=1)
-        self.__createWidgets()
+        self.createWidgets()
 
-    def __createWidgets(self):
-        horizon_cinema_label = ttk.Label(self, text="Horizon Cinemas", font=('Helvetica bold', 15))
-        horizon_cinema_label.grid(column=0,row=1)
-        current_user_label = ttk.Label(self, text="Staff Name [Staff Type]", font=('Helvetica bold', 15))
-        current_user_label.grid(column=0,row=2)
-        listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Film Listings")
-        listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
-        create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
-        create_booking_button.grid(column=2, row=1, padx=10, pady=20)
-        cancel_booking_button = ttk.Button(self, command=lambda : app.showFrame("CancelBookingFrame"), text="Cancel Booking")
-        cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
-        generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
-        generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
-        view_booking_staff_button = ttk.Button(self, command=lambda : app.showFrame("ViewBookingStaffFrame"), text="View Booking Staff")
-        view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
-        view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
-        view_admin_button.grid(column=2, row=2, padx=10, pady=20)
-        view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
-        view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
-        view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
-        view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
-        view_screenings_button = ttk.Button(self, command=lambda : app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
-        view_screenings_button.grid(column=1, row=3, padx=10, pady=20, sticky=tk.W)
-        logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
-        logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
+    def createWidgets(self):
+        if currentUser.accountType == 0 or currentUser.accountType == 1 or currentUser.accountType == 2:
+            horizon_cinema_label = ttk.Label(self, text="Horizon Cinemas", font=('Helvetica bold', 15))
+            horizon_cinema_label.grid(column=0,row=1)
+            current_user_label = ttk.Label(self, text=currentUser.getEmail(), font=('Helvetica bold', 15))
+            current_user_label.grid(column=0,row=2)
+            listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Film Listings")
+            listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
+            create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
+            create_booking_button.grid(column=2, row=1, padx=10, pady=20)
+            cancel_booking_button = ttk.Button(self, command=lambda : app.showFrame("CancelBookingFrame"), text="Cancel Booking")
+            cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
+            view_screenings_button = ttk.Button(self, command=lambda : app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
+            view_screenings_button.grid(column=1, row=3, padx=10, pady=20, sticky=tk.W)
+            logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
+            logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
+        if currentUser.accountType == 1 or currentUser.accountType == 2:
+            generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
+            generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
+            view_booking_staff_button = ttk.Button(self, command=lambda : app.showFrame("ViewBookingStaffFrame"), text="View Booking Staff")
+            view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
+            view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
+            view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
+        if currentUser.accountType == 2:
+            view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
+            view_admin_button.grid(column=2, row=2, padx=10, pady=20)
+            view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
+            view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
+
+    def logout(self):
+        currentUser.setEmail("default")
+        currentUser.setAccountType(0)
+        app.showFrame("LoginFrame")
+        
+        
+      
 
 class ViewBookingStaffFrame(ttk.Frame):
     def __init__(self, container):
@@ -157,6 +173,8 @@ class ViewBookingStaffFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+        
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
         self.__createContentWithWidgets()
         
@@ -468,41 +486,51 @@ class ViewFilmListingsFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+
+        self.model = ViewFilmListingsModel()
+        self.view =  self
+        self.controller = ViewFilmListingsController(self.model, self.view)
+
+        self.createWidgets()
+      
+        
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
         self.__createContentWithWidgets()
-        
     
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="View Film Listings", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+        self.header = ttk.Frame(self)
+        self.header.grid(row=0)
+        self.current_page_label = ttk.Label(self.header, text="View Film Listings", font=('Helvetica bold', 20))
+        self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        self.staff_name_label = ttk.Label(self.header, text="Staff Email:")
+        self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        self.staff_cinema_label = ttk.Label(self.header, text=currentUser.getEmail())
+        self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        filmName = tk.StringVar()
-        cinemaName = tk.StringVar()
-  
-        film_name_label = ttk.Label(content, text="Film Name:")
-        film_name_label.grid(row=0, column=0, padx=10, pady=10)
-        film_name_entry = ttk.Entry(content, textvariable=filmName)
-        film_name_entry.grid(row=0, column=1, columnspan=2, padx=10, pady=10)
-        cinema_name_label = ttk.Label(content, text="Cinema Name:")
-        cinema_name_label.grid(row=1, column=0, padx=10, pady=10)
-        cinema_name_entry = ttk.Entry(content, textvariable=cinemaName)
-        cinema_name_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
+        self.__filmName = tk.StringVar()
+        self.__cinemaName = tk.StringVar()
 
-        show_listings_button = ttk.Button(content, text="Show Listings")
-        show_listings_button.grid(row=2, column=0, columnspan=3)
-        text_fill_label = ttk.Label(content, text="""
         
+        self.film_name_label = ttk.Label(self.content, text="Film Name:")
+        self.film_name_label.grid(row=0, column=0, padx=10, pady=10)
+        self.film_name_entry = ttk.Entry(self.content, textvariable=self.__filmName)
+        self.film_name_entry.grid(row=0, column=1, columnspan=2, padx=10, pady=10)
+        self.cinema_name_label = ttk.Label(self.content, text="Cinema Name:")
+        self.cinema_name_label.grid(row=1, column=0, padx=10, pady=10)
+        self.cinema_name_entry = ttk.Entry(self.content, textvariable=self.__cinemaName)
+        self.cinema_name_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
+
+        self.show_listings_button = ttk.Button(self.content, text="Show Listings")
+        self.show_listings_button.grid(row=2, column=0, columnspan=3)
+        self.text_fill_label = ttk.Label(self.content, text="""
+
+
 
 
 
@@ -513,13 +541,20 @@ class ViewFilmListingsFrame(ttk.Frame):
 
 
         """)
-        text_fill_label.grid(row=3, column=0, columnspan=3)
-        listings_listbox = tk.Listbox(self)
-        listings_listbox.place(height=300, width=200, x=200, y=400)
-        listings_listbox1 = tk.Listbox(self)
-        listings_listbox1.place(height=300, width=200, x=400, y=400)
-        listings_listbox2 = tk.Listbox(self)
-        listings_listbox2.place(height=300, width=500, x=600, y=400)
+        self.text_fill_label.grid(row=3, column=0, columnspan=3)
+        self.listings_listbox = tk.Listbox(self)
+        self.listings_listbox.place(height=300, width=200, x=200, y=400)
+        self.listings_listbox1 = tk.Listbox(self)
+        self.listings_listbox1.place(height=300, width=200, x=400, y=400)
+        self.listings_listbox2 = tk.Listbox(self)
+        self.listings_listbox2.place(height=300, width=500, x=600, y=400)
+
+        if currentUser.getAccountType() == 0:
+            self.__cinemaName.set(currentUser.getAccountCinema())
+            self.cinema_name_entry.configure(state='disabled')  
+
+    def searchFailed(self, message):
+        pass
 
 class CreateBookingFrame(ttk.Frame):
     def __init__(self, container):
@@ -698,8 +733,33 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         content = ttk.Frame(self)
         content.grid(row=1)
 
+class CurrentUser:
+    def __init__(self, email, accountType, accountCinema = None):
+        self.email = email
+        self.accountType = accountType
+        if accountCinema is not None:
+            self.accountCinema = accountCinema
+
+    def getEmail(self):
+        return self.email
+    
+    def getAccountType(self):
+        return self.accountType
+
+    def getAccountCinema(self):
+        return self.accountCinema
+
+    def setEmail(self, email):
+        self.email = email
+
+    def setAccountType(self, accountType):
+        self.accountType = accountType
+
+    def setAccountCinema(self, accountCinema):
+        self.accountCinema = accountCinema
 
 
 if __name__ == "__main__":
+    currentUser = CurrentUser("default", 0, "default")
     app = App()
     app.mainloop()

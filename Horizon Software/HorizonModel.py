@@ -60,3 +60,28 @@ class LoginModel:
             print("Account not found")
             return 0
 
+    def getAccountUserType(self, email, password):
+        query = 'SELECT user_type FROM Users WHERE email = ? AND password = ?'
+        cur.execute(query, (email, password))
+        record = cur.fetchone()
+        userType = int(''.join(map(str, record)))
+        print(userType)
+        return userType
+    
+    def getAccountCinema(self, email, password):
+        query = 'SELECT user_cinema FROM Users WHERE email = ? AND password = ?'
+        cur.execute(query, (email, password))
+        record = cur.fetchone()
+        if record != None:
+            userCinema = ''.join(map(str, record))
+            print(userCinema)
+            return userCinema
+        else:
+            userCinema = None
+            return userCinema
+
+class ViewFilmListingsModel:
+    def __init__(self):
+        self.__filmName = ""
+        self.__cinemaName = ""
+

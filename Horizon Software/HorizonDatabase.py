@@ -39,7 +39,7 @@ DROP TABLE if exists Cities
 # Creating tables
 cur.execute('''
 CREATE TABLE Users
-(userID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL, user_type INT NOT NULL)
+(userID INTEGER PRIMARY KEY, email varchar(120) UNIQUE, password varchar(120) NOT NULL, user_type INT NOT NULL, user_cinema varchar(120))
 ''')
 
 cur.execute('''
@@ -76,10 +76,20 @@ CREATE TABLE Cities
 (cityID INTERGER PRIMARY KEY, city_name varchar(120), morning_price REAL, afternoon_price REAL, evening_price REAL)
 ''')
 
-# Insert mock data
+# Insert booking staff account
+cur.execute('''
+INSERT INTO Users(email, password, user_type, user_cinema)
+VALUES ('arthur@gmail.com', '12345', 0, 'Cabot Circus')
+''')
+# Insert admin account
 cur.execute('''
 INSERT INTO Users(email, password, user_type)
-VALUES ('arthur@gmail.com', '12345', 0)
+VALUES ('henry@gmail.com', 'hello', 1)
+''')
+
+cur.execute('''
+INSERT INTO Users(email, password, user_type)
+VALUES ('milner@gmail.com', 'bye12', 2)
 ''')
 
 conn.commit()

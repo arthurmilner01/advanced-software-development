@@ -11,7 +11,9 @@ class LoginController:
                 if self.model.validatePasswordSyntax(password):
                     if self.model.checkAccountInDB(email, password):
                         print("Account found.")
-                        self.view.loginSuccess(f'Logged in as {email}.')
+                        userType = self.model.getAccountUserType(email, password)
+                        accountCinema = self.model.getAccountCinema(email, password)
+                        self.view.loginSuccess(f'Logged in as {email}.', userType, accountCinema)
                     else:
                         print("Could not find account.")
                         self.view.loginFailed('Could not find account.')
@@ -23,3 +25,14 @@ class LoginController:
                 self.view.loginFailed('Email syntax incorrect.')
         except ValueError as error:
             self.view.loginFailed(error)
+
+class ViewFilmListingsController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+
+    def searchListings(self, filmName, cinemaName):
+        try:
+            pass
+        except ValueError as error:
+            pass
