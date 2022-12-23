@@ -36,6 +36,14 @@ class ViewFilmListingsController:
             if self.model.validateFilmNameSyntax(filmName):
                 if self.model.validateCinemaNameSyntax(cinemaName):
                     if self.model.checkForScreenings(filmName, cinemaName):
-                        pass
+                        screeningInfo = self.model.returnScreeningsInfo(filmName, cinemaName)
+                        self.view.searchSuccess('Displaying Screenings for ' + str(filmName) + ' at ' + str(cinemaName) + '.', screeningInfo)
+                    else:
+                        self.view.searchFailed('No screenings found.')
+                else:
+                    self.view.searchFailed('Cinema name syntax incorrect.')
+            else:
+                print("Film name syntax incorrect.")
+                self.view.searchFailed('Film name syntax incorrect.')
         except ValueError as error:
             pass

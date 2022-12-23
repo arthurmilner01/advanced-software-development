@@ -106,4 +106,20 @@ class ViewFilmListingsModel:
             return 0
 
     def checkForScreenings(self, filmName, cinemaName):
-        pass
+        query = 'SELECT film_name, cinema_name FROM FilmScreenings WHERE film_name = ? AND cinema_name = ?'
+        cur.execute(query, (filmName, cinemaName))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Screenings found.")
+            return 1
+        else:
+            print("Screenings not found.")
+            return 0
+
+    def returnScreeningsInfo(self, filmName, cinemaName):
+        query = 'SELECT screening_time, screening_date, screening_screen FROM FilmScreenings WHERE film_name = ? AND cinema_name = ? ORDER BY screening_date, screening_time ASC'
+        cur.execute(query, (filmName, cinemaName))
+        screeningsInfo = cur.fetchall()
+        print(screeningsInfo)
+        return screeningsInfo
+

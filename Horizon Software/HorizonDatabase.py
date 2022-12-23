@@ -57,23 +57,23 @@ film_actors varchar(120) NOT NULL, film_genre varchar(120) NOT NULL, film_age IN
 
 cur.execute('''
 CREATE TABLE FilmScreenings
-(screeningID INTEGER PRIMARY KEY, screening_time varchar(120) NOT NULL, screening_screen INTEGER NOT NULL, film_name varchar(120) NOT NULL, 
-lower_hall_tickets_left INTEGER NOT NULL, upper_hall_tickets_left INTEGER NOT NULL, VIP_tickets_left INTEGER NOT NULL)
+(screeningID INTEGER PRIMARY KEY, screening_time varchar(120) NOT NULL, screening_date varchar(120) NOT NULL, screening_screen INTEGER NOT NULL, cinema_name varchar(120) NOT NULL, film_name varchar(120) NOT NULL, 
+lower_hall_tickets_left INTEGER NOT NULL DEFAULT '30', upper_hall_tickets_left INTEGER NOT NULL DEFAULT '60', VIP_tickets_left INTEGER NOT NULL DEFAULT '10')
 ''')
 
 cur.execute('''
 CREATE TABLE CinemaScreens
-(cinema_screenID INTEGER PRIMARY KEY, lower_hall_capacity INTEGER, upper_hall_capacity INTEGER, VIP_capacity INTEGER)
+(cinema_screenID INTEGER PRIMARY KEY, cinema_name varchar(120), lower_hall_capacity INTEGER DEFAULT '30', upper_hall_capacity INTEGER DEFAULT '60', VIP_capacity INTEGER DEFAULT '10')
 ''')
 
 cur.execute('''
 CREATE TABLE Cinemas
-(cinemaID INTEGER PRIMARY KEY, cinema_name varchar(120), city_name varchar(120))
+(cinemaID INTEGER PRIMARY KEY, cinema_name varchar(120) UNIQUE, city_name varchar(120))
 ''')
 
 cur.execute('''
 CREATE TABLE Cities
-(cityID INTERGER PRIMARY KEY, city_name varchar(120), morning_price REAL, afternoon_price REAL, evening_price REAL)
+(cityID INTEGER PRIMARY KEY, city_name varchar(120), morning_price REAL, afternoon_price REAL, evening_price REAL)
 ''')
 
 # Insert booking staff account
@@ -91,5 +91,32 @@ cur.execute('''
 INSERT INTO Users(email, password, user_type)
 VALUES ('milner@gmail.com', 'bye12', 2)
 ''')
+
+cur.execute('''
+INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating)
+VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans & More', 'Superhero', 18, 7.6)
+''')
+
+cur.execute('''
+INSERT INTO Cities(city_name, morning_price, afternoon_price, evening_price)
+VALUES ('Bristol', 6.00, 7.00, 8.00)
+''')
+
+cur.execute('''
+INSERT INTO Cinemas(cinema_name, city_name)
+VALUES ('Cabot Circus', 'Bristol')
+''')
+
+cur.execute('''
+INSERT INTO CinemaScreens(cinema_name)
+VALUES ('Cabot Circus')
+''')
+
+cur.execute('''
+INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name)
+VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
+('19:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers')
+''')
+
 
 conn.commit()
