@@ -85,3 +85,25 @@ class ViewFilmListingsModel:
         self.__filmName = ""
         self.__cinemaName = ""
 
+    def validateFilmNameSyntax(self, filmName):
+        if len(filmName) > 0:
+            pattern = r'[A-Za-z0-9 ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, filmName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+    
+    def validateCinemaNameSyntax(self, cinemaName):
+        if len(cinemaName) > 0:
+            pattern = r'[A-Za-z ]{0,50}' #Letters and up to 50 char
+            if re.fullmatch(pattern, cinemaName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    def checkForScreenings(self, filmName, cinemaName):
+        pass

@@ -33,6 +33,9 @@ class ViewFilmListingsController:
 
     def searchListings(self, filmName, cinemaName):
         try:
-            pass
+            if self.model.validateFilmNameSyntax(filmName):
+                if self.model.validateCinemaNameSyntax(cinemaName):
+                    if self.model.checkForScreenings(filmName, cinemaName):
+                        pass
         except ValueError as error:
             pass

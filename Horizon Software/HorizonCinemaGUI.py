@@ -553,8 +553,14 @@ class ViewFilmListingsFrame(ttk.Frame):
             self.__cinemaName.set(currentUser.getAccountCinema())
             self.cinema_name_entry.configure(state='disabled')  
 
-    def searchFailed(self, message):
+    def searchSuccess(self, message):
         pass
+
+    def searchFailed(self, message):
+        self.__filmName.set('')
+        if currentUser.getAccountType() != 0:
+            self.__cinemaName.set('')
+        mb.showerror(title="Search Failed", message=message)
 
 class CreateBookingFrame(ttk.Frame):
     def __init__(self, container):
