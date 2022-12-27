@@ -46,7 +46,7 @@ cur.execute('''
 CREATE TABLE Bookings
 (bookingID INTEGER PRIMARY KEY, seat_type varchar(20) NOT NULL, seat_numbers varchar(50) NOT NULL, 
 price REAL NOT NULL, customer_name varchar(120) NOT NULL, customer_email varchar(120) NOT NULL, 
-customer_phone INTEGER NOT NULL, number_of_tickets INTEGER NOT NULL)
+customer_phone INTEGER NOT NULL, number_of_tickets INTEGER NOT NULL, screeningID INTEGER NOT NULL)
 ''')
 
 cur.execute('''
@@ -94,7 +94,8 @@ VALUES ('milner@gmail.com', 'bye12', 2)
 
 cur.execute('''
 INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating)
-VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans & More', 'Superhero', 18, 7.6)
+VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans & More', 'Superhero', 18, 7.6),
+('UP', 'balloon on the house', 'Old man and Kid and Dog', 'Family adventure', 7, 10)
 ''')
 
 cur.execute('''
@@ -115,7 +116,8 @@ VALUES ('Cabot Circus')
 cur.execute('''
 INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name)
 VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
-('19:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers')
+('19:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
+('19:00', '20/01/2023', 1, 'Cabot Circus', 'UP')
 ''')
 
 

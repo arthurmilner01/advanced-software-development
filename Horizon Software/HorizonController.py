@@ -47,3 +47,24 @@ class ViewFilmListingsController:
                 self.view.searchFailed('Film name syntax incorrect.')
         except ValueError as error:
             pass
+
+
+class CreateBookingController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+    
+    #function to fetch films to show in combobox
+    def searchFilm(self, cinemaName):
+        try:
+            if self.model.validateCinemaNameSyntax(cinemaName):
+                if self.model.checkForFilms(cinemaName):
+                    films = self.model.returnFilms(cinemaName)
+                    self.view.searchSuccess('Displaying films at ' + str(cinemaName) + '.', films)
+                else:
+                    #self.view.searchFailed('No films found.')
+                    print("no films")
+            else:
+                self.view.searchFailed('Cinema name syntax incorrect.')
+        except ValueError as error:
+            pass

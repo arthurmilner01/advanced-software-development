@@ -1,5 +1,6 @@
 import re
 from DatabaseAccess import *
+import string
 
 conn = getConn()
 cur = getCursor()
@@ -123,3 +124,41 @@ class ViewFilmListingsModel:
         print(screeningsInfo)
         return screeningsInfo
 
+class CreateBookingModel:
+    def __init__(self):
+        self.__seatType = ""
+        self.__seatNumbers = ""
+        self.__customerName = ""
+        self.__cinemaName = ""
+    
+    def validateCinemaNameSyntax(self, cinemaName):
+        if len(cinemaName) > 0:
+            pattern = r'[A-Za-z ]{0,50}' #Letters and up to 50 char
+            if re.fullmatch(pattern, cinemaName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+   
+    def checkForFilms(self, cinemaName):
+        query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
+        cur.execute(query, (cinemaName,))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Films found.")
+            return 1
+        else:
+            print("Films not found.")
+            return 0
+
+    #function to return a fetch of all films in a given cinema to be put in combobox   
+    def returnFilms(self, cinemaName):
+        query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
+        cur.execute(query, (cinemaName,)) #NOTE: have to have the execute layed out like this when only using 1 parameter
+        films = cur.fetchall()            # very wierd but have to have (cinemaName, ) and not just cinemaName
+        print(films)
+        return films
+
+
+   
