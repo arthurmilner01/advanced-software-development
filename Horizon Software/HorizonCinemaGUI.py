@@ -614,7 +614,6 @@ class CreateBookingFrame(ttk.Frame):
         self.cinemaName = tk.StringVar()
 
 
-        # TODO: FIND WAY TO MAKE COMBOBOX FETCH AND UPDATE AFTER LOGIN BUT BEFORE <<ComboboxSelected>>
         # TODO: WHEN ONE COMBOBOX CHANGES UPDATE OTHER COMBO BOX OPTIONS ACCORDINGLY
         
         self.films = ['click me']
@@ -624,7 +623,7 @@ class CreateBookingFrame(ttk.Frame):
         self.select_film_combobox.grid(row=0, column=3, padx=5, pady=(0, 40))
         self.select_film_combobox['values'] = self.films
         self.select_film_combobox['state'] = 'readonly'
-        self.select_film_combobox.bind("<<ComboboxSelected>>", self.comboboxFunction)
+        self.select_film_combobox.bind("<Enter>", self.comboboxFunction) #new event <Enter> changes combobox when hovered over and not when selected
 
         dates = ('15/05/2000', '15/02/2001', '20/07/1990') 
         select_date_label = ttk.Label(content, text="Select Date:")
