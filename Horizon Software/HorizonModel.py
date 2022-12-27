@@ -150,19 +150,6 @@ class CreateBookingModel:
                 return 0
         else:
             return 0
-
-    #TODO: find a way to properly check date syntax
-
-    def validateDateSyntax(self, date):
-        '''if len(date) > 0:
-            pattern = r'^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$' # DD/MM/YYYY
-            if re.fullmatch(pattern, date):
-                return 1
-            else:
-                return 0
-        else:
-            return 0'''
-        return 1
    
     def checkForFilms(self, cinemaName):
         query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
@@ -216,4 +203,19 @@ class CreateBookingModel:
         showings = cur.fetchall()
         return showings
 
-   
+    def checkForTickets(self, showing, filmDate, filmName, cinemaName):
+        query = 'SELECT lower_hall_tickets_left, upper_hall_tickets_left, VIP_tickets_left FROM FilmScreenings WHERE screening_time = ? AND film_name = ? AND cinema_name = ? AND screening_date = ?'
+        cur.execute(query, (showing, filmName, cinemaName, filmDate))
+        records = cur.fetchall()
+        if len(records) > 0:
+            print('Tickets found.')
+            return 1
+        else:
+            print('No tickets found.')
+            return 0
+        
+    def returnTickets(self, showing, filmDate, filmName, cinemaName):
+        query = 'SELECT lower_hall_tickets_left, upper_hall_tickets_left, VIP_tickets_left FROM FilmScreenings WHERE screening_time = ? AND film_name = ? AND cinema_name = ? AND screening_date = ?'
+        cur.execute(query, (showing, filmName, cinemaName, filmDate))
+        tickets = cur.fetchall()
+        return tickets

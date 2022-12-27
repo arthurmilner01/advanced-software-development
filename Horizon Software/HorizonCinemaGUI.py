@@ -615,8 +615,7 @@ class CreateBookingFrame(ttk.Frame):
 
 
         # TODO: GET A PROPER DATE VALIDATION IN MODEL
-        # TODO: MAKE FUNCTION TO CHECK AVAILABILITY OF SEATS 
-        # TODO: IM THINKING SHOW HOW MANY ARE AVAILABLE FO EACH SEAT AFTER PICKING HOW MANY SEATS BUT BEFORE SELECTIG SEAT TYPE
+        # TODO: MAKE FUNCTION TO CHECK AVAILABILITY OF SEATS AND CHECK PRICES
         # TODO: CREATE BOOKING FUNCTION
         
         self.films = ['click me']
@@ -646,22 +645,22 @@ class CreateBookingFrame(ttk.Frame):
         self.select_showing_combobox['values'] = self.showings
         self.select_showing_combobox['state'] = 'readonly'
 
-        select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
-        select_ticket_type_label.grid(row=1, column=0, padx=5, pady=(0, 40))
-        lower_hall_ticket_radio_button = ttk.Radiobutton(content, text="Lower Hall", value=1, variable=self.bookingSeatType)
-        lower_hall_ticket_radio_button.grid(row=1, column=1, padx=5, pady=(0, 40))
-        upper_hall_ticket_radio_button = ttk.Radiobutton(content, text="Upper Hall", value=2, variable=self.bookingSeatType)
-        upper_hall_ticket_radio_button.grid(row=1, column=2, padx=5, pady=(0, 40))
-        VIP_ticket_radio_button = ttk.Radiobutton(content, text="VIP", value=3, variable=self.bookingSeatType)
-        VIP_ticket_radio_button.grid(row=1, column=3, padx=5, pady=(0, 40))
+        self.select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
+        self.select_ticket_type_label.grid(row=1, column=0, padx=5, pady=(0, 40))
+        self.lower_hall_ticket_radio_button = ttk.Radiobutton(content, text="Lower Hall", value=1, variable=self.bookingSeatType)
+        self.lower_hall_ticket_radio_button.grid(row=1, column=1, padx=5, pady=(0, 40))
+        self.upper_hall_ticket_radio_button = ttk.Radiobutton(content, text="Upper Hall", value=2, variable=self.bookingSeatType)
+        self.upper_hall_ticket_radio_button.grid(row=1, column=2, padx=5, pady=(0, 40))
+        self.VIP_ticket_radio_button = ttk.Radiobutton(content, text="VIP", value=3, variable=self.bookingSeatType)
+        self.VIP_ticket_radio_button.grid(row=1, column=3, padx=5, pady=(0, 40))
 
-        booking_num_of_tickets_label = ttk.Label(content, text="Number of Tickets:")
-        booking_num_of_tickets_label.grid(row=1, column=4, padx=5, pady=(0, 40))
-        booking_num_of_ticekts_entry = ttk.Entry(content, textvariable=self.bookingNumOfTickets)
-        booking_num_of_ticekts_entry.grid(row=1, column=5, padx=5, pady=(0, 40))
+        self.booking_num_of_tickets_label = ttk.Label(content, text="Number of Tickets:")
+        self.booking_num_of_tickets_label.grid(row=1, column=4, padx=5, pady=(0, 40))
+        self.booking_num_of_ticekts_entry = ttk.Entry(content, textvariable=self.bookingNumOfTickets)
+        self.booking_num_of_ticekts_entry.grid(row=1, column=5, padx=5, pady=(0, 40))
 
-        check_availability_price_button = ttk.Button(content, text="Check Availability/Price")
-        check_availability_price_button.grid(row=2, column=0, columnspan=6, padx=5, pady=(0, 80))
+        self.check_availability_price_button = ttk.Button(content, text="Check Availability/Price", command=self.checkAvailabilityAndPrice)
+        self.check_availability_price_button.grid(row=2, column=0, columnspan=6, padx=5, pady=(0, 80))
 
         customer_name_label = ttk.Label(content, text="Customer Name:")
         customer_name_label.grid(row=3, column=0,padx=5, pady=(0, 40))
@@ -732,7 +731,7 @@ class CreateBookingFrame(ttk.Frame):
 
     def searchDates(self):
         if self.controller:
-            self.controller.searchDates(self.select_film_combobox.get(), self.cinemaName.get())
+            self.controller.searchDates(self.bookingFilm.get(), self.cinemaName.get())
     
     def updateDateCombobox(self):
         self.select_date_combobox['values'] = self.dates
@@ -749,7 +748,7 @@ class CreateBookingFrame(ttk.Frame):
     
     def searchShowings(self):
         if self.controller:
-            self.controller.searchShowings(self.select_date_combobox.get(), self.select_film_combobox.get(), self.cinemaName.get())
+            self.controller.searchShowings(self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
 
     def updateShowingsCombobox(self):
         self.select_showing_combobox['values'] = self.showings
@@ -758,6 +757,21 @@ class CreateBookingFrame(ttk.Frame):
     def dateComboboxFunction(self, film):
         self.searchShowings()
         self.updateShowingsCombobox()
+    
+    def availabilitySuccess(self, message):
+        mb.showinfo(title="Availability Success", message= message)
+
+    def availabilityFailed(self, message, tickets):
+        message = message + "\nlower tickets available: " + str(tickets[0][0]) + "\nupper ticekts available: " + str(tickets[0][1]) + "\nVIP tickets available: " + str(tickets[0][2])
+        mb.showinfo(title="Availability Failure", message= message)
+
+    def checkAvailability(self):
+        if self.controller:
+            self.controller.checkAvailability(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
+
+    def checkAvailabilityAndPrice(self):
+        self.checkAvailability()
+        #self.checkPrice()
 
 
 

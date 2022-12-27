@@ -72,35 +72,34 @@ class CreateBookingController:
     #function to update other comboboxes when film is selected
     def searchDates(self, filmName, cinemaName):
         try:
-            if self.model.validateCinemaNameSyntax(cinemaName):
-                if self.model.validateFilmNameSyntax(filmName):
-                    if self.model.checkForDates(filmName, cinemaName):
-                        dates = self.model.returnDates(filmName, cinemaName)
-                        self.view.dateSearchSuccess('Found dates for film '+str(filmName)+'.', dates)
-                    else:
-                        self.view.searchFailed('no dates found.')
-                else:
-                    self.view.searchFailed('Film name syntax error')
+            if self.model.checkForDates(filmName, cinemaName):
+                dates = self.model.returnDates(filmName, cinemaName)
+                self.view.dateSearchSuccess('Found dates for film '+str(filmName)+'.', dates)
             else:
-                self.view.searchFailed('Cinema name syntax error')
+                self.view.searchFailed('no dates found.')
         except ValueError as error:
             pass
     
     def searchShowings(self, filmDate, filmName, cinemaName):
         try:
-            if self.model.validateCinemaNameSyntax(cinemaName):
-                if self.model.validateFilmNameSyntax(filmName):
-                    if self.model.validateDateSyntax(filmDate):
-                        if self.model.checkForShowings(filmDate, filmName, cinemaName):
-                            showings = self.model.returnShowings(filmDate, filmName, cinemaName)
-                            self.view.showingSearchSuccess('Found Showings for film ' + str(filmName) + " on " + str(filmDate) +".", showings)
-                        else:
-                            self.view.searchFailed('no showings found.')
-                    else:
-                        self.view.searchFailed('date syntax error.')
-                else:
-                    self.view.searchFailed('Film name syntax error.')
+            if self.model.checkForShowings(filmDate, filmName, cinemaName):
+                showings = self.model.returnShowings(filmDate, filmName, cinemaName)
+                self.view.showingSearchSuccess('Found Showings for film ' + str(filmName) + " on " + str(filmDate) +".", showings)
             else:
-                self.view.searchFailed('Cinema name syntax error.')
+                self.view.searchFailed('no showings found.')
         except ValueError as error:
             pass
+    
+    def checkAvailability(self, numOfTickets, seatType, showing, date, film, cinema):
+        try:
+            if self.model.checkForTickets(showing, date, film, cinema):
+                amountOfTickets = self.model.returnTickets(showing, date, film, cinema)
+                if numOfTickets <= amountOfTickets[0][seatType-1]:
+                    self.view.availabilitySuccess('Available tickets for film ' + str(film))
+                else:
+                    self.view.availabilityFailed('not enough tickets', amountOfTickets)
+            else:
+                self.view.searchFailed('No tickets.')
+        except ValueError as error:
+            pass
+
