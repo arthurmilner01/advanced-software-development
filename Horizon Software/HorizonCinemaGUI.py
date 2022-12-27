@@ -615,7 +615,7 @@ class CreateBookingFrame(ttk.Frame):
 
 
         # TODO: GET A PROPER DATE VALIDATION IN MODEL
-        # TODO: MAKE FUNCTION TO CHECK AVAILABILITY OF SEATS AND CHECK PRICES
+        # TODO: MAKE FUNCTION TO CHECK PRICES
         # TODO: CREATE BOOKING FUNCTION
         
         self.films = ['click me']
