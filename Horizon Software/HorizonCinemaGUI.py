@@ -615,7 +615,6 @@ class CreateBookingFrame(ttk.Frame):
 
 
         # TODO: GET A PROPER DATE VALIDATION IN MODEL
-        # TODO: MAKE FUNCTION TO CHECK PRICES
         # TODO: CREATE BOOKING FUNCTION
         
         self.films = ['click me']
@@ -758,8 +757,13 @@ class CreateBookingFrame(ttk.Frame):
         self.searchShowings()
         self.updateShowingsCombobox()
     
-    def availabilitySuccess(self, message):
-        mb.showinfo(title="Availability Success", message= message)
+    def priceSuccess(self, message, price):
+        message = message + "\nTotal price: " + str(price)
+        mb.showinfo(title="Availability and Price", message =message)
+
+    def checkPrice(self, message):
+        if self.controller:
+            self.controller.checkPrice(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get(), message)
 
     def availabilityFailed(self, message, tickets):
         message = message + "\nlower tickets available: " + str(tickets[0][0]) + "\nupper ticekts available: " + str(tickets[0][1]) + "\nVIP tickets available: " + str(tickets[0][2])
@@ -771,7 +775,7 @@ class CreateBookingFrame(ttk.Frame):
 
     def checkAvailabilityAndPrice(self):
         self.checkAvailability()
-        #self.checkPrice()
+        
 
 
 

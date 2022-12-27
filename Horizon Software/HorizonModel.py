@@ -219,3 +219,12 @@ class CreateBookingModel:
         cur.execute(query, (showing, filmName, cinemaName, filmDate))
         tickets = cur.fetchall()
         return tickets
+    
+    def getPrices(self, cinemaName):
+        query = 'SELECT city_name FROM Cinemas WHERE cinema_name = ?'
+        cur.execute(query, (cinemaName, ))
+        city = cur.fetchone()
+        query = 'SELECT morning_price, afternoon_price, evening_price FROM Cities WHERE city_name = ?'
+        cur.execute(query, (city[0], ))
+        prices = cur.fetchone()
+        return prices

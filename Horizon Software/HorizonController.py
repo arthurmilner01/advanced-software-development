@@ -1,4 +1,5 @@
 from HorizonModel import *
+import datetime
 
 class LoginController:
     def __init__(self, model, view):
@@ -95,11 +96,44 @@ class CreateBookingController:
             if self.model.checkForTickets(showing, date, film, cinema):
                 amountOfTickets = self.model.returnTickets(showing, date, film, cinema)
                 if numOfTickets <= amountOfTickets[0][seatType-1]:
-                    self.view.availabilitySuccess('Available tickets for film ' + str(film))
+                    self.view.checkPrice('Available tickets for film ' + str(film))
                 else:
                     self.view.availabilityFailed('not enough tickets', amountOfTickets)
             else:
                 self.view.searchFailed('No tickets.')
+        except ValueError as error:
+            pass
+    
+    def checkPrice(self, numOfTickets, seatType, showing, date, film, cinema, message):
+        try:
+            #get prices of different part fo the day 
+            prices = self.model.getPrices(cinema)
+            #check what time showing is at 
+            print(showing)
+            time = datetime.datetime.strptime(showing, "%H:%M")
+            morning = datetime.datetime.strptime("09:00", "%H:%M")
+            noon = datetime.datetime.strptime("12:00", "%H:%M")
+            afternoon = datetime.datetime.strptime("17:00", "%H:%M")
+            if time>=morning and time < noon:
+                price = prices[0]
+            elif time>=noon and time<afternoon:
+                price = prices[1]
+            elif time>=afternoon:
+                price = prices[2]
+            else:
+                ValueError
+            #CALCULATE PRICE
+            #calculate price of 1 ticket 
+            if seatType == 2:
+                price = price *1.20
+            if seatType == 3:
+                price = (price *1.20)*1.20
+            print("price of 1 ticket = " + str(price))
+            #calculate total 
+            price = price * numOfTickets
+            print("total price = "+str(price))
+            self.view.priceSuccess(message, price)
+            
         except ValueError as error:
             pass
 
