@@ -228,3 +228,25 @@ class CreateBookingModel:
         cur.execute(query, (city[0], ))
         prices = cur.fetchone()
         return prices
+
+    def getScreeningID(self, time, date, name, cinema):
+        query = 'SELECT screeningID FROM FilmScreenings WHERE screening_time = ? AND screening_date = ? AND film_name = ? AND cinema_name = ?'
+        cur.execute(query, (time, date, name, cinema))
+        screeningID = cur.fetchone()
+        return screeningID[0]
+
+    def createBooking(self, bookingID, seatType, seatNums, price, numOfTickets, screeningID):
+        cur.execute("SELECT bookingID FROM Bookings")
+        bookings = cur.fetchall()
+        query = '''INSERT INTO Bookings (bookingID, seat_type, seat_numbers, price, number_of_tickets, screeningID)
+        VALUES (?, ?, ? ,?, ?, ?)'''
+        cur.execute(query, (bookingID, seatType, seatNums, price, numOfTickets, screeningID))
+        cur.execute("SELECT bookingID FROM Bookings")
+        bookings1 = cur.fetchall()
+        if len(bookings1) - len(bookings) == 1:
+            print("booking added to database")
+            return 1
+        else:
+            return 0
+
+

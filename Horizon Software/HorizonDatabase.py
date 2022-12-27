@@ -45,8 +45,7 @@ CREATE TABLE Users
 cur.execute('''
 CREATE TABLE Bookings
 (bookingID INTEGER PRIMARY KEY, seat_type varchar(20) NOT NULL, seat_numbers varchar(50) NOT NULL, 
-price REAL NOT NULL, customer_name varchar(120) NOT NULL, customer_email varchar(120) NOT NULL, 
-customer_phone INTEGER NOT NULL, number_of_tickets INTEGER NOT NULL, screeningID INTEGER NOT NULL)
+price REAL NOT NULL, number_of_tickets INTEGER NOT NULL, screeningID INTEGER NOT NULL)
 ''')
 
 cur.execute('''

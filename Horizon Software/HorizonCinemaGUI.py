@@ -612,12 +612,13 @@ class CreateBookingFrame(ttk.Frame):
         self.bookingExpiry = tk.StringVar()
         self.bookingCVV = tk.IntVar()
         self.cinemaName = tk.StringVar()
+        self.price = tk.IntVar()
 
 
         # TODO: GET A PROPER DATE VALIDATION IN MODEL
-        # TODO: CREATE BOOKING FUNCTION
+        # TODO: UPDATE BOOKING FUNCTION TO SHOW A RECIEPT
         
-        self.films = ['click me']
+        self.films = ['select movie']
         self.select_film_label = ttk.Label(content, text="Select Film:")
         self.select_film_label.grid(row=0, column=0, padx=10, pady=(0, 40))
         self.select_film_combobox = ttk.Combobox(content, textvariable=self.bookingFilm)
@@ -627,7 +628,7 @@ class CreateBookingFrame(ttk.Frame):
         self.select_film_combobox.bind("<Enter>", self.comboboxHoverFunction) #new event <Enter> changes combobox when hovered over and not when selected
         self.select_film_combobox.bind("<<ComboboxSelected>>", self.filmComboboxFunction)
 
-        self.dates = ('15/05/2000', '15/02/2001', '20/07/1990') 
+        self.dates = ('select movie') 
         self.select_date_label = ttk.Label(content, text="Select Date:")
         self.select_date_label.grid(row=0, column=2, padx=5, pady=(0, 40))
         self.select_date_combobox = ttk.Combobox(content, textvariable=self.bookingDate)
@@ -636,7 +637,7 @@ class CreateBookingFrame(ttk.Frame):
         self.select_date_combobox['state'] = 'readonly'  
         self.select_date_combobox.bind("<<ComboboxSelected>>", self.dateComboboxFunction)  
 
-        self.showings = ('Showing1', 'Showing2', 'Showing3')
+        self.showings = ('select date')
         self.select_showing_label = ttk.Label(content, text="Select Showing:")
         self.select_showing_label.grid(row=0, column=4, padx=10, pady=(0, 40))
         self.select_showing_combobox = ttk.Combobox(content, textvariable=self.bookingShowing)
@@ -691,8 +692,8 @@ class CreateBookingFrame(ttk.Frame):
         cvv_entry = ttk.Entry(content, textvariable=self.bookingCVV)
         cvv_entry.grid(row=5, column=3, padx=5, pady=(0, 40))
 
-        create_booking_button = ttk.Button(content, text="Create Booking/Get Receipt")
-        create_booking_button.grid(row=6, column=0, columnspan=6, padx=5, pady=(0, 80))
+        self.create_booking_button = ttk.Button(content, text="Create Booking/Get Receipt", command=self.createBooking)
+        self.create_booking_button.grid(row=6, column=0, columnspan=6, padx=5, pady=(0, 80))
 
         if currentUser.getAccountType() == 0:
             self.cinemaName.set(currentUser.getAccountCinema())
@@ -758,6 +759,7 @@ class CreateBookingFrame(ttk.Frame):
         self.updateShowingsCombobox()
     
     def priceSuccess(self, message, price):
+        self.price = price
         message = message + "\nTotal price: " + str(price)
         mb.showinfo(title="Availability and Price", message =message)
 
@@ -775,6 +777,13 @@ class CreateBookingFrame(ttk.Frame):
 
     def checkAvailabilityAndPrice(self):
         self.checkAvailability()
+    
+    def createBooking(self):
+        if self.controller:
+            self.controller.createBooking(self.bookingSeatType.get(), self.price, self.bookingNumOfTickets.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
+        
+    def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema):
+        print("booking function")
         
 
 
