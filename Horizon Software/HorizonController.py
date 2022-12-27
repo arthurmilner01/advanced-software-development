@@ -60,11 +60,47 @@ class CreateBookingController:
             if self.model.validateCinemaNameSyntax(cinemaName):
                 if self.model.checkForFilms(cinemaName):
                     films = self.model.returnFilms(cinemaName)
-                    self.view.searchSuccess('Displaying films at ' + str(cinemaName) + '.', films)
+                    self.view.filmSearchSuccess('Displaying films at ' + str(cinemaName) + '.', films)
                 else:
                     #self.view.searchFailed('No films found.')
                     print("no films")
             else:
                 self.view.searchFailed('Cinema name syntax incorrect.')
+        except ValueError as error:
+            pass
+    
+    #function to update other comboboxes when film is selected
+    def searchDates(self, filmName, cinemaName):
+        try:
+            if self.model.validateCinemaNameSyntax(cinemaName):
+                if self.model.validateFilmNameSyntax(filmName):
+                    if self.model.checkForDates(filmName, cinemaName):
+                        dates = self.model.returnDates(filmName, cinemaName)
+                        self.view.dateSearchSuccess('Found dates for film '+str(filmName)+'.', dates)
+                    else:
+                        self.view.searchFailed('no dates found.')
+                else:
+                    self.view.searchFailed('Film name syntax error')
+            else:
+                self.view.searchFailed('Cinema name syntax error')
+        except ValueError as error:
+            pass
+    
+    def searchShowings(self, filmDate, filmName, cinemaName):
+        try:
+            if self.model.validateCinemaNameSyntax(cinemaName):
+                if self.model.validateFilmNameSyntax(filmName):
+                    if self.model.validateDateSyntax(filmDate):
+                        if self.model.checkForShowings(filmDate, filmName, cinemaName):
+                            showings = self.model.returnShowings(filmDate, filmName, cinemaName)
+                            self.view.showingSearchSuccess('Found Showings for film ' + str(filmName) + " on " + str(filmDate) +".", showings)
+                        else:
+                            self.view.searchFailed('no showings found.')
+                    else:
+                        self.view.searchFailed('date syntax error.')
+                else:
+                    self.view.searchFailed('Film name syntax error.')
+            else:
+                self.view.searchFailed('Cinema name syntax error.')
         except ValueError as error:
             pass

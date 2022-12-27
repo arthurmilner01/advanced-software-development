@@ -140,6 +140,29 @@ class CreateBookingModel:
                 return 0
         else:
             return 0
+    
+    def validateFilmNameSyntax(self, filmName):
+        if len(filmName) > 0:
+            pattern = r'[A-Za-z0-9 ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, filmName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    #TODO: find a way to properly check date syntax
+
+    def validateDateSyntax(self, date):
+        '''if len(date) > 0:
+            pattern = r'^[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}$' # DD/MM/YYYY
+            if re.fullmatch(pattern, date):
+                return 1
+            else:
+                return 0
+        else:
+            return 0'''
+        return 1
    
     def checkForFilms(self, cinemaName):
         query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
@@ -157,8 +180,40 @@ class CreateBookingModel:
         query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
         cur.execute(query, (cinemaName,)) #NOTE: have to have the execute layed out like this when only using 1 parameter
         films = cur.fetchall()            # very wierd but have to have (cinemaName, ) and not just cinemaName
-        print(films)
         return films
-
+    
+    def checkForDates(self, filmName, cinemaName):
+        query = 'SELECT screening_date FROM FilmScreenings WHERE film_name = ? AND cinema_name = ?'
+        cur.execute(query, (filmName,cinemaName))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print('Dates found.')
+            return 1
+        else:
+            print('No dates found.')
+            return 0
+        
+    def returnDates(self, filmName, cinemaName):
+        query = 'SELECT DISTINCT screening_date FROM FilmScreenings WHERE film_name = ? AND cinema_name = ?'
+        cur.execute(query, (filmName,cinemaName)) 
+        dates = cur.fetchall()
+        return dates
+    
+    def checkForShowings(self, filmDate, filmName, cinemaName):
+        query = 'SELECT screening_time FROM FilmScreenings WHERE film_name = ? AND cinema_name = ? AND screening_date = ?'
+        cur.execute(query, (filmName, cinemaName, filmDate))
+        records = cur.fetchall()
+        if len(records) > 0:
+            print('Showings found.')
+            return 1
+        else:
+            print('No showings found')
+            return 0
+    
+    def returnShowings(self, filmDate, filmName, cinemaName):
+        query = 'SELECT DISTINCT screening_time FROM FilmScreenings WHERE film_name = ? AND cinema_name = ? AND screening_date = ?'
+        cur.execute(query, (filmName, cinemaName, filmDate))
+        showings = cur.fetchall()
+        return showings
 
    

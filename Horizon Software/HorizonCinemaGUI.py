@@ -614,32 +614,37 @@ class CreateBookingFrame(ttk.Frame):
         self.cinemaName = tk.StringVar()
 
 
-        # TODO: WHEN ONE COMBOBOX CHANGES UPDATE OTHER COMBO BOX OPTIONS ACCORDINGLY
+        # TODO: GET A PROPER DATE VALIDATION IN MODEL
+        # TODO: MAKE FUNCTION TO CHECK AVAILABILITY OF SEATS 
+        # TODO: IM THINKING SHOW HOW MANY ARE AVAILABLE FO EACH SEAT AFTER PICKING HOW MANY SEATS BUT BEFORE SELECTIG SEAT TYPE
+        # TODO: CREATE BOOKING FUNCTION
         
         self.films = ['click me']
         self.select_film_label = ttk.Label(content, text="Select Film:")
-        self.select_film_label.grid(row=0, column=2, padx=10, pady=(0, 40))
+        self.select_film_label.grid(row=0, column=0, padx=10, pady=(0, 40))
         self.select_film_combobox = ttk.Combobox(content, textvariable=self.bookingFilm)
-        self.select_film_combobox.grid(row=0, column=3, padx=5, pady=(0, 40))
+        self.select_film_combobox.grid(row=0, column=1, padx=5, pady=(0, 40))
         self.select_film_combobox['values'] = self.films
         self.select_film_combobox['state'] = 'readonly'
-        self.select_film_combobox.bind("<Enter>", self.comboboxFunction) #new event <Enter> changes combobox when hovered over and not when selected
+        self.select_film_combobox.bind("<Enter>", self.comboboxHoverFunction) #new event <Enter> changes combobox when hovered over and not when selected
+        self.select_film_combobox.bind("<<ComboboxSelected>>", self.filmComboboxFunction)
 
-        dates = ('15/05/2000', '15/02/2001', '20/07/1990') 
-        select_date_label = ttk.Label(content, text="Select Date:")
-        select_date_label.grid(row=0, column=0, padx=5, pady=(0, 40))
-        select_date_combobox = ttk.Combobox(content, textvariable=self.bookingDate)
-        select_date_combobox.grid(row=0, column=1, padx=5, pady=(0, 40))
-        select_date_combobox['values'] = dates
-        select_date_combobox['state'] = 'readonly'    
+        self.dates = ('15/05/2000', '15/02/2001', '20/07/1990') 
+        self.select_date_label = ttk.Label(content, text="Select Date:")
+        self.select_date_label.grid(row=0, column=2, padx=5, pady=(0, 40))
+        self.select_date_combobox = ttk.Combobox(content, textvariable=self.bookingDate)
+        self.select_date_combobox.grid(row=0, column=3, padx=5, pady=(0, 40))
+        self.select_date_combobox['values'] = self.dates
+        self.select_date_combobox['state'] = 'readonly'  
+        self.select_date_combobox.bind("<<ComboboxSelected>>", self.dateComboboxFunction)  
 
-        showings = ('Showing1', 'Showing2', 'Showing3')
-        select_showing_label = ttk.Label(content, text="Select Showing:")
-        select_showing_label.grid(row=0, column=4, padx=10, pady=(0, 40))
-        select_showing_combobox = ttk.Combobox(content, textvariable=self.bookingShowing)
-        select_showing_combobox.grid(row=0, column=5, padx=5, pady=(0, 40))
-        select_showing_combobox['values'] = showings
-        select_showing_combobox['state'] = 'readonly'
+        self.showings = ('Showing1', 'Showing2', 'Showing3')
+        self.select_showing_label = ttk.Label(content, text="Select Showing:")
+        self.select_showing_label.grid(row=0, column=4, padx=10, pady=(0, 40))
+        self.select_showing_combobox = ttk.Combobox(content, textvariable=self.bookingShowing)
+        self.select_showing_combobox.grid(row=0, column=5, padx=5, pady=(0, 40))
+        self.select_showing_combobox['values'] = self.showings
+        self.select_showing_combobox['state'] = 'readonly'
 
         select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
         select_ticket_type_label.grid(row=1, column=0, padx=5, pady=(0, 40))
@@ -694,7 +699,7 @@ class CreateBookingFrame(ttk.Frame):
         if currentUser.getAccountType() == 0:
             self.cinemaName.set(currentUser.getAccountCinema())
 
-    def searchSuccess(self, message, films):
+    def filmSearchSuccess(self, message, films):
         #resets list so doesnt show 'click me'
         self.films = []
         #adds fetched films to combobox list
@@ -712,13 +717,48 @@ class CreateBookingFrame(ttk.Frame):
             self.controller.searchFilm(self.cinemaName.get())
         
     #function which updates list in combobox to new fetched films
-    def updateCombobox(self):
+    def updateFilmCombobox(self):
         self.select_film_combobox['values'] = self.films
 
-    #function with joins 2 functions together so both happen on <<ComboboxSelected>> event   
-    def comboboxFunction(self, film):
+    #function with joins 2 functions together so both happen on <Enter> (when hovered over) event   
+    def comboboxHoverFunction(self, film):
         self.searchFilms()
-        self.updateCombobox()
+        self.updateFilmCombobox()
+
+    def dateSearchSuccess(self, message, dates):
+        self.dates = []
+        for date in dates:
+            self.dates.append(date[0])
+
+    def searchDates(self):
+        if self.controller:
+            self.controller.searchDates(self.select_film_combobox.get(), self.cinemaName.get())
+    
+    def updateDateCombobox(self):
+        self.select_date_combobox['values'] = self.dates
+
+    #function for <<ComboboxSelected>> event on the film combobox
+    def filmComboboxFunction(self, film):
+        self.searchDates()
+        self.updateDateCombobox()
+    
+    def showingSearchSuccess(self, message, showings):
+        self.showings = []
+        for show in showings:
+            self.showings.append(show[0])
+    
+    def searchShowings(self):
+        if self.controller:
+            self.controller.searchShowings(self.select_date_combobox.get(), self.select_film_combobox.get(), self.cinemaName.get())
+
+    def updateShowingsCombobox(self):
+        self.select_showing_combobox['values'] = self.showings
+
+    #function for <<ComboboxSelected>> event on the dates combobox
+    def dateComboboxFunction(self, film):
+        self.searchShowings()
+        self.updateShowingsCombobox()
+
 
 
 
