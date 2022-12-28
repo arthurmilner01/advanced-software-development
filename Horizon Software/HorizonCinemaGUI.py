@@ -615,8 +615,7 @@ class CreateBookingFrame(ttk.Frame):
         self.price = tk.IntVar()
 
 
-        # TODO: GET A PROPER DATE VALIDATION IN MODEL
-        # TODO: UPDATE BOOKING FUNCTION TO SHOW A RECIEPT
+        # TODO: MAKE BOOKING ID 100% UNIQUE ALL THE TIME
         
         self.films = ['select movie']
         self.select_film_label = ttk.Label(content, text="Select Film:")
@@ -782,11 +781,22 @@ class CreateBookingFrame(ttk.Frame):
         if self.controller:
             self.controller.createBooking(self.bookingSeatType.get(), self.price, self.bookingNumOfTickets.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
         
-    def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema):
+    def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen):
+        message = '''
+        ---------------------------BOOKING RECIEPT---------------------------\n
+        BookingID = '''+str(bookingID)+'''     \n 
+        Film Name = '''+str(film)+'''       \n
+        Screening Date = '''+str(date)+'''   \n
+        Screening Time = '''+str(time)+''' \n
+        Screen = '''+str(screeningScreen)+'''              \n
+        Number of Tickets = '''+str(numOfTickets)+''' \n
+        Seat Numbers = '''+str(ticketSeats)+''' \n
+        Cost = £'''+str(price)+''' \n
+        '''
+        mb.showinfo(title="Booking Reciept", message=message)
         print("booking function")
+        app.showFrame("HomeFrame")
         
-
-
 
 
 

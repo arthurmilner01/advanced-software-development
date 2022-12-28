@@ -142,18 +142,18 @@ class CreateBookingController:
         try:
             screeningID = self.model.getScreeningID(time, date, film, cinema)
             alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-            holder = random.randint(0, 24)
-            letter = alphabet[holder]
-            number = random.randint(0,24)
+            letter = alphabet[random.randint(0, 24)]
+            number = random.randint(0,15)
             ticketSeats = ""
-            for i in range(numOfTickets):
-                ticketSeats = ticketSeats + str(letter)+str(number)
-                number+= i+1
+            for ticket in range(numOfTickets):
+                ticketSeats = ticketSeats+"[" + str(letter)+str(number)+"]"
+                number+= 1
             bookingID = ""
             for i in range(10):
                 bookingID = bookingID + str(random.randint(0,9))
             if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
-                self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema)
+                screeningScreen = self.model.getScreeningScreen(screeningID)
+                self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen)
             else:
                 self.view.searchFailed("Booking unsuccessful")
         except ValueError as error:

@@ -240,13 +240,46 @@ class CreateBookingModel:
         bookings = cur.fetchall()
         query = '''INSERT INTO Bookings (bookingID, seat_type, seat_numbers, price, number_of_tickets, screeningID)
         VALUES (?, ?, ? ,?, ?, ?)'''
+        print(seatNums)
+        print(type(seatNums))
         cur.execute(query, (bookingID, seatType, seatNums, price, numOfTickets, screeningID))
         cur.execute("SELECT bookingID FROM Bookings")
         bookings1 = cur.fetchall()
         if len(bookings1) - len(bookings) == 1:
             print("booking added to database")
+            #removing seats booked from database
+            if seatType == 1:
+                query = "SELECT lower_hall_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+                cur.execute(query, (screeningID,))
+                tickets = cur.fetchone()
+                ticketsRemaining = tickets[0] - numOfTickets
+                query = "UPDATE FilmScreenings SET lower_hall_tickets_left = ? WHERE screeningID = ? "
+                cur.execute(query, (ticketsRemaining, screeningID))
+                conn.commit()
+            if seatType == 2:
+                query = "SELECT upper_hall_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+                cur.execute(query, (screeningID,))
+                tickets = cur.fetchone()
+                ticketsRemaining = tickets[0] - numOfTickets
+                query = "UPDATE FilmScreenings SET upper_hall_tickets_left = ? WHERE screeningID = ? "
+                cur.execute(query, (ticketsRemaining, screeningID))
+                conn.commit()
+            if seatType == 3:
+                query = "SELECT VIP_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+                cur.execute(query, (screeningID,))
+                tickets = cur.fetchone()
+                ticketsRemaining = tickets[0] - numOfTickets
+                query = "UPDATE FilmScreenings SET VIP_tickets_left = ? WHERE screeningID = ? "
+                cur.execute(query, (ticketsRemaining, screeningID))
+                conn.commit()
             return 1
         else:
             return 0
+        
+    def getScreeningScreen(self, screeningID):
+        query = "SELECT screening_screen FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        screeningScreen = cur.fetchone()
+        return screeningScreen[0]
 
 
