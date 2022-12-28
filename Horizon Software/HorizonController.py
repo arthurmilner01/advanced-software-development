@@ -48,7 +48,7 @@ class ViewFilmListingsController:
                 print("Film name syntax incorrect.")
                 self.view.searchFailed('Film name syntax incorrect.')
         except ValueError as error:
-            pass
+            self.view.searchFailed(error)
 
 
 class CreateBookingController:
@@ -158,6 +158,27 @@ class CreateBookingController:
                 self.view.searchFailed("Booking unsuccessful")
         except ValueError as error:
             pass
+
+class GenerateReportController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view=view
+
+    def generateReport(self, reportType, reportParameter):
+        try:
+            if self.model.validateReportTypeSyntax(reportType):
+                if self.model.validateReportParameterSyntax(reportType, reportParameter):
+                    if self.model.checkReportReturnsInfo(reportType, reportParameter):
+                        reportInfo = self.model.returnReportInfo(reportType, reportParameter)
+                        self.view.generateSuccess('Generating report', reportInfo)
+                    else:
+                        self.view.generateFailed('Report did not return any results.')
+                else:
+                    self.view.generateFailed('Report parameter syntax incorrect.')
+            else:
+                self.view.generateFailed('Report type syntax incorrect.')
+        except ValueError as error:
+            self.view.generateFailed(error)
                         
 
 

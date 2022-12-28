@@ -281,5 +281,67 @@ class CreateBookingModel:
         cur.execute(query, (screeningID,))
         screeningScreen = cur.fetchone()
         return screeningScreen[0]
+class GenerateReportModel:
+    def __init__(self):
+        self.__reportType = ""
+        self.__reportParameter = ""
+
+    def validateReportTypeSyntax(self, reportType):
+        if len(reportType) > 0:
+            pattern = r'[1-4]' #Numbers, up to 4, increase if you wish to have more reports
+            if re.fullmatch(pattern, reportType):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    def validateReportParameterSyntax(self, reportType, reportParameter):
+        if reportType == 3 and len(reportParameter) == 0:
+            return 1
+        if len(reportParameter) > 0:
+            pattern = r'[1-4]' #Numbers, up to 4, increase if you wish to have more reports
+            if re.fullmatch(pattern, reportType):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    def checkReportReturnsInfo(self, reportType, reportParameter):
+        #TODO: Make all of these functional, maybe change reports to something easier
+        if reportType == 1:
+            pass
+        if reportType == 2:
+            #Getting all bookings for given screening ID to check if any bookings have been made
+            query = "SELECT bookingID FROM Bookings WHERE screeningID = ?"
+            cur.execute(query, (reportParameter, ))
+            result = cur.fetchall()
+            print(result)
+            if len(result) > 0:
+                print("Found results.")
+                return 1
+            else:
+                return 0
+        if reportType == 3:
+            pass
+        if reportType == 4:
+            pass
+    
+    def returnReportInfo(self, reportType, reportParameter):
+        #TODO: Make all of these functional, maybe change reports to something easier
+        if reportType == 1:
+            pass
+        if reportType == 2:
+            #Getting the count of bookings under a given screening ID
+            query = "SELECT screeningID, COUNT(*) FROM Bookings WHERE screeningID = ?"
+            cur.execute(query, (reportParameter, ))
+            reportInfo = cur.fetchall()
+            return reportInfo
+        if reportType == 3:
+            pass
+        if reportType == 4:
+            pass
+
 
 

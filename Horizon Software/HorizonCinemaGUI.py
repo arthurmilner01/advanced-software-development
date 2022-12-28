@@ -428,56 +428,76 @@ class GenerateReportFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+
+        self.model = GenerateReportModel()
+        self.view = self
+        self.controller = GenerateReportController(self.model, self.view)
+    
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
         self.__createContentWithWidgets()
         
     
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="Generate Report", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+        self.header = ttk.Frame(self)
+        self.header.grid(row=0)
+        self.current_page_label = ttk.Label(self.header, text="Generate Report", font=('Helvetica bold', 20))
+        self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        self.staff_name_label = ttk.Label(self.header, text="Staff Name:")
+        self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        self.staff_cinema_label = ttk.Label(self.header, text=currentUser.getEmail())
+        self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        reportType = tk.StringVar()
-        reportParameter = tk.StringVar()
-        filler_label = ttk.Label(content, text="""
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
+        self.__reportType = tk.StringVar()
+        self.__reportParameter = tk.StringVar()
+        self.filler_label = ttk.Label(self.content, text="""
         
         
         
         
         
         """)
-        filler_label.grid(row=0, column=0)
-        report_information_label = ttk.Label(content, text="""
+        self.filler_label.grid(row=0, column=0)
+        self.report_information_label = ttk.Label(self.content, text="""
         Report ID 1: List of Staff and The Number of Bookings They Have Created for the Month. (Parameter = Desired Month)
         Report ID 2: Number of Bookings for a Screening. (Parameter: Screening ID)
         Report ID 3: Total Monthly Revenue for Each Cinema. (Parameter: N/A)
         Report ID 4: Film Generating the Most Revenue.
         """, font=('Helvetica bold', 10))
-        report_information_label.grid(row=1, column=0, columnspan=3, sticky=tk.N)
-        generate_report_label = ttk.Label(content, text="Enter Report ID:")
-        generate_report_label.grid(row=2, column=0, pady=10, padx=10)
-        generate_report_entry = ttk.Entry(content, textvariable=reportType)
-        generate_report_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
-        report_parameter_label = ttk.Label(content, text="Enter Report Parameter:")
-        report_parameter_label.grid(row=3, column=0, pady=10, padx=10)
-        report_parameter_entry = ttk.Entry(content, textvariable=reportParameter)
-        report_parameter_entry.grid(row=3, column=1, columnspan=2, padx=10, pady=10)
-        generate_report_button = ttk.Button(content, text="Generate Report")
-        generate_report_button.grid(row=4, column=0, columnspan=3)
-        report_listbox = tk.Listbox(self)
-        report_listbox.place(height=200, width=200, x=500, y=200)
-        report_listbox1 = tk.Listbox(self)
-        report_listbox1.place(height=200, width=200, x=700, y=200)
+        self.report_information_label.grid(row=1, column=0, columnspan=3, sticky=tk.N)
+        self.generate_report_label = ttk.Label(self.content, text="Enter Report ID:")
+        self.generate_report_label.grid(row=2, column=0, pady=10, padx=10)
+        self.generate_report_entry = ttk.Entry(self.content, textvariable=self.__reportType)
+        self.generate_report_entry.grid(row=2, column=1, columnspan=2, padx=10, pady=10)
+        self.report_parameter_label = ttk.Label(self.content, text="Enter Report Parameter:")
+        self.report_parameter_label.grid(row=3, column=0, pady=10, padx=10)
+        self.report_parameter_entry = ttk.Entry(self.content, textvariable=self.__reportParameter)
+        self.report_parameter_entry.grid(row=3, column=1, columnspan=2, padx=10, pady=10)
+        self.generate_report_button = ttk.Button(self.content, text="Generate Report", command=self.generateReport)
+        self.generate_report_button.grid(row=4, column=0, columnspan=3)
+        self.report_listbox = tk.Listbox(self)
+        self.report_listbox.place(height=250, width=450, x=500, y=100)
+
+    def generateSuccess(self, message, reportInfo):
+        self.report_listbox.delete(0, tk.END)
+        mb.showinfo(title="Report Generating:", message=message)
+        for row in reportInfo:
+            self.report_listbox.insert(tk.END, row)
+
+    def generateFailed(self, message):
+        self.__reportType.set('')
+        self.__reportParameter.set('')
+        mb.showerror(title="Failed to Generate Report:", message=message)
+
+    def generateReport(self,):
+        if self.controller:
+            self.controller.generateReport(self.__reportType.get(), self.__reportParameter.get())
+
         
         
 class ViewFilmListingsFrame(ttk.Frame):
