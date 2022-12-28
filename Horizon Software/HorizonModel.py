@@ -5,6 +5,16 @@ from datetime import *
 conn = getConn()
 cur = getCursor()
 
+class HomeModel:
+    def __init__(self):
+        pass
+
+    def getCinemas(self):
+        cur.execute("SELECT cinema_name FROM Cinemas")
+        cinemas = cur.fetchall()
+        return cinemas
+
+
 class LoginModel:
     def __init__(self):
         self.__email = ""
@@ -133,6 +143,7 @@ class CreateBookingModel:
     
     def validateCinemaNameSyntax(self, cinemaName):
         if len(cinemaName) > 0:
+            print("yes")
             pattern = r'[A-Za-z ]{0,50}' #Letters and up to 50 char
             if re.fullmatch(pattern, cinemaName):
                 return 1

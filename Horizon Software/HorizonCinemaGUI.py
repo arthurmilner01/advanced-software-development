@@ -128,7 +128,12 @@ class HomeFrame(ttk.Frame):
         self.rowconfigure(4, weight=1)
         self.columnconfigure(0, weight=1)
         self.columnconfigure(5, weight=1)
+        self.current_cinema_combobox_values = ["Select Current Cinema"]
         self.createWidgets()
+
+        self.model = HomeModel()
+        self.view =  self
+        self.controller = HomeController(self.model, self.view)
 
     def createWidgets(self):
         if currentUser.accountType == 0 or currentUser.accountType == 1 or currentUser.accountType == 2:
@@ -153,6 +158,12 @@ class HomeFrame(ttk.Frame):
             view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
             view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
             view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
+            self.current_cinema_combobox = ttk.Combobox(self, state="readonly")
+            self.current_cinema_combobox['values'] = self.current_cinema_combobox_values
+            self.current_cinema_combobox.bind("<Enter>", self.comboboxHoverFunction) #event <Enter> changes combobox when hovered over and not when selected
+            self.current_cinema_combobox.bind("<<ComboboxSelected>>", self.selectComboboxFunction) #event <<ComboboxSelected>> does function when new value is selected
+            self.current_cinema_combobox.current(0)
+            self.current_cinema_combobox.grid(column=2, row=2, padx=10, pady=20)
         if currentUser.accountType == 2:
             view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
             view_admin_button.grid(column=2, row=2, padx=10, pady=20)
@@ -163,6 +174,19 @@ class HomeFrame(ttk.Frame):
         currentUser.setEmail("default")
         currentUser.setAccountType(0)
         app.showFrame("LoginFrame")
+    
+    def cinemaSearchSuccess(self, cinemas):
+        self.current_cinema_combobox_values = []
+        for cinema in cinemas:
+            self.current_cinema_combobox_values.append(cinema[0])
+
+    def comboboxHoverFunction(self, cinema):
+        if self.controller:
+            self.controller.searchCinemas()
+        self.current_cinema_combobox['values'] = self.current_cinema_combobox_values
+
+    def selectComboboxFunction(self, cinema):
+        currentUser.setAccountCinema(self.current_cinema_combobox.get())
         
         
       
@@ -607,7 +631,6 @@ class CreateBookingFrame(ttk.Frame):
         self.model = CreateBookingModel()
         self.view =  self
         self.controller = CreateBookingController(self.model, self.view)
-
         self.createWidgets()
 
     def createWidgets(self):
@@ -656,6 +679,7 @@ class CreateBookingFrame(ttk.Frame):
         self.select_film_combobox['state'] = 'readonly'
         self.select_film_combobox.bind("<Enter>", self.comboboxHoverFunction) #new event <Enter> changes combobox when hovered over and not when selected
         self.select_film_combobox.bind("<<ComboboxSelected>>", self.filmComboboxFunction)
+        self.select_film_combobox.current(0)
 
         self.dates = ('select movie') 
         self.select_date_label = ttk.Label(content, text="Select Date:")
@@ -664,7 +688,8 @@ class CreateBookingFrame(ttk.Frame):
         self.select_date_combobox.grid(row=0, column=3, padx=5, pady=(0, 40))
         self.select_date_combobox['values'] = self.dates
         self.select_date_combobox['state'] = 'readonly'  
-        self.select_date_combobox.bind("<<ComboboxSelected>>", self.dateComboboxFunction)  
+        self.select_date_combobox.bind("<<ComboboxSelected>>", self.dateComboboxFunction) 
+        self.select_date_combobox.current(0) 
 
         self.showings = ('select date')
         self.select_showing_label = ttk.Label(content, text="Select Showing:")
@@ -673,6 +698,7 @@ class CreateBookingFrame(ttk.Frame):
         self.select_showing_combobox.grid(row=0, column=5, padx=5, pady=(0, 40))
         self.select_showing_combobox['values'] = self.showings
         self.select_showing_combobox['state'] = 'readonly'
+        self.select_showing_combobox.current(0)
 
         self.select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
         self.select_ticket_type_label.grid(row=1, column=0, padx=5, pady=(0, 40))
@@ -742,16 +768,12 @@ class CreateBookingFrame(ttk.Frame):
     
     def searchFilms(self):
         if self.controller:
-            self.controller.searchFilm(self.cinemaName.get())
-        
-    #function which updates list in combobox to new fetched films
-    def updateFilmCombobox(self):
-        self.select_film_combobox['values'] = self.films
+            self.controller.searchFilm(currentUser.getAccountCinema())
 
     #function with joins 2 functions together so both happen on <Enter> (when hovered over) event   
     def comboboxHoverFunction(self, film):
         self.searchFilms()
-        self.updateFilmCombobox()
+        self.select_film_combobox['values'] = self.films
 
     def dateSearchSuccess(self, message, dates):
         self.dates = []
@@ -760,7 +782,7 @@ class CreateBookingFrame(ttk.Frame):
 
     def searchDates(self):
         if self.controller:
-            self.controller.searchDates(self.bookingFilm.get(), self.cinemaName.get())
+            self.controller.searchDates(self.bookingFilm.get(), currentUser.getAccountCinema())
     
     def updateDateCombobox(self):
         self.select_date_combobox['values'] = self.dates
@@ -777,7 +799,7 @@ class CreateBookingFrame(ttk.Frame):
     
     def searchShowings(self):
         if self.controller:
-            self.controller.searchShowings(self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
+            self.controller.searchShowings(self.bookingDate.get(), self.bookingFilm.get(), currentUser.getAccountCinema())
 
     def updateShowingsCombobox(self):
         self.select_showing_combobox['values'] = self.showings
@@ -794,7 +816,7 @@ class CreateBookingFrame(ttk.Frame):
 
     def checkPrice(self, message):
         if self.controller:
-            self.controller.checkPrice(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get(), message)
+            self.controller.checkPrice(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), currentUser.getAccountCinema(), message)
 
     def availabilityFailed(self, message, tickets):
         message = message + "\nlower tickets available: " + str(tickets[0][0]) + "\nupper ticekts available: " + str(tickets[0][1]) + "\nVIP tickets available: " + str(tickets[0][2])
@@ -802,14 +824,14 @@ class CreateBookingFrame(ttk.Frame):
 
     def checkAvailability(self):
         if self.controller:
-            self.controller.checkAvailability(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
+            self.controller.checkAvailability(self.bookingNumOfTickets.get(), self.bookingSeatType.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), currentUser.getAccountCinema())
 
     def checkAvailabilityAndPrice(self):
         self.checkAvailability()
     
     def createBooking(self):
         if self.controller:
-            self.controller.createBooking(self.bookingSeatType.get(), self.price, self.bookingNumOfTickets.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), self.cinemaName.get())
+            self.controller.createBooking(self.bookingSeatType.get(), self.price, self.bookingNumOfTickets.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), currentUser.getAccountCinema())
         
     def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen):
         message = '''

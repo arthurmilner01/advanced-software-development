@@ -2,6 +2,20 @@ from HorizonModel import *
 import datetime
 import random
 
+class HomeController:
+    def __init__(self,model, view):
+        self.model = model
+        self.view = view
+
+    def searchCinemas(self):
+        try:
+            cinemas = self.model.getCinemas()
+            self.view.cinemaSearchSuccess(cinemas)
+        except ValueError as error:
+            pass
+    
+
+
 class LoginController:
     def __init__(self, model, view):
         self.model = model 
