@@ -184,9 +184,9 @@ class ViewBookingStaffFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="View Booking Staff", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -240,9 +240,9 @@ class ViewAdminFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="View Admin", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -291,9 +291,9 @@ class ViewFilmFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="View Film", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -375,9 +375,9 @@ class AddCinemasFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="Add Cinema/City", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -437,9 +437,9 @@ class GenerateReportFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="Generate Report", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -505,7 +505,7 @@ class ViewFilmListingsFrame(ttk.Frame):
         self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
         self.staff_name_label = ttk.Label(self.header, text="Staff Email:")
         self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        self.staff_cinema_label = ttk.Label(self.header, text=currentUser.getEmail())
+        self.staff_cinema_label = ttk.Label(self.header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -589,9 +589,9 @@ class CreateBookingFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="Create Booking", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=currentUser.getEmail() + " " + currentUser.getAccountCinema())
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -783,7 +783,7 @@ class CreateBookingFrame(ttk.Frame):
         
     def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen):
         message = '''
-        ---------------------------BOOKING RECIEPT---------------------------\n
+        -------------------BOOKING RECIEPT-------------------\n
         BookingID = '''+str(bookingID)+'''     \n 
         Film Name = '''+str(film)+'''       \n
         Screening Date = '''+str(date)+'''   \n
@@ -806,18 +806,25 @@ class CancelBookingFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
-        self.__createHeaderWithWidgets()
-        self.__createContentWithWidgets()
+        self.createWidgets()
+
+        self.model = CancelBookingModel()
+        self.view =  self
+        self.controller = CancelBookingController(self.model, self.view)
         
     
+    def createWidgets(self):
+        self.__createHeaderWithWidgets()
+        self.__createContentWithWidgets()
+
     def __createHeaderWithWidgets(self):
         header = ttk.Frame(self)
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="Cancel Booking", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
@@ -826,15 +833,29 @@ class CancelBookingFrame(ttk.Frame):
         content = ttk.Frame(self)
         content.grid(row=1)
 
-        bookingID = tk.StringVar()
+        self.bookingID = tk.StringVar()
 
-        booking_id_label = ttk.Label(content, text="Booking ID:")
-        booking_id_label.grid(row=0, column=0, padx=5, pady=(0, 100))
-        booking_id_entry = ttk.Entry(content, textvariable=bookingID)
-        booking_id_entry.grid(row=0, column=1, padx=5, pady=(0, 100))
+        self.booking_id_label = ttk.Label(content, text="Booking ID:")
+        self.booking_id_label.grid(row=0, column=0, padx=5, pady=(0, 100))
+        self.booking_id_entry = ttk.Entry(content, textvariable=self.bookingID)
+        self.booking_id_entry.grid(row=0, column=1, padx=5, pady=(0, 100))
 
-        cancel_booking_button = ttk.Button(content, text="Cancel Booking")
-        cancel_booking_button.grid(row=1, column=0, columnspan=2)
+        self.cancel_booking_button = ttk.Button(content, text="Cancel Booking", command=self.cancelBooking)
+        self.cancel_booking_button.grid(row=1, column=0, columnspan=2)
+
+    def cancelBooking(self):
+        if self.controller:
+            self.controller.cancelBooking(self.bookingID.get())
+        
+    def cancelSuccess(self, message):
+        mb.showinfo(title="Booking Cancelled", message=message)
+        print("Booking Cancelled.")
+        app.showFrame("HomeFrame")
+    
+    def searchFailed(self, message):
+        mb.showinfo(title="Booking Cancelation Faliure", message=message)
+        print("booking cancelation faliure")
+
 
 class ViewCinemaScreeningsFrame(ttk.Frame):
     def __init__(self, container):
@@ -851,9 +872,9 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         header.grid(row=0)
         current_page_label = ttk.Label(header, text="View Screenings", font=('Helvetica bold', 20))
         current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Name:")
+        staff_name_label = ttk.Label(header, text="Staff Email:")
         staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text=" Staff Name [Staff Cinema]")
+        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
         staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
         menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)

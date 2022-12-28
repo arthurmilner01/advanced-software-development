@@ -158,6 +158,35 @@ class CreateBookingController:
                 self.view.searchFailed("Booking unsuccessful")
         except ValueError as error:
             pass
-                        
+
+
+
+class CancelBookingController():
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+    
+    def cancelBooking(self, bookingID):
+        try:
+            if len(bookingID) == 10:
+                if self.model.checkBookingID(bookingID):
+                    bookingInfo = self.model.getBooking(bookingID)
+                    if self.model.checkCancelTime(bookingInfo[5]):                        
+                        if self.model.removeBooking(bookingID):
+                            if self.model.updateTickets(bookingInfo[4], bookingInfo[1], bookingInfo[5]):
+                                self.view.cancelSuccess("Cancel success for booking ID: "+str(bookingID)+".")
+                            else:
+                                self.view.searchFailed("Screening tickets remaining couldnt be updated.")
+                        else:
+                            self.view.searchFailed("Booking could not be removed from database.")
+                    else:
+                        self.view.searchFailed("Booking can't be canceled less that a day before showing.")
+                else:
+                    self.view.searchFailed("No booking connected to that booking ID.")
+            else:
+                self.view.searchFailed("Booking ID not correct.")
+        except ValueError as error:
+            pass
+
 
 

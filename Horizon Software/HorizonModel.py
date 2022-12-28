@@ -1,6 +1,6 @@
 import re
 from DatabaseAccess import *
-import string
+from datetime import *
 
 conn = getConn()
 cur = getCursor()
@@ -240,8 +240,6 @@ class CreateBookingModel:
         bookings = cur.fetchall()
         query = '''INSERT INTO Bookings (bookingID, seat_type, seat_numbers, price, number_of_tickets, screeningID)
         VALUES (?, ?, ? ,?, ?, ?)'''
-        print(seatNums)
-        print(type(seatNums))
         cur.execute(query, (bookingID, seatType, seatNums, price, numOfTickets, screeningID))
         cur.execute("SELECT bookingID FROM Bookings")
         bookings1 = cur.fetchall()
@@ -283,3 +281,80 @@ class CreateBookingModel:
         return screeningScreen[0]
 
 
+
+class CancelBookingModel():
+    def checkBookingID(self, bookingID):
+        query = "SELECT * FROM Bookings WHERE bookingID = ?"
+        cur.execute(query, (bookingID,))
+        records = cur.fetchall()
+        if len(records) > 0:
+            return 1
+        else: 
+            return 0
+
+    def checkCancelTime(self, screeningID):
+        query = "SELECT screening_date FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        dates = cur.fetchone()
+        holder = date.today()
+        today = holder.strftime("%d/%m/%Y")
+        today = datetime.strptime(today, "%d/%m/%Y")
+        bookingDate = datetime.strptime(dates[0], "%d/%m/%Y")
+        difference = bookingDate - today
+        if int(difference.days) >= 1:
+            return 1
+        else:
+            return 0
+    
+    def getBooking(self, bookingID):
+        query = "SELECT * FROM Bookings WHERE bookingID = ?"
+        cur.execute(query, (bookingID,))
+        bookingInfo = cur.fetchone()
+        return bookingInfo
+
+    def removeBooking(self, bookingID):
+        query = "SELECT * FROM Bookings WHERE bookingID = ?"
+        cur.execute(query, (bookingID,))
+        bookingsBefore = cur.fetchall()
+        query = "DELETE FROM Bookings WHERE bookingID = ?"
+        cur.execute(query, (bookingID,))
+        conn.commit
+        query = "SELECT * FROM Bookings WHERE bookingID = ?"
+        cur.execute(query, (bookingID,))
+        bookingsAfter = cur.fetchall()
+        if  len(bookingsBefore) - len(bookingsAfter) == 1:
+            return 1
+        else: 
+            return 0
+
+    def updateTickets(self, numOfTickets, seatType, screeningID):
+        print(numOfTickets, seatType, screeningID)
+        if seatType == "1":
+            query = "SELECT lower_hall_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+            cur.execute(query, (screeningID,))
+            tickets = cur.fetchone()
+            ticketsRemaining = tickets[0] + numOfTickets
+            query = "UPDATE FilmScreenings SET lower_hall_tickets_left = ? WHERE screeningID = ? "
+            cur.execute(query, (ticketsRemaining, screeningID))
+            conn.commit()
+            return 1
+        elif seatType == "2":
+            query = "SELECT upper_hall_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+            cur.execute(query, (screeningID,))
+            tickets = cur.fetchone()
+            ticketsRemaining = tickets[0] + numOfTickets
+            query = "UPDATE FilmScreenings SET upper_hall_tickets_left = ? WHERE screeningID = ? "
+            cur.execute(query, (ticketsRemaining, screeningID))
+            conn.commit()
+            return 1
+        elif seatType == "3":
+            query = "SELECT VIP_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+            cur.execute(query, (screeningID,))
+            tickets = cur.fetchone()
+            ticketsRemaining = tickets[0] + numOfTickets
+            query = "UPDATE FilmScreenings SET VIP_tickets_left = ? WHERE screeningID = ? "
+            cur.execute(query, (ticketsRemaining, screeningID))
+            conn.commit()
+            return 1
+        else:
+            return 0
