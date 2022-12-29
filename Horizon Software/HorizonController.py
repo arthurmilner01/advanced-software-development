@@ -298,6 +298,40 @@ class ViewFilmController:
                 self.view.searchFailed("Invalid Film Name Syntax.")
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    def editFilm(self, filmID, updateList):
+        try:
+            if self.model.checkFilmID(filmID):
+                filmInfo = self.model.getFilmInfo(filmID)
+                i=0
+                for i in range(len(filmInfo)):
+                    if updateList[i] == "":
+                        updateList[i] = str(filmInfo[i])
+                if self.model.validateFilmNameSyntax(updateList[0]):
+                    if self.model.validateFilmNameSyntax(updateList[1]):
+                        if self.model.validateFilmNameSyntax(updateList[2]):
+                            if self.model.validateFilmNameSyntax(updateList[3]):
+                                if self.model.validateFilmAgeSyntax(updateList[4]):
+                                    if self.model.validateFilmRatingSyntax(updateList[5]):
+                                        self.model.updateFilm(filmID, updateList)
+                                        self.view.editFilmSuccess(filmID)
+                                    else:
+                                        self.view.searchFailed("Invalid Rating Syntax.")
+                                else:
+                                    self.view.searchFailed("Invalid Film Age Syntax.")
+                            else:
+                                self.view.searchFailed("Invalid Film Genre Syntax.")
+                        else:
+                            self.view.searchFailed("Invalid Film Actors Syntax.")
+                    else:
+                        self.view.searchFailed("Invalid Film Description Syntax.")
+                else:
+                    self.view.searchFailed("Invalid Film Name Syntax.")
+            else:
+                self.view.searchFailed("No Film With That ID")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
 
 class ViewBookingStaffController:
     def __init__(self, model, view):

@@ -548,6 +548,22 @@ class ViewFilmModel:
         cur.execute(query, (filmName,))
         film = cur.fetchone()
         return film
+    
+    def getFilmInfo(self, filmID):
+        query = 'SELECT film_name, film_description, film_actors, film_genre, film_age, film_rating FROM Films WHERE filmID = ?'
+        cur.execute(query, (filmID,))
+        film = cur.fetchone()
+        return film
+    
+    def updateFilm(self, filmID, updateList):
+        query = 'UPDATE Films SET film_name = ?, film_description = ?, film_actors = ?, film_genre = ?, film_age = ?, film_rating = ? WHERE filmID = ?'
+        cur.execute(query, (updateList[0], updateList[1], updateList[2], updateList[3], updateList[4], updateList[5], filmID))
+        conn.commit()
+        query = "SELECT * FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        film = cur.fetchone()
+        print("film: "+str(film))
+
 
 class ViewBookingStaffModel:
     def __init__(self):

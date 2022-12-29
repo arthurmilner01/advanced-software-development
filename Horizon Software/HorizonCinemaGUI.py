@@ -420,11 +420,11 @@ class ViewFilmFrame(ttk.Frame):
         """)
         self.text_fill_label.grid(row=11, column=0, columnspan=3)
 
-    #TODO: function to edit film from ID and check what entry fields are not empty and change them
-    #TODO: function to pull all details of a film from its name
+    #TODO: find a way to change all showings of a film to new name after its been updated because when 
+    #TODO: looking at viewings and booking it pulls names of film from film screenings table and not films table
 
     def searchFailed(self, message):
-        mb.showerror(title="Film Edit Page Faliure", message=message)
+        mb.showinfo(title="Film Edit Page Faliure", message=message)
         print("Film Edit Page faliure.")
     
     def addFilmSuccess(self, filmName):
@@ -442,7 +442,15 @@ class ViewFilmFrame(ttk.Frame):
         mb.showinfo(title="Film Removed", message="Film With ID: "+str(filmID)+" Successfully Removed\nAswell As All Screenings With Film Name: "+str(filmName))
 
     def editFilm(self):
-        pass
+        if self.controller:
+            listOfItems = []
+            listOfItems.append(self.filmName.get())
+            listOfItems.append(self.filmDescription.get())
+            listOfItems.append(self.filmActors.get())
+            listOfItems.append(self.filmGenre.get())
+            listOfItems.append(self.filmAge.get())          
+            listOfItems.append(self.filmRating.get())
+            self.controller.editFilm(self.filmID.get(), listOfItems)
 
     def searchFilmByTitle(self):
         if self.controller:
@@ -450,6 +458,9 @@ class ViewFilmFrame(ttk.Frame):
 
     def filmSearchSuccess(self, film, filmName):
         mb.showinfo(title="Film Found", message="Film Found With Name: "+str(filmName)+"\n"+str(film))
+    
+    def editFilmSuccess(self, filmID):
+        mb.showinfo(title="Film Updated", message="Film Updated With ID: "+str(filmID)+" Successfully.")
 
 class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):
