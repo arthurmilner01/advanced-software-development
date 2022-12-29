@@ -407,7 +407,6 @@ class CancelBookingModel():
             return 0
 
     def updateTickets(self, numOfTickets, seatType, screeningID):
-        print(numOfTickets, seatType, screeningID)
         if seatType == "1":
             query = "SELECT lower_hall_tickets_left FROM FilmScreenings WHERE screeningID = ?"
             cur.execute(query, (screeningID,))
@@ -434,6 +433,55 @@ class CancelBookingModel():
             query = "UPDATE FilmScreenings SET VIP_tickets_left = ? WHERE screeningID = ? "
             cur.execute(query, (ticketsRemaining, screeningID))
             conn.commit()
+            return 1
+        else:
+            return 0
+
+
+class ViewFilmModel:
+    def __init__(self):
+        pass
+
+    def validateFilmNameSyntax(self, filmName):
+        if len(filmName) > 0:
+            pattern = r'[A-Za-z0-9, ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, filmName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def validateFilmAgeSyntax(self, filmAge):
+        if len(filmAge) > 0 and len(filmAge) <= 2:
+            pattern = r'[0-9 ]{0,2}' #numbers and up to 2 char
+            if re.fullmatch(pattern, filmAge):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def validateFilmRatingSyntax(self, filmName):
+        if len(filmName) > 0:
+            pattern = r'-?\d+(?:\.\d+)?' #floating point 
+            if re.fullmatch(pattern, filmName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def addFilm(self, filmName, filmDescription, filmActors, filmGenre, filmAge, filmRating):
+        cur.execute("SELECT * FROM Films")
+        filmsBefore = cur.fetchall()
+        query = "INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating) VALUES (?,?,?,?,?,?)"
+        cur.execute(query, (filmName, filmDescription, filmActors, filmGenre, filmAge, filmRating))
+        conn.commit()
+        cur.execute("SELECT * FROM Films")
+        filmsAfter = cur.fetchall()
+        print(filmsAfter)
+        if len(filmsAfter) - len(filmsBefore) == 1:
             return 1
         else:
             return 0

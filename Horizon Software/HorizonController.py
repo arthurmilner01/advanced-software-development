@@ -236,3 +236,35 @@ class CancelBookingController():
 
 
 
+class ViewFilmController:
+    def __init__(self, model, view):
+        self.view = view
+        self.model = model
+    
+    def addFilm(self, filmName, filmDescription, filmActors, filmGenre, filmAge, filmRating):
+        try:
+            if self.model.validateFilmNameSyntax(filmName):
+                if self.model.validateFilmNameSyntax(filmDescription):
+                    if self.model.validateFilmNameSyntax(filmActors):
+                        if self.model.validateFilmNameSyntax(filmGenre):
+                            if self.model.validateFilmAgeSyntax(filmAge):
+                                if self.model.validateFilmRatingSyntax(filmRating):
+                                    if self.model.addFilm(filmName, filmDescription, filmActors, filmGenre, filmAge, filmRating):
+                                        self.view.addFilmSuccess(filmName)
+                                    else:
+                                        self.view.searchFailed("Cannot Add Film To Database.")
+                                else:
+                                    self.view.searchFailed("Invalid Rating Syntax.")
+                            else:
+                                self.view.searchFailed("Invalid Film Age Syntax.")
+                        else:
+                            self.view.searchFailed("Invalid Film Genre Syntax.")
+                    else:
+                        self.view.searchFailed("Invalid Film Actors Syntax.")
+                else:
+                    self.view.searchFailed("Invalid Film Description Syntax.")
+            else:
+                self.view.searchFailed("Invalid Film Name Syntax.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+

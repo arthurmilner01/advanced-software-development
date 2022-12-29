@@ -304,6 +304,13 @@ class ViewFilmFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+        self.createWidgets()
+
+        self.model = ViewFilmModel()
+        self.view =  self
+        self.controller = ViewFilmController(self.model, self.view)
+
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
         self.__createContentWithWidgets()
         
@@ -321,66 +328,82 @@ class ViewFilmFrame(ttk.Frame):
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        filmID = tk.StringVar()
-        filmName = tk.StringVar()
-        filmDescription = tk.StringVar()
-        filmActors = tk.StringVar()
-        filmGenre = tk.StringVar()
-        filmAge = tk.StringVar()
-        filmRating = tk.StringVar()
-        searchTitle = tk.StringVar()
-        filmID_label = ttk.Label(content, text="Film ID:")
-        filmID_label.grid(row=0, column=0, pady=10, padx=10)
-        filmID_entry = ttk.Entry(content, textvariable=filmID)
-        filmID_entry.grid(row=0, column=1, columnspan=2, pady=10, padx=10)
-        film_title_label = ttk.Label(content, text="Film Title:")
-        film_title_label.grid(row=1, column=0, pady=10, padx=10)
-        film_title_entry = ttk.Entry(content, textvariable=filmName)
-        film_title_entry.grid(row=1, column=1, columnspan=2, pady=10, padx=10)
-        film_description_label = ttk.Label(content, text="Film Description:")
-        film_description_label.grid(row=2, column=0, pady=10, padx=10)
-        film_description_entry = ttk.Entry(content, textvariable=filmDescription)
-        film_description_entry.grid(row=2, column=1, columnspan=2, pady=10, padx=10)
-        film_actors_label = ttk.Label(content, text="Film Actors:")
-        film_actors_label.grid(row=3, column=0, pady=10, padx=10)
-        film_actors_entry = ttk.Entry(content, textvariable=filmActors)
-        film_actors_entry.grid(row=3, column=1, columnspan=2, pady=10, padx=10)
-        film_genre_label = ttk.Label(content, text="Film Genre:")
-        film_genre_label.grid(row=4, column=0, pady=10, padx=10)
-        film_genre_entry = ttk.Entry(content, textvariable=filmGenre)
-        film_genre_entry.grid(row=4, column=1, columnspan=2, pady=10, padx=10)
-        film_age_label = ttk.Label(content, text="Film Age:")
-        film_age_label.grid(row=5, column=0, pady=10, padx=10)
-        film_age_entry = ttk.Entry(content, textvariable=filmAge)
-        film_age_entry.grid(row=5, column=1, columnspan=2, pady=10, padx=10)
-        film_rating_label = ttk.Label(content, text="Film Rating:")
-        film_rating_label.grid(row=6, column=0, pady=10, padx=10)
-        film_age_entry = ttk.Entry(content, textvariable=filmRating)
-        film_age_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)     
+        self.filmID = tk.StringVar()
+        self.filmName = tk.StringVar()
+        self.filmDescription = tk.StringVar()
+        self.filmActors = tk.StringVar()
+        self.filmGenre = tk.StringVar()
+        self.filmAge = tk.StringVar()
+        self.filmRating = tk.StringVar()
+        self.searchTitle = tk.StringVar()
+        self.filmID_label = ttk.Label(self.content, text="Film ID:")
+        self.filmID_label.grid(row=0, column=0, pady=10, padx=10)
+        self.filmID_entry = ttk.Entry(self.content, textvariable=self.filmID)
+        self.filmID_entry.grid(row=0, column=1, columnspan=2, pady=10, padx=10)
+        self.film_title_label = ttk.Label(self.content, text="Film Title:")
+        self.film_title_label.grid(row=1, column=0, pady=10, padx=10)
+        self.film_title_entry = ttk.Entry(self.content, textvariable=self.filmName)
+        self.film_title_entry.grid(row=1, column=1, columnspan=2, pady=10, padx=10)
+        self.film_description_label = ttk.Label(self.content, text="Film Description:")
+        self.film_description_label.grid(row=2, column=0, pady=10, padx=10)
+        self.film_description_entry = ttk.Entry(self.content, textvariable=self.filmDescription)
+        self.film_description_entry.grid(row=2, column=1, columnspan=2, pady=10, padx=10)
+        self.film_actors_label = ttk.Label(self.content, text="Film Actors:")
+        self.film_actors_label.grid(row=3, column=0, pady=10, padx=10)
+        self.film_actors_entry = ttk.Entry(self.content, textvariable=self.filmActors)
+        self.film_actors_entry.grid(row=3, column=1, columnspan=2, pady=10, padx=10)
+        self.film_genre_label = ttk.Label(self.content, text="Film Genre:")
+        self.film_genre_label.grid(row=4, column=0, pady=10, padx=10)
+        self.film_genre_entry = ttk.Entry(self.content, textvariable=self.filmGenre)
+        self.film_genre_entry.grid(row=4, column=1, columnspan=2, pady=10, padx=10)
+        self.film_age_label = ttk.Label(self.content, text="Film Age:")
+        self.film_age_label.grid(row=5, column=0, pady=10, padx=10)
+        self.film_age_entry = ttk.Entry(self.content, textvariable=self.filmAge)
+        self.film_age_entry.grid(row=5, column=1, columnspan=2, pady=10, padx=10)
+        self.film_rating_label = ttk.Label(self.content, text="Film Rating:")
+        self.film_rating_label.grid(row=6, column=0, pady=10, padx=10)
+        self.film_rating_entry = ttk.Entry(self.content, textvariable=self.filmRating)
+        self.film_rating_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
 
-        add_film_button = ttk.Button(content, text="Add Film")
-        add_film_button.grid(row=7, column=0, pady=20, padx=10)
-        edit_film_button = ttk.Button(content, text="Edit Film")
-        edit_film_button.grid(row=7, column=1, pady=20, padx=10)
-        remove_film_button = ttk.Button(content, text="Remove Film")
-        remove_film_button.grid(row=7, column=2, pady=20, padx=10)
-        horizontal_line_label = ttk.Label(content, text="-------------------------------------------------------------------------------------------")
-        horizontal_line_label.grid(row=8, column=0, columnspan=3)
-        search_label = ttk.Label(content, text="Search Film Details by Title:")
-        search_label.grid(row=9, column=0, pady=10, padx=10)
-        search_title_entry = ttk.Entry(content, textvariable=searchTitle)
-        search_title_entry.grid(row=9, column=2, columnspan=2, pady=20, padx=10)
-        search_title_button = ttk.Button(content, text="Search")
-        search_title_button.grid(row=10, column=0, columnspan=3, pady=10, padx=10)
-        text_fill_label = ttk.Label(content, text="""
+        self.add_film_button = ttk.Button(self.content, text="Add Film", command=self.addFilm)
+        self.add_film_button.grid(row=7, column=0, pady=20, padx=10)
+        self.edit_film_button = ttk.Button(self.content, text="Edit Film")
+        self.edit_film_button.grid(row=7, column=1, pady=20, padx=10)
+        self.remove_film_button = ttk.Button(self.content, text="Remove Film")
+        self.remove_film_button.grid(row=7, column=2, pady=20, padx=10)
+        self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
+        self.horizontal_line_label.grid(row=8, column=0, columnspan=3)
+        self.search_label = ttk.Label(self.content, text="Search Film Details by Title:")
+        self.search_label.grid(row=9, column=0, pady=10, padx=10)
+        self.search_title_entry = ttk.Entry(self.content, textvariable=self.searchTitle)
+        self.search_title_entry.grid(row=9, column=2, columnspan=2, pady=20, padx=10)
+        self.search_title_button = ttk.Button(self.content, text="Search")
+        self.search_title_button.grid(row=10, column=0, columnspan=3, pady=10, padx=10)
+        self.text_fill_label = ttk.Label(self.content, text="""
         
 
 
 
         """)
-        text_fill_label.grid(row=11, column=0, columnspan=3)
+        self.text_fill_label.grid(row=11, column=0, columnspan=3)
+
+    #TODO: function to add film. has to check if entries are not empty
+    #TODO: function to remove film from ID
+    #TODO: function to edit film from ID and check what entry fields are not empty and change them
+    #TODO: function to pull all details of a film from its name
+
+    def searchFailed(self, message):
+        mb.showinfo(title="Film Edit Faliure", message=message)
+        print("Film Edit faliure.")
+    
+    def addFilmSuccess(self, filmName):
+        mb.showinfo(title="Film Adding", message= "Film: "+str(filmName)+" Successfully Added To Database.")
+
+    def addFilm(self):
+        if self.controller:
+            self.controller.addFilm(self.filmName.get(), self.filmDescription.get(), self.filmActors.get(), self.filmGenre.get(), self.filmAge.get(), self.filmRating.get())
 
 class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):
