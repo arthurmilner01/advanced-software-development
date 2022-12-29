@@ -195,6 +195,10 @@ class ViewBookingStaffFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+
+        self.model = ViewBookingStaffModel()
+        self.view = self
+        self.controller = ViewBookingStaffController(self.model, self.view)
         
     def createWidgets(self):
         self.__createHeaderWithWidgets()
@@ -202,50 +206,77 @@ class ViewBookingStaffFrame(ttk.Frame):
         
     
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="View Booking Staff", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Email:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+        self.header = ttk.Frame(self)
+        self.header.grid(row=0)
+        self.current_page_label = ttk.Label(self.header, text="View Booking Staff", font=('Helvetica bold', 20))
+        self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        self.staff_name_label = ttk.Label(self.header, text="Staff Email:")
+        self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        self.staff_cinema_label = ttk.Label(self.header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
+        self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        email = tk.StringVar()
-        password = tk.StringVar()
-        cinemaName = tk.StringVar()
-        searchEmail = tk.StringVar()
-        email_label = ttk.Label(content, text="Booking Staff Email:")
-        email_label.grid(row=0, column=0, pady=20, padx=10)
-        booking_staff_email_entry = ttk.Entry(content, textvariable=email)
-        booking_staff_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
-        password_label = ttk.Label(content, text="Booking Staff Password:")
-        password_label.grid(row=1, column=0, pady=20, padx=10)
-        booking_staff_password_entry = ttk.Entry(content, textvariable=password)
-        booking_staff_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
-        cinema_name_label = ttk.Label(content, text="Booking Staff Cinema:")
-        cinema_name_label.grid(row=2, column=0, pady=20, padx=10)
-        booking_staff_cinema_name_entry = ttk.Entry(content, textvariable=cinemaName)
-        booking_staff_cinema_name_entry.grid(row=2, column=1, columnspan=2, pady=20, padx=10)
-        add_booking_staff_button = ttk.Button(content, text="Add Booking Staff")
-        add_booking_staff_button.grid(row=4, column=0, pady=20, padx=10)
-        edit_booking_staff_button = ttk.Button(content, text="Edit Booking Staff")
-        edit_booking_staff_button.grid(row=4, column=1, pady=20, padx=10)
-        remove_booking_staff_button = ttk.Button(content, text="Remove Booking Staff")
-        remove_booking_staff_button.grid(row=4, column=2, pady=20, padx=10)
-        horizontal_line_label = ttk.Label(content, text="-------------------------------------------------------------------------------------------")
-        horizontal_line_label.grid(row=5, column=0, columnspan=3)
-        search_label = ttk.Label(content, text="Search Details by Email:")
-        search_label.grid(row=6, column=0, pady=30, padx=10)
-        search_email_entry = ttk.Entry(content, textvariable=searchEmail)
-        search_email_entry.grid(row=6, column=2, columnspan=2, pady=20, padx=10)
-        search_email_button = ttk.Button(content, text="Search")
-        search_email_button.grid(row=7, column=0, columnspan=3, pady=10, padx=10)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
+        self.__email = tk.StringVar()
+        self.__password = tk.StringVar()
+        self.__cinemaName = tk.StringVar()
+        self.__searchEmail = tk.StringVar()
+        self.email_label = ttk.Label(self.content, text="Booking Staff Email:")
+        self.email_label.grid(row=0, column=0, pady=20, padx=10)
+        self.booking_staff_email_entry = ttk.Entry(self.content, textvariable=self.__email)
+        self.booking_staff_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
+        self.password_label = ttk.Label(self.content, text="Booking Staff Password:")
+        self.password_label.grid(row=1, column=0, pady=20, padx=10)
+        self.booking_staff_password_entry = ttk.Entry(self.content, textvariable=self.__password)
+        self.booking_staff_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
+        self.cinema_name_label = ttk.Label(self.content, text="Booking Staff Cinema:")
+        self.cinema_name_label.grid(row=2, column=0, pady=20, padx=10)
+        self.booking_staff_cinema_name_entry = ttk.Entry(self.content, textvariable=self.__cinemaName)
+        self.booking_staff_cinema_name_entry.grid(row=2, column=1, columnspan=2, pady=20, padx=10)
+        self.add_booking_staff_button = ttk.Button(self.content, text="Add Booking Staff", command=self.addBookingStaff)
+        self.add_booking_staff_button.grid(row=4, column=0, pady=20, padx=10)
+        self.edit_booking_staff_button = ttk.Button(self.content, text="Edit Booking Staff")
+        self.edit_booking_staff_button.grid(row=4, column=1, pady=20, padx=10)
+        self.remove_booking_staff_button = ttk.Button(self.content, text="Remove Booking Staff")
+        self.remove_booking_staff_button.grid(row=4, column=2, pady=20, padx=10)
+        self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
+        self.horizontal_line_label.grid(row=5, column=0, columnspan=3)
+        self.search_label = ttk.Label(self.content, text="Search Details by Email:")
+        self.search_label.grid(row=6, column=0, pady=30, padx=10)
+        self.search_email_entry = ttk.Entry(self.content, textvariable=self.__searchEmail)
+        self.search_email_entry.grid(row=6, column=2, columnspan=2, pady=20, padx=10)
+        self.search_email_button = ttk.Button(self.content, text="Search", command=self.searchForBookingStaff)
+        self.search_email_button.grid(row=7, column=0, columnspan=3, pady=10, padx=10)
+
+    
+    def searchFailed(self, message):
+        mb.showerror(title="Error:", message=message)
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
+        self.__cinemaName.set('')
+
+
+    def searchSuccess(self, message):
+        mb.showinfo(title="Booking Staff Account Found:", message="Account Info:" + str(message))
+        self.__email.set(message[0])
+        self.__password.set(message[1])
+        self.__cinemaName.set(message[2])
+        print(message)
+
+    def addSuccess(self, message):
+        mb.showinfo(title="Added Booking Staff:", message="Account Info:" + str(message))
+
+    def searchForBookingStaff(self):
+        if self.controller:
+            self.controller.searchBookingStaff(self.__searchEmail.get())
+
+    def addBookingStaff(self):
+        if self.controller:
+            self.controller.addBookingStaff(self.__email.get(), self.__password.get(), self.__cinemaName.get())
 
 class ViewAdminFrame(ttk.Frame):
     def __init__(self, container):
@@ -393,7 +424,7 @@ class ViewFilmFrame(ttk.Frame):
     #TODO: function to pull all details of a film from its name
 
     def searchFailed(self, message):
-        mb.showinfo(title="Film Edit Page Faliure", message=message)
+        mb.showerror(title="Film Edit Page Faliure", message=message)
         print("Film Edit Page faliure.")
     
     def addFilmSuccess(self, filmName):

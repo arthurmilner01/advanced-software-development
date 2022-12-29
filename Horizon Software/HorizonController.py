@@ -299,3 +299,46 @@ class ViewFilmController:
         except ValueError as error:
             self.view.searchFailed(error)
 
+class ViewBookingStaffController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+
+    def addBookingStaff(self, email, password, cinemaName):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.validateCinemaNameSyntax(cinemaName):
+                        if self.model.checkCinemaNameInDB(cinemaName):
+                            self.model.addBookingStaff(email, password, cinemaName)
+                            accountDetails = self.model.retrieveAccountInfo(email)
+                            self.view.addSuccess(accountDetails)
+                        else:
+                            self.view.searchFailed("Cinema name not found in database.")
+                    else:
+                        self.view.searchFailed("Cinema name syntax incorrect.")
+                else:
+                    self.view.searchFailed("Password syntax incorrect.")
+            else:
+                self.view.searchFailed("Email syntax incorrect.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
+    def updateBookingStaff(self, email, password, cinemaName):
+        pass
+
+    def deleteBookingStaff(self, email, password, cinemaName):
+        pass
+
+    def searchBookingStaff(self, email):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.searchForAccountByEmail(email):
+                    accountDetails = self.model.retrieveAccountInfo(email)
+                    self.view.searchSuccess(accountDetails)
+                else:
+                    self.view.searchFailed("Account not found under that email.")
+            else:
+                self.view.searchFailed("Email syntax invalid.")
+        except ValueError as error:
+            self.view.searchFailed(error)
