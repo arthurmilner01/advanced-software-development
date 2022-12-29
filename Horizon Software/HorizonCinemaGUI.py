@@ -389,7 +389,6 @@ class ViewFilmFrame(ttk.Frame):
         """)
         self.text_fill_label.grid(row=11, column=0, columnspan=3)
 
-    #TODO: function to add film. has to check if entries are not empty
     #TODO: function to remove film from ID
     #TODO: function to edit film from ID and check what entry fields are not empty and change them
     #TODO: function to pull all details of a film from its name
