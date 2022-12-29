@@ -141,14 +141,12 @@ class HomeFrame(ttk.Frame):
             horizon_cinema_label.grid(column=0,row=1)
             current_user_label = ttk.Label(self, text=currentUser.getEmail(), font=('Helvetica bold', 15))
             current_user_label.grid(column=0,row=2)
-            listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Film Listings")
+            listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Films/ Listings")
             listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
             create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
             create_booking_button.grid(column=2, row=1, padx=10, pady=20)
             cancel_booking_button = ttk.Button(self, command=lambda : app.showFrame("CancelBookingFrame"), text="Cancel Booking")
             cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
-            view_screenings_button = ttk.Button(self, command=lambda : app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
-            view_screenings_button.grid(column=1, row=3, padx=10, pady=20, sticky=tk.W)
             logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
             logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
         if currentUser.accountType == 1 or currentUser.accountType == 2:
@@ -532,7 +530,8 @@ class GenerateReportFrame(ttk.Frame):
         if self.controller:
             self.controller.generateReport(self.__reportType.get(), self.__reportParameter.get())
 
-        
+
+    #TODO: make a way so that when you click on a viewing in the listBox it takes you to the CreateBooking page and auto inputs the selected viewing  
         
 class ViewFilmListingsFrame(ttk.Frame):
     def __init__(self, container):
@@ -580,7 +579,7 @@ class ViewFilmListingsFrame(ttk.Frame):
         self.cinema_name_entry = ttk.Entry(self.content, textvariable=self.__cinemaName)
         self.cinema_name_entry.grid(row=1, column=1, columnspan=2, padx=10, pady=10)
 
-        self.show_listings_button = ttk.Button(self.content, text="Show Listings", command=self.searchListings)
+        self.show_listings_button = ttk.Button(self.content, text="Show Films/ Listings", command=self.searchListings)
         self.show_listings_button.grid(row=2, column=0, columnspan=3)
         self.text_fill_label = ttk.Label(self.content, text="""
 
@@ -598,8 +597,8 @@ class ViewFilmListingsFrame(ttk.Frame):
         self.text_fill_label.grid(row=3, column=0, columnspan=3)
         self.listings_listbox = tk.Listbox(self)
         self.listings_listbox.place(height=300, width=200, x=583, y=400)
-        listboxHeadings = "Time: Date: Screen:"
-        self.listings_listbox.insert(0, listboxHeadings)
+        self.listboxHeadings = "Time: Date: Screen:"
+        self.listings_listbox.insert(0, self.listboxHeadings)
 
         if currentUser.getAccountType() == 0:
             self.__cinemaName.set(currentUser.getAccountCinema())
@@ -616,10 +615,27 @@ class ViewFilmListingsFrame(ttk.Frame):
         if currentUser.getAccountType() != 0:
             self.__cinemaName.set('')
         mb.showerror(title="Search Failed", message=message)
+    
+    def filmListboxFunction(self, flim):
+        film = self.listings_listbox.get(self.listings_listbox.curselection())
+        self.film_name_entry.insert(0, film[0])
+
+    def listingsListboxFunction(self, lsiting):
+        listing = self.listings_listbox.get(self.listings_listbox.curselection())
+        print(listing[0], listing[1], listing[2])
 
     def searchListings(self):
         if self.controller:
-            self.controller.searchListings(self.__filmName.get(), self.__cinemaName.get())
+            if self.__filmName.get() == '':
+                self.listings_listbox.delete(0, tk.END)
+                self.listings_listbox.insert(tk.END, "films at "+str(self.__cinemaName.get()))
+                self.controller.searchFilms(self.__cinemaName.get())
+                self.listings_listbox.bind("<<ListboxSelect>>", self.filmListboxFunction)
+            else:
+                self.listings_listbox.delete(0, tk.END)
+                self.listings_listbox.insert(tk.END, self.listboxHeadings)
+                self.controller.searchListings(self.__filmName.get(), self.__cinemaName.get())
+                self.listings_listbox.bind("<<ListboxSelect>>", self.listingsListboxFunction)
 
 class CreateBookingFrame(ttk.Frame):
     def __init__(self, container):
@@ -915,9 +931,11 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+        self.createWidgets()
+    
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
-        self.__createContentWithWidgets()
-        
+        self.__createContentWithWidgets()       
     
     def __createHeaderWithWidgets(self):
         header = ttk.Frame(self)

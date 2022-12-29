@@ -63,6 +63,16 @@ class ViewFilmListingsController:
                 self.view.searchFailed('Film name syntax incorrect.')
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    def searchFilms(self, cinemaName):
+        try:
+            if self.model.validateCinemaNameSyntax(cinemaName):
+                filmNames = self.model.getFilms(cinemaName)
+                self.view.searchSuccess('Showing films in ' + str(cinemaName)+".", filmNames)
+            else:
+                self.view.searchFailed('Cinema name syntax incorrect.')
+        except ValueError as error:
+            self.view.searchFailed(error)
 
 
 class CreateBookingController:

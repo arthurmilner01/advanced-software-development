@@ -126,6 +126,12 @@ class ViewFilmListingsModel:
         else:
             print("Screenings not found.")
             return 0
+        
+    def getFilms(self, cinemaName):
+        query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
+        cur.execute(query, (cinemaName,))
+        films = cur.fetchall()
+        return films
 
     def returnScreeningsInfo(self, filmName, cinemaName):
         query = 'SELECT screening_time, screening_date, screening_screen FROM FilmScreenings WHERE film_name = ? AND cinema_name = ? ORDER BY screening_date, screening_time ASC'
