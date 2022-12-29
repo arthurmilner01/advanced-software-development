@@ -369,9 +369,9 @@ class ViewFilmFrame(ttk.Frame):
 
         self.add_film_button = ttk.Button(self.content, text="Add Film", command=self.addFilm)
         self.add_film_button.grid(row=7, column=0, pady=20, padx=10)
-        self.edit_film_button = ttk.Button(self.content, text="Edit Film")
+        self.edit_film_button = ttk.Button(self.content, text="Edit Film", command=self.editFilm)
         self.edit_film_button.grid(row=7, column=1, pady=20, padx=10)
-        self.remove_film_button = ttk.Button(self.content, text="Remove Film")
+        self.remove_film_button = ttk.Button(self.content, text="Remove Film", command=self.deleteFilm)
         self.remove_film_button.grid(row=7, column=2, pady=20, padx=10)
         self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
         self.horizontal_line_label.grid(row=8, column=0, columnspan=3)
@@ -389,20 +389,29 @@ class ViewFilmFrame(ttk.Frame):
         """)
         self.text_fill_label.grid(row=11, column=0, columnspan=3)
 
-    #TODO: function to remove film from ID
     #TODO: function to edit film from ID and check what entry fields are not empty and change them
     #TODO: function to pull all details of a film from its name
 
     def searchFailed(self, message):
-        mb.showinfo(title="Film Edit Faliure", message=message)
-        print("Film Edit faliure.")
+        mb.showinfo(title="Film Edit Page Faliure", message=message)
+        print("Film Edit Page faliure.")
     
     def addFilmSuccess(self, filmName):
-        mb.showinfo(title="Film Adding", message= "Film: "+str(filmName)+" Successfully Added To Database.")
+        mb.showinfo(title="Film Added", message= "Film: "+str(filmName)+" Successfully Added To Database.")
 
     def addFilm(self):
         if self.controller:
             self.controller.addFilm(self.filmName.get(), self.filmDescription.get(), self.filmActors.get(), self.filmGenre.get(), self.filmAge.get(), self.filmRating.get())
+
+    def deleteFilm(self):
+        if self.controller:
+            self.controller.deleteFilm(self.filmID.get())
+        
+    def removeFilmSuccess(self, filmID, filmName):
+        mb.showinfo(title="Film Removed", message="Film With ID: "+str(filmID)+" Successfully Removed\nAswell As All Screenings With Film Name: "+str(filmName))
+
+    def editFilm(self):
+        pass
 
 class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):

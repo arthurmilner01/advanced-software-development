@@ -267,4 +267,22 @@ class ViewFilmController:
                 self.view.searchFailed("Invalid Film Name Syntax.")
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    def deleteFilm(self, filmID):
+        try:
+            if self.model.checkFilmID(filmID):
+                filmName = self.model.getFilmName(filmID)
+                #deletes all films with ID filmID
+                if self.model.deleteFilm(filmID):
+                    #deletes all showings with film name filName (pulled from Films with ID filmID)
+                    if self.model.deleteShowings(filmName):
+                        self.view.removeFilmSuccess(filmID, filmName)
+                    else:
+                        self.view.searchFailed("Couldn't Delete Showings From Database.")
+                else:
+                    self.view.searchFailed("Couldn't Delete Film From Database.")
+            else:
+                self.view.searchFailed("No Film With That ID.")
+        except ValueError as error:
+            self.view.searchFailed(error)
 

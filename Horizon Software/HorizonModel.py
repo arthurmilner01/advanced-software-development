@@ -485,3 +485,49 @@ class ViewFilmModel:
             return 1
         else:
             return 0
+
+    def checkFilmID(self, filmID):
+        query = "SELECT * FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        records = cur.fetchall()
+        if len(records) > 0:
+            return 1
+        else:
+            return 0
+    def getFilmName(self, filmID):
+        query = "SELECT film_name FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        filmName = cur.fetchone()
+        return filmName[0]
+
+    def deleteFilm(self, filmID):
+        query = "SELECT * FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        filmsBefore = cur.fetchall()
+        query = "DELETE FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        conn.commit()
+        query = "SELECT * FROM Films WHERE filmID = ?"
+        cur.execute(query, (filmID,))
+        filmsAfter = cur.fetchall()
+        if len(filmsBefore) - len(filmsAfter) > 0:
+            return 1
+        else:
+            return 0
+        
+    def deleteShowings(self, filmName):
+        query = "SELECT * FROM FilmScreenings WHERE film_name = ?"
+        cur.execute(query, (filmName,))
+        showingsBefore = cur.fetchall()
+        query = "DELETE FROM FilmScreenings WHERE film_name = ?"
+        cur.execute(query, (filmName,))
+        conn.commit()
+        query = "SELECT * FROM FilmScreenings WHERE film_name = ?"
+        cur.execute(query, (filmName,))
+        showingsAfter = cur.fetchall()
+        if len(showingsBefore) == 0:
+            return 1
+        if len(showingsBefore) - len(showingsAfter) > 0:
+            return 1
+        else:
+            return 0
