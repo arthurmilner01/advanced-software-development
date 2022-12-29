@@ -531,3 +531,20 @@ class ViewFilmModel:
             return 1
         else:
             return 0
+        
+    def checkFilmName(self, filmName):
+        query = 'SELECT * FROM Films WHERE film_name = ?'
+        cur.execute(query, (filmName,))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Film found.")
+            return 1
+        else:
+            print("Film not found.")
+            return 0
+        
+    def getFilm(self, filmName):
+        query = 'SELECT * FROM Films WHERE film_name = ?'
+        cur.execute(query, (filmName,))
+        film = cur.fetchone()
+        return film

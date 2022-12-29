@@ -285,4 +285,17 @@ class ViewFilmController:
                 self.view.searchFailed("No Film With That ID.")
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    def searchFilmByTitle(self, filmName):
+        try:
+            if self.model.validateFilmNameSyntax(filmName):
+                if self.model.checkFilmName(filmName):
+                    film = self.model.getFilm(filmName)
+                    self.view.filmSearchSuccess(film, filmName)
+                else:
+                    self.view.searchFailed("No Film With Name: "+str(filmName)+" In Database.")
+            else:
+                self.view.searchFailed("Invalid Film Name Syntax.")
+        except ValueError as error:
+            self.view.searchFailed(error)
 

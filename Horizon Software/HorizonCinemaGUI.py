@@ -379,7 +379,7 @@ class ViewFilmFrame(ttk.Frame):
         self.search_label.grid(row=9, column=0, pady=10, padx=10)
         self.search_title_entry = ttk.Entry(self.content, textvariable=self.searchTitle)
         self.search_title_entry.grid(row=9, column=2, columnspan=2, pady=20, padx=10)
-        self.search_title_button = ttk.Button(self.content, text="Search")
+        self.search_title_button = ttk.Button(self.content, text="Search", command=self.searchFilmByTitle)
         self.search_title_button.grid(row=10, column=0, columnspan=3, pady=10, padx=10)
         self.text_fill_label = ttk.Label(self.content, text="""
         
@@ -412,6 +412,13 @@ class ViewFilmFrame(ttk.Frame):
 
     def editFilm(self):
         pass
+
+    def searchFilmByTitle(self):
+        if self.controller:
+            self.controller.searchFilmByTitle(self.searchTitle.get())
+
+    def filmSearchSuccess(self, film, filmName):
+        mb.showinfo(title="Film Found", message="Film Found With Name: "+str(filmName)+"\n"+str(film))
 
 class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):
