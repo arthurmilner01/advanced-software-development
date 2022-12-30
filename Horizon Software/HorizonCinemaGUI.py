@@ -619,7 +619,7 @@ class AddCinemasFrame(ttk.Frame):
         self.city_evening_price_label.grid(row=7, column=0, pady=10, padx=10)
         self.city_evening_price_entry = ttk.Entry(self.content, textvariable=self.eveningPrice)
         self.city_evening_price_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
-        self.add_city_button = ttk.Button(self.content, text="Add City")
+        self.add_city_button = ttk.Button(self.content, text="Add City", command=self.addCity)
         self.add_city_button.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
 
     #TODO: Add City functionality
@@ -641,7 +641,23 @@ class AddCinemasFrame(ttk.Frame):
 
     def addCinemaSuccess(self, cityName, cinemaName):
         message = "Cinema Successfully Added with name: "+str(cinemaName)+" in the city: "+str(cityName)
+        self.cinema_name_entry.delete(0, 'end')
         mb.showinfo(title="Cinema Added Successfully", message=message)
+    
+    def addCity(self):
+        if self.controller:
+            self.controller.addCity(self.addCityName.get(), self.morningPrice.get(), self.afternoonPrice.get(), self.eveningPrice.get())
+
+    def addCitySuccess(self, cityName, morningPrice, afternoonPrice, eveningPrice):
+        message = "City Added Successfully Added with name: "+str(cityName)+"\nmorning price: £"+str(morningPrice)+"\nafternoon price: £"+str(afternoonPrice)+"\nevening price: £"+str(eveningPrice)
+        self.city_entry.delete(0, 'end')
+        self.city_morning_price_entry.delete(0, 'end')
+        self.city_afternoon_price_entry.delete(0, 'end')
+        self.city_evening_price_entry.delete(0, 'end')
+        mb.showinfo(title="City Added Successfully", message=message)
+
+    def searchFailed(self, messgae):
+        mb.showinfo(title="City/Cinema Add Failed", message=messgae)
 
 class GenerateReportFrame(ttk.Frame):
     def __init__(self, container):

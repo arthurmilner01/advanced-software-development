@@ -526,3 +526,29 @@ class AddCinemasController:
                 self.view.searchFailed("Cinema Name Syntax Incorrect.")
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    def addCity(self, cityName, morningPrice, afternoonPrice, eveningPrice):
+        try:
+            if self.model.validateCityNameSyntax(cityName):
+                if self.model.checkCityName(cityName):
+                    if self.model.validatePriceSyntax(morningPrice):
+                        if self.model.validatePriceSyntax(afternoonPrice):
+                            if self.model.validatePriceSyntax(eveningPrice):
+                                if self.model.addCity(cityName, morningPrice, afternoonPrice, eveningPrice):
+                                    self.view.addCitySuccess(cityName, morningPrice, afternoonPrice, eveningPrice)
+                                else:
+                                    self.view.searchFailed("Failed To Add City To Database.")
+                            else:
+                                self.view.searchFailed("Evening Price Syntax Error.")
+                        else:
+                            self.view.searchFailed("Afternoon Price Syntax Error.")
+                    else:
+                        self.view.searchFailed("Morning Price Syntax Error.")
+                else:
+                    self.view.searchFailed("City With Name: "+str(cityName)+" already exsists.")
+            else:
+                self.view.searchFailed("City Name Syntax Error.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
+

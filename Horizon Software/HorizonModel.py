@@ -850,4 +850,47 @@ class AddCinemasModel:
             return 1
         else: 
             return 0
+        
+    def validateCityNameSyntax(self, cityName):
+        if len(cityName) > 0:
+            pattern = r'[A-Za-z ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, cityName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def checkCityName(self, cityName):
+        query = "SELECT * FROM Cities WHERE city_name = ?"
+        cur.execute(query, (cityName,))
+        cities = cur.fetchall()
+        if len(cities) > 0:
+            return 0
+        else:
+            return 1
+    
+    def validatePriceSyntax(self, price):
+        if len(price) > 0:
+            pattern = r'^\d+(.\d{2})?$' #price regex
+            if re.fullmatch(pattern, price):
+                return 1
+            else:
+                return 0
+        else:
+            return 0 
+
+    def addCity(self, cityName, morningPrice, afternoonPrice, eveningPrice):
+        cur.execute("SELECT * FROM Cities")
+        citiesBefore = cur.fetchall()
+        query = "INSERT INTO Cities(city_name, morning_price, afternoon_price, evening_price) VALUES (?,?,?,?)"
+        cur.execute(query, (cityName, morningPrice, afternoonPrice, eveningPrice))
+        conn.commit()
+        cur.execute("SELECT * FROM Cities")
+        citiesAfter = cur.fetchall()
+        if len(citiesAfter) > len(citiesBefore):
+            return 1
+        else:
+            return 0
+
 
