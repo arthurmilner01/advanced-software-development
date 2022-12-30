@@ -376,3 +376,34 @@ class ViewBookingStaffController:
                 self.view.searchFailed("Email syntax invalid.")
         except ValueError as error:
             self.view.searchFailed(error)
+        
+    
+class AddCinemasController:
+    def __init__(self, model, view):
+        self.view = view
+        self.model = model
+    
+    def getCities(self):
+        try:
+            if self.model.checkCities():
+                cities = self.model.getCities()
+                return cities
+            else:
+                self.view.searchFailed("No Cities.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+        
+    def addCinema(self, cityName, cinemaName):
+        try:
+            if self.model.validateCinemaNameSyntax(cinemaName):
+                if self.model.checkCinemaName(cityName, cinemaName):
+                    if self.model.addCinema(cityName, cinemaName):
+                        self.view.addCinemaSuccess(cityName, cinemaName)
+                    else:
+                        self.view.searchFailed("Failed To Add Cinema To Database.")
+                else:
+                    self.view.searchFailed("Cinema With That Name Already Exsist in "+str(cityName)+".")
+            else:
+                self.view.searchFailed("Cinema Name Syntax Incorrect.")
+        except ValueError as error:
+            self.view.searchFailed(error)

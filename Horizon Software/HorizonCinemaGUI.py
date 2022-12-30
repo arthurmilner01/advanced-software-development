@@ -161,12 +161,14 @@ class HomeFrame(ttk.Frame):
             self.current_cinema_combobox.bind("<Enter>", self.comboboxHoverFunction) #event <Enter> changes combobox when hovered over and not when selected
             self.current_cinema_combobox.bind("<<ComboboxSelected>>", self.selectComboboxFunction) #event <<ComboboxSelected>> does function when new value is selected
             self.current_cinema_combobox.current(0)
-            self.current_cinema_combobox.grid(column=2, row=2, padx=10, pady=20)
+            self.current_cinema_combobox.grid(column=1, row=3, padx=10, pady=20)
         if currentUser.accountType == 2:
             view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
             view_admin_button.grid(column=2, row=2, padx=10, pady=20)
             view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
             view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
+
+    #TODO: When logout reset Frame so doesnt show other user types buttons
 
     def logout(self):
         currentUser.setEmail("default")
@@ -458,6 +460,13 @@ class ViewFilmFrame(ttk.Frame):
 
     def filmSearchSuccess(self, film, filmName):
         mb.showinfo(title="Film Found", message="Film Found With Name: "+str(filmName)+"\n"+str(film))
+        self.filmID.set(film[0])
+        self.filmName.set(film[1])
+        self.filmDescription.set(film[2])
+        self.filmActors.set(film[3])
+        self.filmGenre.set(film[4])
+        self.filmAge.set(film[5])
+        self.filmRating.set(film[6])
     
     def editFilmSuccess(self, filmID):
         mb.showinfo(title="Film Updated", message="Film Updated With ID: "+str(filmID)+" Successfully.")
@@ -468,9 +477,15 @@ class AddCinemasFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
-        self.__createHeaderWithWidgets()
-        self.__createContentWithWidgets()
+        self.createWidgets()
+
+        self.view = self
+        self.model = AddCinemasModel()
+        self.controller = AddCinemasController(self.model, self.view)
         
+    def createWidgets(self):    
+        self.__createHeaderWithWidgets()
+        self.__createContentWithWidgets()     
     
     def __createHeaderWithWidgets(self):
         header = ttk.Frame(self)
@@ -485,44 +500,70 @@ class AddCinemasFrame(ttk.Frame):
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        cinemaCity = tk.StringVar()
-        cinemaName = tk.StringVar()
-        addCityName = tk.StringVar()
-        morningPrice = tk.StringVar()
-        afternoonPrice = tk.StringVar()
-        eveningPrice = tk.StringVar()
-        cinema_city_label = ttk.Label(content, text="Cinema City:")
-        cinema_city_label.grid(row=0, column=0, pady=20, padx=10)
-        cinema_city_entry = ttk.Entry(content, textvariable=cinemaCity)
-        cinema_city_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
-        cinema_name_label = ttk.Label(content, text="Cinema Name:")
-        cinema_name_label.grid(row=1, column=0, pady=20, padx=10)
-        cinema_name_entry = ttk.Entry(content, textvariable=cinemaName)
-        cinema_name_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
-        add_cinema_button = ttk.Button(content, text="Add Cinema")
-        add_cinema_button.grid(row=2, column=0, columnspan=3, pady=20, padx=10)
-        horizontal_line_label = ttk.Label(content, text="-------------------------------------------------------------------------------------------")
-        horizontal_line_label.grid(row=3, column=0, columnspan=3)
-        city_label = ttk.Label(content, text="City Name:")
-        city_label.grid(row=4, column=0, pady=20, padx=10)
-        city_entry = ttk.Entry(content, textvariable=addCityName)
-        city_entry.grid(row=4, column=1, columnspan=2, pady=10, padx=10)
-        city_morning_price_label = ttk.Label(content, text="Morning Price:")
-        city_morning_price_label.grid(row=5, column=0, pady=10, padx=10)
-        city_morning_price_entry = ttk.Entry(content, textvariable=morningPrice)
-        city_morning_price_entry.grid(row=5, column=1, columnspan=2, pady=10, padx=10)
-        city_afternoon_price_label = ttk.Label(content, text="Afternoon Price:")
-        city_afternoon_price_label.grid(row=6, column=0, pady=10, padx=10)
-        city_afternoon_price_entry = ttk.Entry(content, textvariable=afternoonPrice)
-        city_afternoon_price_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
-        city_evening_price_label = ttk.Label(content, text="Evening Price:")
-        city_evening_price_label.grid(row=7, column=0, pady=10, padx=10)
-        city_evening_price_entry = ttk.Entry(content, textvariable=eveningPrice)
-        city_evening_price_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
-        add_city_button = ttk.Button(content, text="Add City")
-        add_city_button.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
+        self.cinemaCity = tk.StringVar()
+        self.cinemaName = tk.StringVar()
+        self.addCityName = tk.StringVar()
+        self.morningPrice = tk.StringVar()
+        self.afternoonPrice = tk.StringVar()
+        self.eveningPrice = tk.StringVar()
+        self.cities = ['select a city']
+        self.cinema_city_label = ttk.Label(self.content, text="Cinema City:")
+        self.cinema_city_label.grid(row=0, column=0, pady=20, padx=10)
+        self.cinema_city_combobox = ttk.Combobox(self.content, textvariable=self.cinemaCity)
+        self.cinema_city_combobox.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
+        self.cinema_city_combobox['values'] = self.cities
+        self.cinema_city_combobox['state'] = 'readonly'
+        self.cinema_city_combobox.bind("<Enter>", self.cityEnterFunction)
+        self.cinema_city_combobox.current(0)
+        self.cinema_name_label = ttk.Label(self.content, text="Cinema Name:")
+        self.cinema_name_label.grid(row=1, column=0, pady=20, padx=10)
+        self.cinema_name_entry = ttk.Entry(self.content, textvariable=self.cinemaName)
+        self.cinema_name_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
+        self.add_cinema_button = ttk.Button(self.content, text="Add Cinema", command=self.addCinemaButton)
+        self.add_cinema_button.grid(row=2, column=0, columnspan=3, pady=20, padx=10)
+        self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
+        self.horizontal_line_label.grid(row=3, column=0, columnspan=3)
+        self.city_label = ttk.Label(self.content, text="City Name:")
+        self.city_label.grid(row=4, column=0, pady=20, padx=10)
+        self.city_entry = ttk.Entry(self.content, textvariable=self.addCityName)
+        self.city_entry.grid(row=4, column=1, columnspan=2, pady=10, padx=10)
+        self.city_morning_price_label = ttk.Label(self.content, text="Morning Price:")
+        self.city_morning_price_label.grid(row=5, column=0, pady=10, padx=10)
+        self.city_morning_price_entry = ttk.Entry(self.content, textvariable=self.morningPrice)
+        self.city_morning_price_entry.grid(row=5, column=1, columnspan=2, pady=10, padx=10)
+        self.city_afternoon_price_label = ttk.Label(self.content, text="Afternoon Price:")
+        self.city_afternoon_price_label.grid(row=6, column=0, pady=10, padx=10)
+        self.city_afternoon_price_entry = ttk.Entry(self.content, textvariable=self.afternoonPrice)
+        self.city_afternoon_price_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
+        self.city_evening_price_label = ttk.Label(self.content, text="Evening Price:")
+        self.city_evening_price_label.grid(row=7, column=0, pady=10, padx=10)
+        self.city_evening_price_entry = ttk.Entry(self.content, textvariable=self.eveningPrice)
+        self.city_evening_price_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
+        self.add_city_button = ttk.Button(self.content, text="Add City")
+        self.add_city_button.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
+
+    #TODO: Add City functionality
+
+    def cityEnterFunction(self, city):
+        self.cities = []
+        if self.controller:
+            cities = self.controller.getCities()
+            for city in cities:
+               self.cities.append(city[1])
+            self.cinema_city_combobox['values'] = self.cities
+
+    def seacrhFailed(self, message):
+        mb.showinfo(title="City/Cinema Page Error", message=message)
+
+    def addCinemaButton(self):
+        if self.controller:
+            self.controller.addCinema(self.cinemaCity.get(), self.cinemaName.get())
+
+    def addCinemaSuccess(self, cityName, cinemaName):
+        message = "Cinema Successfully Added with name: "+str(cinemaName)+" in the city: "+str(cityName)
+        mb.showinfo(title="Cinema Added Successfully", message=message)
 
 class GenerateReportFrame(ttk.Frame):
     def __init__(self, container):

@@ -656,3 +656,53 @@ class ViewBookingStaffModel:
         cur.execute(query, (email, password, userType, cinemaName))
         conn.commit()
         print("Booking Staff added.")
+
+    
+class AddCinemasModel:
+    def checkCities(self):
+        cur.execute("SELECT * FROM cities")
+        cities = cur.fetchall()
+        if len(cities) == 0:
+            return 0
+        else:
+            return 1
+
+    def getCities(self):
+        cur.execute("SELECT * FROM cities")
+        cities = cur.fetchall()
+        return cities
+    
+    def validateCinemaNameSyntax(self, cinemaName):
+        if len(cinemaName) > 0:
+            pattern = r'[A-Za-z0-9 ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, cinemaName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def checkCinemaName(self, cityName, cinemaName):
+        query = "SELECT cinema_name FROM Cinemas WHERE city_name = ?"
+        cur.execute(query, (cityName,))
+        cinemas = cur.fetchall()
+        for cinema in cinemas:
+            if cinema[0] == cinemaName:
+                return 0
+        return 1
+    
+    def addCinema(self, cityName, cinemaName):
+        query = "SELECT * FROM Cinemas WHERE city_name = ?"
+        cur.execute(query, (cityName,))
+        cinemasBefore = cur.fetchall()
+        query = "INSERT INTO Cinemas(city_name, cinema_name) VALUES (?,?)"
+        cur.execute(query, (cityName, cinemaName))
+        conn.commit
+        query = "SELECT * FROM Cinemas WHERE city_name = ?"
+        cur.execute(query, (cityName,))
+        cinemasAfter = cur.fetchall()
+        if len(cinemasAfter) > len(cinemasBefore):
+            return 1
+        else: 
+            return 0
+
