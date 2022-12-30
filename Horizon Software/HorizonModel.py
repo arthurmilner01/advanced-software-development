@@ -610,9 +610,20 @@ class ViewBookingStaffModel:
             print("Account not found")
             return 0
 
-    def getAccountUserType(self, email, password):
-        query = 'SELECT user_type FROM Users WHERE email = ? AND password = ?'
-        cur.execute(query, (email, password))
+    def checkAccountNotExist(self, email):
+        query = 'SELECT * FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Account exists.")
+            return 0
+        else:
+            print("Account does not exist.")
+            return 1
+
+    def getUserAccountType(self, email):
+        query = 'SELECT user_type FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
         record = cur.fetchone()
         userType = int(''.join(map(str, record)))
         if userType == 0:
@@ -676,6 +687,120 @@ class ViewBookingStaffModel:
         cur.execute(query, (email,))
         conn.commit()
         print("Booking staff deleted.")
+
+class ViewAdminModel:
+    def __init__(self):
+        pass
+
+    def validateEmailSyntax(self, email):
+        if len(email) > 0:
+            pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+            if re.fullmatch(pattern, email):
+                return 1
+            else:
+                return 0
+        else: 
+            return 0
+
+    def validatePasswordSyntax(self, password):
+        if len(password) > 0:
+            pattern = r'[A-Za-z0-9 ]{5,}'
+            if re.fullmatch(pattern, password):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+
+    def validateCinemaNameSyntax(self, cinemaName):
+        if len(cinemaName) > 0:
+            pattern = r'[A-Za-z ]{3,}' #Check letters only at least 3 in length
+            if re.fullmatch(pattern, cinemaName):
+                return 1
+            else:
+                return 0
+        else: 
+            return 0
+
+    def checkAccountInDB(self, email, password):
+        query = 'SELECT email, password FROM Users WHERE email = ? AND password = ?'
+        cur.execute(query, (email, password))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Account found")
+            return 1
+        else:
+            print("Account not found")
+            return 0
+
+    def checkAccountNotExist(self, email):
+        query = 'SELECT * FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Account exists.")
+            return 0
+        else:
+            print("Account does not exist.")
+            return 1
+
+    def getUserAccountType(self, email):
+        query = 'SELECT user_type FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
+        record = cur.fetchone()
+        userType = int(''.join(map(str, record)))
+        if userType == 1:
+            return 1
+        else:
+            return 0
+
+    def searchForAccountByEmail(self, email):
+        query = 'SELECT * FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
+        record = cur.fetchall()
+        if len(record) > 0:
+            print("Account found")
+            return 1
+        else:
+            print("Account not found")
+            return 0
+
+    def retrieveAccountInfo(self, email):
+        query = 'SELECT email, password, user_cinema FROM Users WHERE email = ?'
+        cur.execute(query, (email,))
+        account = cur.fetchone()
+        print(account[0])
+        return account
+
+    def addAdmin(self, email, password):
+        userType = 1
+        query = '''
+        INSERT INTO Users(email, password, user_type)
+        VALUES (?, ?, ?)
+        '''
+        cur.execute(query, (email, password, userType))
+        conn.commit()
+        print("Admin added.")
+
+    def updateAdmin(self, email, password):
+        query = '''
+        UPDATE Users
+        SET email = ?,
+        password = ?
+        WHERE email = ?
+        '''
+        cur.execute(query, (email, password, email))
+        conn.commit()
+        print("Admin updated.")
+    
+    def deleteAdmin(self, email):
+        query = '''
+        DELETE FROM Users WHERE email = ?
+        '''
+        cur.execute(query, (email,))
+        conn.commit()
+        print("Admin deleted.")
+    
 
     
 class AddCinemasModel:

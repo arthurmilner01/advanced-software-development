@@ -267,16 +267,26 @@ class ViewBookingStaffFrame(ttk.Frame):
         self.__email.set(message[0])
         self.__password.set(message[1])
         self.__cinemaName.set(message[2])
+        self.__searchEmail.set('')
         print(message)
 
     def addSuccess(self, message):
         mb.showinfo(title="Added Booking Staff:", message="Account Info:" + str(message))
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
     
     def updateSuccess(self, message):
         mb.showinfo(title="Booking Staff Updated:", message="Updated Info:" + str(message))
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
 
     def deleteSuccess(self, message):
         mb.showinfo(title="Booking Staff Deleted:", message="Account with details "+ str(message) + " deleted.")
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
 
     def searchForBookingStaff(self):
         if self.controller:
@@ -300,50 +310,104 @@ class ViewAdminFrame(ttk.Frame):
         self.rowconfigure(0, weight=1)
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
+        
+        self.model = ViewAdminModel()
+        self.view = self
+        self.controller = ViewAdminController(self.model, self.view)
+    
+    def createWidgets(self):
         self.__createHeaderWithWidgets()
         self.__createContentWithWidgets()
-        
-    
+
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="View Admin", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Email:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+        self.header = ttk.Frame(self)
+        self.header.grid(row=0)
+        self.current_page_label = ttk.Label(self.header, text="View Admin", font=('Helvetica bold', 20))
+        self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        self.staff_name_label = ttk.Label(self.header, text="Staff Email:")
+        self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        self.staff_cinema_label = ttk.Label(self.header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
+        self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
-        email = tk.StringVar()
-        password = tk.StringVar()
-        searchEmail = tk.StringVar()
-        email_label = ttk.Label(content, text="Admin Email:")
-        email_label.grid(row=0, column=0, pady=20, padx=10)
-        admin_email_entry = ttk.Entry(content, textvariable=email)
-        admin_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
-        password_label = ttk.Label(content, text="Admin Password:")
-        password_label.grid(row=1, column=0, pady=20, padx=10)
-        admin_password_entry = ttk.Entry(content, textvariable=password)
-        admin_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
-        add_admin_button = ttk.Button(content, text="Add Admin")
-        add_admin_button.grid(row=4, column=0, pady=20, padx=10)
-        edit_admin_button = ttk.Button(content, text="Edit Admin")
-        edit_admin_button.grid(row=4, column=1, pady=20, padx=10)
-        remove_admin_button = ttk.Button(content, text="Remove Admin")
-        remove_admin_button.grid(row=4, column=2, pady=20, padx=10)
-        horizontal_line_label = ttk.Label(content, text="-------------------------------------------------------------------------------------------")
-        horizontal_line_label.grid(row=5, column=0, columnspan=3)
-        search_label = ttk.Label(content, text="Search Details by Email:")
-        search_label.grid(row=6, column=0, pady=30, padx=10)
-        search_email_entry = ttk.Entry(content, textvariable=searchEmail)
-        search_email_entry.grid(row=6, column=2, columnspan=2, pady=20, padx=10)
-        search_email_button = ttk.Button(content, text="Search")
-        search_email_button.grid(row=7, column=0, columnspan=3, pady=10, padx=10)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
+        self.__email = tk.StringVar()
+        self.__password = tk.StringVar()
+        self.__searchEmail = tk.StringVar()
+        self.email_label = ttk.Label(self.content, text="Admin Email:")
+        self.email_label.grid(row=0, column=0, pady=20, padx=10)
+        self.admin_email_entry = ttk.Entry(self.content, textvariable=self.__email)
+        self.admin_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
+        self.password_label = ttk.Label(self.content, text="Admin Password:")
+        self.password_label.grid(row=1, column=0, pady=20, padx=10)
+        self.admin_password_entry = ttk.Entry(self.content, textvariable=self.__password)
+        self.admin_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
+        self.add_admin_button = ttk.Button(self.content, text="Add Admin", command=self.addAdmin)
+        self.add_admin_button.grid(row=4, column=0, pady=20, padx=10)
+        self.edit_admin_button = ttk.Button(self.content, text="Edit Admin", command=self.updateAdmin)
+        self.edit_admin_button.grid(row=4, column=1, pady=20, padx=10)
+        self.remove_admin_button = ttk.Button(self.content, text="Remove Admin", command=self.deleteAdmin)
+        self.remove_admin_button.grid(row=4, column=2, pady=20, padx=10)
+        self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
+        self.horizontal_line_label.grid(row=5, column=0, columnspan=3)
+        self.search_label = ttk.Label(self.content, text="Search Details by Email:")
+        self.search_label.grid(row=6, column=0, pady=30, padx=10)
+        self.search_email_entry = ttk.Entry(self.content, textvariable=self.__searchEmail)
+        self.search_email_entry.grid(row=6, column=2, columnspan=2, pady=20, padx=10)
+        self.search_email_button = ttk.Button(self.content, text="Search", command=self.searchForAdmin)
+        self.search_email_button.grid(row=7, column=0, columnspan=3, pady=10, padx=10)
+        
+    def searchSuccess(self, message):
+        mb.showinfo(title="Admin Account Found:", message="Account Info:"+ str(message))
+        self.__email.set(message[0])
+        self.__password.set(message[1])
+        self.__searchEmail.set('')
+        print(message)
+    
+    def searchFailed(self, message):
+        mb.showerror(title="Error:", message=message)
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
+
+    def addSuccess(self, message):
+        mb.showinfo(title="Added Admin:", message="Account Info:" + str(message))
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
+    
+    def updateSuccess(self, message):
+        mb.showinfo(title="Admin Updated:", message="Updated Info:" + str(message))
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
+
+    def deleteSuccess(self, message):
+        mb.showinfo(title="Admin Deleted:", message="Account with details "+ str(message) + " deleted.")
+        self.__searchEmail.set('')
+        self.__email.set('')
+        self.__password.set('')
+
+    def searchForAdmin(self):
+        if self.controller:
+            self.controller.searchForAdmin(self.__searchEmail.get())
+
+    def addAdmin(self):
+        if self.controller:
+            self.controller.addAdmin(self.__email.get(), self.__password.get())
+
+    def updateAdmin(self):
+        if self.controller:
+            self.controller.updateAdmin(self.__email.get(), self.__password.get())
+
+    def deleteAdmin(self):
+        if self.controller:
+            self.controller.deleteAdmin(self.__email.get(), self.__password.get())
+
+
 
 class ViewFilmFrame(ttk.Frame):
     def __init__(self, container):

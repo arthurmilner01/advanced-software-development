@@ -344,9 +344,12 @@ class ViewBookingStaffController:
                 if self.model.validatePasswordSyntax(password):
                     if self.model.validateCinemaNameSyntax(cinemaName):
                         if self.model.checkCinemaNameInDB(cinemaName):
-                            self.model.addBookingStaff(email, password, cinemaName)
-                            accountDetails = self.model.retrieveAccountInfo(email)
-                            self.view.addSuccess(accountDetails)
+                            if self.model.checkAccountNotExist(email):
+                                self.model.addBookingStaff(email, password, cinemaName)
+                                accountDetails = self.model.retrieveAccountInfo(email)
+                                self.view.addSuccess(accountDetails)
+                            else:
+                                self.view.searchFailed("Account already under that email.")
                         else:
                             self.view.searchFailed("Cinema name not found in database.")
                     else:
@@ -365,9 +368,12 @@ class ViewBookingStaffController:
                     if self.model.validateCinemaNameSyntax(cinemaName):
                         if self.model.checkCinemaNameInDB(cinemaName):
                             if self.model.searchForAccountByEmail(email):
-                                self.model.updateBookingStaff(email, password, cinemaName)
-                                accountDetails = self.model.retrieveAccountInfo(email)
-                                self.view.updateSuccess(accountDetails)
+                                if self.model.getUserAccountType(email):
+                                    self.model.updateBookingStaff(email, password, cinemaName)
+                                    accountDetails = self.model.retrieveAccountInfo(email)
+                                    self.view.updateSuccess(accountDetails)
+                                else:
+                                    self.view.searchFailed("User is not booking staff.")
                             else:
                                 self.view.searchFailed("Booking staff doesn't exist under that email.")
                         else:
@@ -388,9 +394,12 @@ class ViewBookingStaffController:
                     if self.model.validateCinemaNameSyntax(cinemaName):
                         if self.model.checkCinemaNameInDB(cinemaName):
                             if self.model.searchForAccountByEmail(email):
-                                accountDetails = self.model.retrieveAccountInfo(email)
-                                self.model.deleteBookingStaff(email)
-                                self.view.deleteSuccess(accountDetails)
+                                if self.model.getUserAccountType(email):     
+                                    accountDetails = self.model.retrieveAccountInfo(email)
+                                    self.model.deleteBookingStaff(email)
+                                    self.view.deleteSuccess(accountDetails)
+                                else:
+                                    self.view.searchFailed("User is not booking staff.")
         except ValueError as error:
             self.view.searchFailed(error)
 
@@ -398,8 +407,11 @@ class ViewBookingStaffController:
         try:
             if self.model.validateEmailSyntax(email):
                 if self.model.searchForAccountByEmail(email):
-                    accountDetails = self.model.retrieveAccountInfo(email)
-                    self.view.searchSuccess(accountDetails)
+                    if self.model.getUserAccountType(email):
+                        accountDetails = self.model.retrieveAccountInfo(email)
+                        self.view.searchSuccess(accountDetails)
+                    else:
+                        self.view.searchFailed("User is not booking staff.")
                 else:
                     self.view.searchFailed("Account not found under that email.")
             else:
@@ -407,6 +419,83 @@ class ViewBookingStaffController:
         except ValueError as error:
             self.view.searchFailed(error)
         
+class ViewAdminController:
+    def __init__(self, model, view):
+        self.model = model
+        self.view = view
+
+    def searchForAdmin(self, email):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.searchForAccountByEmail(email):
+                    if self.model.getUserAccountType(email):
+                        accountDetails = self.model.retrieveAccountInfo(email)
+                        self.view.searchSuccess(accountDetails)
+                    else:
+                        self.view.searchFailed("User is not booking staff.")
+                else:
+                    self.view.searchFailed("Account not found under that email.")
+            else:
+                self.view.searchFailed("Email syntax invalid.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
+    def addAdmin(self, email, password):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.checkAccountNotExist(email):
+                        self.model.addAdmin(email, password)
+                        accountDetails = self.model.retrieveAccountInfo(email)
+                        self.view.addSuccess(accountDetails)
+                    else:
+                        self.view.searchFailed("Account already exists under that email.")
+                else:
+                    self.view.searchFailed("Password syntax incorrect.")
+            else:
+                self.view.searchFailed("Email syntax incorrect.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
+    def updateAdmin(self, email, password):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.searchForAccountByEmail(email):
+                        if self.model.getUserAccountType(email):
+                            self.model.updateAdmin(email, password)
+                            accountDetails = self.model.retrieveAccountInfo(email)
+                            self.view.updateSuccess(accountDetails)
+                        else:
+                            self.view.searchFailed("User is not admin.")
+                    else:
+                        self.view.searchFailed("Account not found in database.")
+                else:
+                    self.view.searchFailed("Password syntax incorrect.")
+            else:
+                self.view.searchFailed("Email syntax incorrect.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+
+    def deleteAdmin(self, email, password):
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.searchForAccountByEmail(email):
+                        if self.model.getUserAccountType(email):
+                            accountDetails = self.model.retrieveAccountInfo(email)
+                            self.model.deleteAdmin(email)
+                            self.view.deleteSuccess(accountDetails)
+                        else:
+                            self.view.searchFailed("User is not admin.")
+                    else:
+                        self.view.searchFailed("User not found in database.")
+                else:
+                    self.view.searchFailed("Password syntax invalid.")
+            else:
+                self.view.searchFailed("Email syntax invalid.")
+        except ValueError as error:
+            self.view.searchFailed(error)
     
 class AddCinemasController:
     def __init__(self, model, view):
