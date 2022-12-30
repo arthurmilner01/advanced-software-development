@@ -359,10 +359,40 @@ class ViewBookingStaffController:
             self.view.searchFailed(error)
 
     def updateBookingStaff(self, email, password, cinemaName):
-        pass
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.validateCinemaNameSyntax(cinemaName):
+                        if self.model.checkCinemaNameInDB(cinemaName):
+                            if self.model.searchForAccountByEmail(email):
+                                self.model.updateBookingStaff(email, password, cinemaName)
+                                accountDetails = self.model.retrieveAccountInfo(email)
+                                self.view.updateSuccess(accountDetails)
+                            else:
+                                self.view.searchFailed("Booking staff doesn't exist under that email.")
+                        else:
+                            self.view.searchFailed("Cinema name not found in DB.")
+                    else:
+                        self.view.searchFailed("Cinema name syntax incorrect.")
+                else:
+                    self.view.searchFailed("Password syntax incorrect.")
+            else:
+                self.view.searchFailed("Email syntax incorrect.")
+        except ValueError as error:
+            self.view.searchFailed(error)
 
     def deleteBookingStaff(self, email, password, cinemaName):
-        pass
+        try:
+            if self.model.validateEmailSyntax(email):
+                if self.model.validatePasswordSyntax(password):
+                    if self.model.validateCinemaNameSyntax(cinemaName):
+                        if self.model.checkCinemaNameInDB(cinemaName):
+                            if self.model.searchForAccountByEmail(email):
+                                accountDetails = self.model.retrieveAccountInfo(email)
+                                self.model.deleteBookingStaff(email)
+                                self.view.deleteSuccess(accountDetails)
+        except ValueError as error:
+            self.view.searchFailed(error)
 
     def searchBookingStaff(self, email):
         try:

@@ -232,7 +232,7 @@ class ViewBookingStaffFrame(ttk.Frame):
         self.booking_staff_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
         self.password_label = ttk.Label(self.content, text="Booking Staff Password:")
         self.password_label.grid(row=1, column=0, pady=20, padx=10)
-        self.booking_staff_password_entry = ttk.Entry(self.content, textvariable=self.__password)
+        self.booking_staff_password_entry = ttk.Entry(self.content, show="*", textvariable=self.__password)
         self.booking_staff_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
         self.cinema_name_label = ttk.Label(self.content, text="Booking Staff Cinema:")
         self.cinema_name_label.grid(row=2, column=0, pady=20, padx=10)
@@ -240,9 +240,9 @@ class ViewBookingStaffFrame(ttk.Frame):
         self.booking_staff_cinema_name_entry.grid(row=2, column=1, columnspan=2, pady=20, padx=10)
         self.add_booking_staff_button = ttk.Button(self.content, text="Add Booking Staff", command=self.addBookingStaff)
         self.add_booking_staff_button.grid(row=4, column=0, pady=20, padx=10)
-        self.edit_booking_staff_button = ttk.Button(self.content, text="Edit Booking Staff")
+        self.edit_booking_staff_button = ttk.Button(self.content, text="Edit Booking Staff", command=self.updateBookingStaff)
         self.edit_booking_staff_button.grid(row=4, column=1, pady=20, padx=10)
-        self.remove_booking_staff_button = ttk.Button(self.content, text="Remove Booking Staff")
+        self.remove_booking_staff_button = ttk.Button(self.content, text="Remove Booking Staff", command=self.deleteBookingStaff)
         self.remove_booking_staff_button.grid(row=4, column=2, pady=20, padx=10)
         self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
         self.horizontal_line_label.grid(row=5, column=0, columnspan=3)
@@ -271,6 +271,12 @@ class ViewBookingStaffFrame(ttk.Frame):
 
     def addSuccess(self, message):
         mb.showinfo(title="Added Booking Staff:", message="Account Info:" + str(message))
+    
+    def updateSuccess(self, message):
+        mb.showinfo(title="Booking Staff Updated:", message="Updated Info:" + str(message))
+
+    def deleteSuccess(self, message):
+        mb.showinfo(title="Booking Staff Deleted:", message="Account with details "+ str(message) + " deleted.")
 
     def searchForBookingStaff(self):
         if self.controller:
@@ -279,6 +285,14 @@ class ViewBookingStaffFrame(ttk.Frame):
     def addBookingStaff(self):
         if self.controller:
             self.controller.addBookingStaff(self.__email.get(), self.__password.get(), self.__cinemaName.get())
+
+    def updateBookingStaff(self):
+        if self.controller:
+            self.controller.updateBookingStaff(self.__email.get(), self.__password.get(), self.__cinemaName.get())
+
+    def deleteBookingStaff(self):
+        if self.controller:
+            self.controller.deleteBookingStaff(self.__email.get(), self.__password.get(), self.__cinemaName.get())
 
 class ViewAdminFrame(ttk.Frame):
     def __init__(self, container):

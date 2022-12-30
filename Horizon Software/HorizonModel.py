@@ -657,6 +657,26 @@ class ViewBookingStaffModel:
         conn.commit()
         print("Booking Staff added.")
 
+    def updateBookingStaff(self, email, password, cinemaName):
+        query = '''
+        UPDATE Users
+        SET email = ?,
+        password = ?,
+        user_cinema = ?
+        WHERE email = ?
+        '''
+        cur.execute(query, (email, password, cinemaName, email))
+        conn.commit()
+        print("Booking Staff updated.")
+    
+    def deleteBookingStaff(self, email):
+        query = '''
+        DELETE FROM Users WHERE email = ?
+        '''
+        cur.execute(query, (email,))
+        conn.commit()
+        print("Booking staff deleted.")
+
     
 class AddCinemasModel:
     def checkCities(self):
