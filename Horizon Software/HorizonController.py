@@ -68,6 +68,7 @@ class ViewFilmListingsController:
         try:
             if self.model.validateCinemaNameSyntax(cinemaName):
                 filmNames = self.model.getFilms(cinemaName)
+                print("film Names: " + str(filmNames))
                 self.view.searchSuccess('Showing films in ' + str(cinemaName)+".", filmNames)
             else:
                 self.view.searchFailed('Cinema name syntax incorrect.')
@@ -313,6 +314,7 @@ class ViewFilmController:
                 for i in range(len(filmInfo)):
                     if updateList[i] == "":
                         updateList[i] = str(filmInfo[i])
+                print(updateList)
                 if self.model.validateFilmNameSyntax(updateList[0]):
                     if self.model.validateFilmNameSyntax(updateList[1]):
                         if self.model.validateFilmNameSyntax(updateList[2]):
@@ -320,7 +322,7 @@ class ViewFilmController:
                                 if self.model.validateFilmAgeSyntax(updateList[4]):
                                     if self.model.validateFilmRatingSyntax(updateList[5]):
                                         self.model.updateFilm(filmID, updateList)
-                                        self.view.editFilmSuccess(filmID)
+                                        self.view.editFilmSuccess(filmID, filmInfo[0])
                                     else:
                                         self.view.searchFailed("Invalid Rating Syntax.")
                                 else:
@@ -335,6 +337,15 @@ class ViewFilmController:
                     self.view.searchFailed("Invalid Film Name Syntax.")
             else:
                 self.view.searchFailed("No Film With That ID")
+        except ValueError as error:
+            self.view.searchFailed(error)
+        
+    def updateScreenings(self, filmNameOld, filmName):
+        try:
+            if self.model.validateFilmNameSyntax(filmName):
+                self.model.updateScreenings(filmName, filmNameOld)
+            else:
+                self.view.searchFailed("Invalid Film Name Syntax.")
         except ValueError as error:
             self.view.searchFailed(error)
 

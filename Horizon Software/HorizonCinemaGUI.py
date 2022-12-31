@@ -546,8 +546,11 @@ class ViewFilmFrame(ttk.Frame):
         self.filmAge.set(film[5])
         self.filmRating.set(film[6])
     
-    def editFilmSuccess(self, filmID):
+    def editFilmSuccess(self, filmID, filmNameOld):
         mb.showinfo(title="Film Updated", message="Film Updated With ID: "+str(filmID)+" Successfully.")
+        if self.filmName.get() != "":
+            self.controller.updateScreenings(filmNameOld, self.filmName.get())
+
 
 class AddCinemasFrame(ttk.Frame):
     def __init__(self, container):
@@ -835,7 +838,7 @@ class ViewFilmListingsFrame(ttk.Frame):
 
     def listingsListboxFunction(self, lsiting):
         listing = self.listings_listbox.get(self.listings_listbox.curselection())
-        print(listing[0], listing[1], listing[2])
+        print(listing)
 
     def searchListings(self):
         if self.controller:
@@ -898,7 +901,7 @@ class CreateBookingFrame(ttk.Frame):
 
 
         
-        self.films = ['select movie']
+        self.films = ['select movie', 'select cinema on home page']
         self.select_film_label = ttk.Label(content, text="Select Film:")
         self.select_film_label.grid(row=0, column=0, padx=10, pady=(0, 40))
         self.select_film_combobox = ttk.Combobox(content, textvariable=self.bookingFilm)

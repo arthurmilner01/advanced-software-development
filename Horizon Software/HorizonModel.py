@@ -131,6 +131,7 @@ class ViewFilmListingsModel:
         query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
         cur.execute(query, (cinemaName,))
         films = cur.fetchall()
+        print(films)
         return films
 
     def returnScreeningsInfo(self, filmName, cinemaName):
@@ -450,7 +451,7 @@ class ViewFilmModel:
 
     def validateFilmNameSyntax(self, filmName):
         if len(filmName) > 0:
-            pattern = r'[A-Za-z0-9, ]{0,50}' #Letters/numbers and up to 50 char
+            pattern = r'[A-Za-z0-9,.\& ]{0,50}' #Letters/numbers and up to 50 char
             if re.fullmatch(pattern, filmName):
                 return 1
             else:
@@ -569,6 +570,12 @@ class ViewFilmModel:
         cur.execute(query, (filmID,))
         film = cur.fetchone()
         print("film: "+str(film))
+    
+    def updateScreenings(self, filmName, oldFilmName):
+        query = 'UPDATE FilmScreenings SET film_name = ? WHERE film_name = ?'
+        cur.execute(query, (filmName, oldFilmName))
+        print(filmName, oldFilmName)
+        conn.commit()
 
 
 class ViewBookingStaffModel:

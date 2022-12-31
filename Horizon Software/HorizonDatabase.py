@@ -93,7 +93,7 @@ VALUES ('milner@gmail.com', 'bye12', 2)
 
 cur.execute('''
 INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating)
-VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans & More', 'Superhero', 18, 7.6),
+VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans and More', 'Superhero', 18, 7.6),
 ('UP', 'balloon on the house', 'Old man and Kid and Dog', 'Family adventure', 7, 10)
 ''')
 
