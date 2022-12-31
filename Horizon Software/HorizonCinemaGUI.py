@@ -500,8 +500,6 @@ class ViewFilmFrame(ttk.Frame):
         """)
         self.text_fill_label.grid(row=11, column=0, columnspan=3)
 
-    #TODO: find a way to change all showings of a film to new name after its been updated because when 
-    #TODO: looking at viewings and booking it pulls names of film from film screenings table and not films table
 
     def searchFailed(self, message):
         mb.showinfo(title="Film Edit Page Faliure", message=message)
