@@ -296,6 +296,12 @@ class CreateBookingModel:
         cur.execute(query, (screeningID,))
         screeningScreen = cur.fetchone()
         return screeningScreen[0]
+
+    def getBookingIds(self):
+        cur.execute("SELECT bookingID FROM Bookings")
+        bookingIDs = cur.fetchall()
+        return bookingIDs
+
 class GenerateReportModel:
     def __init__(self):
         self.__reportType = ""

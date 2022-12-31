@@ -622,7 +622,6 @@ class AddCinemasFrame(ttk.Frame):
         self.add_city_button = ttk.Button(self.content, text="Add City", command=self.addCity)
         self.add_city_button.grid(row=8, column=0, columnspan=3, pady=10, padx=10)
 
-    #TODO: Add City functionality
 
     def cityEnterFunction(self, city):
         self.cities = []
@@ -746,7 +745,6 @@ class GenerateReportFrame(ttk.Frame):
             self.controller.generateReport(self.__reportType.get(), self.__reportParameter.get())
 
 
-    #TODO: make a way so that when you click on a viewing in the listBox it takes you to the CreateBooking page and auto inputs the selected viewing  
         
 class ViewFilmListingsFrame(ttk.Frame):
     def __init__(self, container):

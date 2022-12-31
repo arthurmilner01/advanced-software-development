@@ -173,8 +173,14 @@ class CreateBookingController:
                 ticketSeats = ticketSeats+"[" + str(letter)+str(number)+"]"
                 number+= 1
             bookingID = ""
-            for i in range(10):
-                bookingID = bookingID + str(random.randint(0,9))
+            match = True
+            while match == True:
+                for i in range(10):
+                    bookingID = bookingID + str(random.randint(0,9))
+                bookingIDs = self.model.getBookingIDs()
+                for ID in bookingIDs:
+                    if ID[0] != bookingID:
+                        match = False
             if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
                 screeningScreen = self.model.getScreeningScreen(screeningID)
                 self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen)
