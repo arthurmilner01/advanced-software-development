@@ -897,7 +897,6 @@ class CreateBookingFrame(ttk.Frame):
         self.price = tk.IntVar()
 
 
-        # TODO: MAKE BOOKING ID 100% UNIQUE ALL THE TIME
         
         self.films = ['select movie']
         self.select_film_label = ttk.Label(content, text="Select Film:")
