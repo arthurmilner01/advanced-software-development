@@ -156,12 +156,14 @@ class HomeFrame(ttk.Frame):
             view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
             view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
             view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
+            view_cinema_screenings_button = ttk.Button(self, command= lambda:app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
+            view_cinema_screenings_button.grid(column=1, row=3, padx=10, pady=10)
             self.current_cinema_combobox = ttk.Combobox(self, state="readonly")
             self.current_cinema_combobox['values'] = self.current_cinema_combobox_values
             self.current_cinema_combobox.bind("<Enter>", self.comboboxHoverFunction) #event <Enter> changes combobox when hovered over and not when selected
             self.current_cinema_combobox.bind("<<ComboboxSelected>>", self.selectComboboxFunction) #event <<ComboboxSelected>> does function when new value is selected
             self.current_cinema_combobox.current(0)
-            self.current_cinema_combobox.grid(column=1, row=3, padx=10, pady=20)
+            self.current_cinema_combobox.grid(column=2, row=3, padx=10, pady=20)
         if currentUser.accountType == 2:
             view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
             view_admin_button.grid(column=2, row=2, padx=10, pady=20)
