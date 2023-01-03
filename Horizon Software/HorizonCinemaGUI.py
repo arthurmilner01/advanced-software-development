@@ -678,16 +678,7 @@ class GenerateReportFrame(ttk.Frame):
         
     
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="Generate Report", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Email:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+
         self.header = ttk.Frame(self)
         self.header.grid(row=0)
         self.current_page_label = ttk.Label(self.header, text="Generate Report", font=('Helvetica bold', 20))
@@ -715,8 +706,7 @@ class GenerateReportFrame(ttk.Frame):
         self.report_information_label = ttk.Label(self.content, text="""
         Report ID 1: List of Staff and The Number of Bookings They Have Created for the Month. (Parameter = Desired Month)
         Report ID 2: Number of Bookings for a Screening. (Parameter: Screening ID)
-        Report ID 3: Total Monthly Revenue for Each Cinema. (Parameter: N/A)
-        Report ID 4: Film Generating the Most Revenue.
+        Report ID 3: Show films and the Number of Bookings. (Parameter: N/A)
         """, font=('Helvetica bold', 10))
         self.report_information_label.grid(row=1, column=0, columnspan=3, sticky=tk.N)
         self.generate_report_label = ttk.Label(self.content, text="Enter Report ID:")
@@ -732,9 +722,21 @@ class GenerateReportFrame(ttk.Frame):
         self.report_listbox = tk.Listbox(self)
         self.report_listbox.place(height=250, width=450, x=500, y=100)
 
-    def generateSuccess(self, message, reportInfo):
+    def generateSuccess(self, message, reportInfo, reportType):
         self.report_listbox.delete(0, tk.END)
         mb.showinfo(title="Report Generating:", message=message)
+        if reportType == "1":
+            pass
+        elif reportType == "2":
+            self.report2Title = "Report to Show the Number of Bookings for a Given Screening."
+            self.report2Headings = "Screening ID: Number of Bookings:"
+            self.report_listbox.insert(tk.END, self.report2Title)
+            self.report_listbox.insert(tk.END, self.report2Headings)
+        elif reportType == "3":
+            self.report3Title = "Report to Show Films and the Number of Bookings."
+            self.report3Headings = "Film Name: Number of Bookings:"
+            self.report_listbox.insert(tk.END, self.report3Title)
+            self.report_listbox.insert(tk.END, self.report3Headings)
         for row in reportInfo:
             self.report_listbox.insert(tk.END, row)
 

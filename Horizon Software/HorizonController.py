@@ -198,11 +198,12 @@ class GenerateReportController:
 
     def generateReport(self, reportType, reportParameter):
         try:
+            print(reportType, reportParameter)
             if self.model.validateReportTypeSyntax(reportType):
                 if self.model.validateReportParameterSyntax(reportType, reportParameter):
                     if self.model.checkReportReturnsInfo(reportType, reportParameter):
                         reportInfo = self.model.returnReportInfo(reportType, reportParameter)
-                        self.view.generateSuccess('Generating report', reportInfo)
+                        self.view.generateSuccess('Generating report type '+ reportType, reportInfo, reportType)
                     else:
                         self.view.generateFailed('Report did not return any results.')
                 else:
