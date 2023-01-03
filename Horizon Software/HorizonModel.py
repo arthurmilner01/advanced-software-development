@@ -1,6 +1,8 @@
 import re
 from DatabaseAccess import *
 from datetime import *
+from datetime import datetime
+import time
 
 conn = getConn()
 cur = getCursor()
@@ -939,3 +941,120 @@ class AddCinemasModel:
             return 0
 
 
+class ViewCinemaScreeningsModel:
+    def __init__(self):
+        pass
+
+    def validateTimeSyntax(self, inputTime):
+        try:
+            time.strptime(inputTime, '%H:%M')
+            return 1
+        except ValueError:
+            return 0
+        
+    def validateDateSyntax(self, inputDate):
+        try:
+            datetime.strptime(inputDate,'%d/%m/%Y').date()
+            return 1
+        except ValueError:
+            return 0
+
+    def validateCinemaNameSyntax(self, cinemaName):
+        if len(cinemaName) > 0:
+            pattern = r'[A-Za-z0-9 ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, cinemaName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0   
+
+    def validateScreensSyntax(self, screen):
+        if len(screen) > 0:
+            pattern = r'[0-9]{0,3}'
+            if re.fullmatch(pattern, screen):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+    
+    def checkScreen(self, screen, cinemaName):
+        query = "SELECT * FROM CinemaScreens WHERE cinema_screenID = ? AND cinema_name = ?"
+        cur.execute(query, (screen, cinemaName))
+        screens = cur.fetchall()
+        if len(screens) > 0:
+            return 1
+        else:
+            return 0
+    
+    def checkTimeDate(self, screen, cinemaName, time, date):
+        query = "SELECT * FROM FilmScreenings WHERE screening_screen = ? AND cinema_name = ? AND screening_time = ? AND screening_date = ?"
+        cur.execute(query, (screen, cinemaName, time, date))
+        screenings = cur.fetchall()
+        if len(screenings) > 0:
+            return 0
+        else:
+            return 1
+    
+    def validateFilmNameSyntax(self, filmName):
+        if len(filmName) > 0:
+            pattern = r'[A-Za-z0-9,.\& ]{0,50}' #Letters/numbers and up to 50 char
+            if re.fullmatch(pattern, filmName):
+                return 1
+            else:
+                return 0
+        else:
+            return 0
+        
+    def addScreening(self, time, date, screen, cinemaName, filmName, LHTickets, UHTickets, VIPTickets):
+        cur.execute("SELECT * FROM FilmScreenings")
+        screeningsBefore = cur.fetchall()
+        query = "INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name, lower_hall_tickets_left, upper_hall_tickets_left, VIP_tickets_left) VALUES (?,?,?,?,?,?,?,?)"
+        cur.execute(query, (time, date, screen, cinemaName, filmName, LHTickets, UHTickets, VIPTickets))
+        conn.commit()
+        cur.execute("SELECT * FROM FilmScreenings")
+        screeningsAfter = cur.fetchall()
+        if len(screeningsAfter) > len(screeningsBefore):
+            return 1
+        else:
+            return 0
+        
+    def checkScreeningID(self, screeningID):
+        query = "SELECT * FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        screenings = cur.fetchall()
+        if len(screenings) > 0:
+            return 1
+        else:
+            return 0
+        
+    def deleteScreening(self, screeningID):
+        cur.execute("SELECT * FROM FilmScreenings")
+        screeningsBefore = cur.fetchall()
+        query = "DELETE FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        conn.commit()
+        cur.execute("SELECT * FROM FilmScreenings")
+        screeningsAfter = cur.fetchall()
+        if len(screeningsBefore) > len(screeningsAfter):
+            return 1
+        else:
+            return 0
+    
+    def getScreening(self, screeningID):
+        query = "SELECT * FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        screening = cur.fetchone()
+        return screening
+    
+    def getScreeningInfo(self, screeningID):
+        query = "SELECT lower_hall_tickets_left, upper_hall_tickets_left, VIP_tickets_left FROM FilmScreenings WHERE screeningID = ?"
+        cur.execute(query, (screeningID,))
+        screeningInfo = cur.fetchone()
+        return screeningInfo
+    
+    def updateScreening(self, screeningID, updateList):
+        query = "UPDATE FilmScreenings SET screening_time = ?, screening_date = ?, screening_screen = ?, cinema_name = ?, film_name = ?, lower_hall_tickets_left = ?, upper_hall_tickets_left = ?, VIP_tickets_left = ? WHERE screeningID = ?"
+        cur.execute(query, (updateList[0], updateList[1], updateList[2], updateList[3], updateList[4], updateList[5], updateList[6], updateList[7], screeningID))
+        conn.commit()

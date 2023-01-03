@@ -1152,6 +1152,10 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         self.rowconfigure(1, weight=10)
         self.columnconfigure(0, weight=1)
         self.createWidgets()
+
+        self.model = ViewCinemaScreeningsModel()
+        self.view =  self
+        self.controller = ViewCinemaScreeningsController(self.model, self.view)
     
     def createWidgets(self):
         self.__createHeaderWithWidgets()
@@ -1170,8 +1174,127 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)     
+        self.screeningID = tk.StringVar()
+        self.screeningTime = tk.StringVar()
+        self.screeningDate = tk.StringVar()
+        self.screeningScreen = tk.StringVar()
+        self.cinemaName = tk.StringVar()
+        self.filmName = tk.StringVar()
+        self.LHTickets = tk.StringVar()
+        self.UHTickets = tk.StringVar()
+        self.VIPTickets = tk.StringVar()
+        self.searchID = tk.StringVar()
+        self.screeningID_label = ttk.Label(self.content, text="Screening ID:")
+        self.screeningID_label.grid(row=0, column=0, pady=10, padx=10)
+        self.screeningID_entry = ttk.Entry(self.content, textvariable=self.screeningID)
+        self.screeningID_entry.grid(row=0, column=1, columnspan=2, pady=10, padx=10)
+        self.screening_time_label = ttk.Label(self.content, text="Time:")
+        self.screening_time_label.grid(row=1, column=0, pady=10, padx=10)
+        self.screening_time_entry = ttk.Entry(self.content, textvariable=self.screeningTime)
+        self.screening_time_entry.grid(row=1, column=1, columnspan=2, pady=10, padx=10)
+        self.screening_date_label = ttk.Label(self.content, text="Date:")
+        self.screening_date_label.grid(row=2, column=0, pady=10, padx=10)
+        self.screening_date_entry = ttk.Entry(self.content, textvariable=self.screeningDate)
+        self.screening_date_entry.grid(row=2, column=1, columnspan=2, pady=10, padx=10)
+        self.screening_screen_label = ttk.Label(self.content, text="Screen:")
+        self.screening_screen_label.grid(row=3, column=0, pady=10, padx=10)
+        self.screening_screen_entry = ttk.Entry(self.content, textvariable=self.screeningScreen)
+        self.screening_screen_entry.grid(row=3, column=1, columnspan=2, pady=10, padx=10)
+        self.cinema_name_label = ttk.Label(self.content, text="Cinema Name:")
+        self.cinema_name_label.grid(row=4, column=0, pady=10, padx=10)
+        self.cinema_name_entry = ttk.Entry(self.content, textvariable=self.cinemaName)
+        self.cinema_name_entry.grid(row=4, column=1, columnspan=2, pady=10, padx=10)
+        self.film_name_label = ttk.Label(self.content, text="Film Name:")
+        self.film_name_label.grid(row=5, column=0, pady=10, padx=10)
+        self.film_name_entry = ttk.Entry(self.content, textvariable=self.filmName)
+        self.film_name_entry.grid(row=5, column=1, columnspan=2, pady=10, padx=10)
+        self.LH_tickets_label = ttk.Label(self.content, text="Lower Hall Tickets:")
+        self.LH_tickets_label.grid(row=6, column=0, pady=10, padx=10)
+        self.LH_tickets_entry = ttk.Entry(self.content, textvariable=self.LHTickets)
+        self.LH_tickets_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
+        self.UH_tickets_label = ttk.Label(self.content, text="Upper Hall Tickets:")
+        self.UH_tickets_label.grid(row=7, column=0, pady=10, padx=10)
+        self.UH_tickets_entry = ttk.Entry(self.content, textvariable=self.LHTickets)
+        self.UH_tickets_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
+        self.VIP_tickets_label = ttk.Label(self.content, text="VIP Tickets:")
+        self.VIP_tickets_label.grid(row=8, column=0, pady=10, padx=10)
+        self.VIP_tickets_entry = ttk.Entry(self.content, textvariable=self.LHTickets)
+        self.VIP_tickets_entry.grid(row=8, column=1, columnspan=2, pady=10, padx=10)
+
+        self.add_screening_button = ttk.Button(self.content, text="Add Screening", command=self.addScreening)
+        self.add_screening_button.grid(row=9, column=0, pady=20, padx=10)
+        self.edit_screening_button = ttk.Button(self.content, text="Edit Screening", command=self.editScreening)
+        self.edit_screening_button.grid(row=9, column=1, pady=20, padx=10)
+        self.remove_screening_button = ttk.Button(self.content, text="Remove Screening", command=self.deleteScreening)
+        self.remove_screening_button.grid(row=9, column=2, pady=20, padx=10)
+        self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
+        self.horizontal_line_label.grid(row=10, column=0, columnspan=3)
+        self.search_label = ttk.Label(self.content, text="Search Film Details by Title:")
+        self.search_label.grid(row=11, column=0, pady=10, padx=10)
+        self.search_ID_entry = ttk.Entry(self.content, textvariable=self.searchID)
+        self.search_ID_entry.grid(row=11, column=1, pady=20, padx=10)
+        self.search_ID_button = ttk.Button(self.content, text="Search", command=self.searchScreeningByID)
+        self.search_ID_button.grid(row=11, column=2, pady=10, padx=10)
+        self.text_fill_label = ttk.Label(self.content, text="""
+        
+
+
+
+        """)
+        self.text_fill_label.grid(row=11, column=0, columnspan=3)
+
+
+    def searchFailed(self, message):
+        mb.showinfo(title="Screening Edit Page Faliure", message=message)
+        print("Screening Edit Page faliure.")
+    
+    def addScreeningSuccess(self, filmName, time, date):
+        mb.showinfo(title="Screening Added", message= "Screening Added For Film: "+str(filmName)+" At Time: "+str(time)+" On: "+str(date)+" Successfully Added To Database.")
+
+    def addScreening(self):
+        if self.controller:
+            self.controller.addScreening(self.screeningTime.get(), self.screeningDate.get(), self.screeningScreen.get(), self.cinemaName.get(), self.filmName.get(), self.LHTickets.get(), self.UHTickets.get(), self.VIPTickets.get())
+
+    def deleteScreening(self):
+        if self.controller:
+            self.controller.deleteScreening(self.screeningID.get())
+        
+    def removeScreeningSuccess(self, screeningID):
+        mb.showinfo(title="Screening Removed", message="Screening With ID: "+str(screeningID)+" Successfully Removed")
+
+    def editScreening(self):
+        if self.controller:
+            listOfItems = []
+            listOfItems.append(self.screeningTime.get())
+            listOfItems.append(self.screeningDate.get())
+            listOfItems.append(self.screeningScreen.get())
+            listOfItems.append(self.cinemaName.get())
+            listOfItems.append(self.filmName.get())
+            listOfItems.append(self.LHTickets.get())
+            listOfItems.append(self.UHTickets.get())          
+            listOfItems.append(self.VIPTickets.get())
+            self.controller.editScreening(self.screeningID.get(), listOfItems)
+
+    def searchScreeningByID(self):
+        if self.controller:
+            self.controller.searchScreeningByID(self.searchID.get())
+
+    def screeningSearchSuccess(self, screening, screeningID):
+        mb.showinfo(title="Screening Found", message="Screening Found With ID: "+str(screeningID)+"\n"+str(screening))
+        self.screeningID.set(screening[0])
+        self.screeningTime.set(screening[1])
+        self.screeningDate.set(screening[2])
+        self.screeningScreen.set(screening[3])
+        self.cinemaName.set(screening[4])
+        self.filmName.set(screening[5])
+        self.LHTickets.set(screening[6])
+        self.UHTickets.set(screening[7])
+        self.VIPTickets.set(screening[8])
+    
+    def editScreeningSuccess(self, screeningID):
+        mb.showinfo(title="Screening Updated", message="Screening Updated With ID: "+str(screeningID)+" Successfully.")
 
 class CurrentUser:
     def __init__(self, email, accountType, accountCinema = None):

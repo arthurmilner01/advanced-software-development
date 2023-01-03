@@ -570,3 +570,111 @@ class AddCinemasController:
             self.view.searchFailed(error)
 
 
+
+class ViewCinemaScreeningsController:
+    def __init__(self, model, view):
+        self.view = view
+        self.model = model
+    
+    def addScreening(self, time, date, screen, cinemaName, filmName, LHTickets, UHTickets, VIPTickets):
+        try:
+            if self.model.validateTimeSyntax(time):
+                if self.model.validateDateSyntax(date):
+                    if self.model.validateCinemaNameSyntax(cinemaName):
+                        if self.model.validateScreensSyntax(screen):
+                            if self.model.checkScreen(screen, cinemaName):
+                                if self.model.checkTimeDate(screen, cinemaName, time, date):
+                                    if self.model.validateFilmNameSyntax(filmName):
+                                        if self.model.validateScreensSyntax(LHTickets):
+                                            if self.model.validateScreensSyntax(UHTickets):
+                                                if self.model.validateScreensSyntax(VIPTickets):
+                                                    if self.model.addScreening(time, date, screen, cinemaName, filmName, LHTickets, UHTickets, VIPTickets):
+                                                        self.view.addScreeningSuccess(filmName, time, date)
+                                                    else:
+                                                        self.view.searchFailed("Cannot Add Screening To Database.")
+                                                else:
+                                                    self.view.searchFailed("Invalid VIP Tickets Syntax.")
+                                            else:
+                                                self.view.searchFailed("Invalid Upper Hall Tickets Syntax.")     
+                                        else:
+                                            self.view.searchFailed("Invalid Lower Hall Tickets Syntax.")   
+                                    else:
+                                        self.view.searchFailed("Invalid Film Names Syntax.")
+                                else:
+                                    self.view.searchFailed("Screening already on at that time in that screen.")
+                            else:
+                                self.view.searchFailed("Cant find screen.")
+                        else:
+                            self.view.searchFailed("Invalid Screeen Syntax.")
+                    else:
+                        self.view.searchFailed("Invalid Cinema Name.")
+                else:
+                    self.view.searchFailed("Invalid Date Syntax.")
+            else:
+                self.view.searchFailed("Invalid Time Syntax.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+        
+    def deleteScreening(self, screeningID):
+        try:
+            if self.model.checkScreeningID(screeningID):
+                #deletes all films with ID filmID
+                if self.model.deleteScreening(screeningID):
+                    self.view.removeScreeningSuccess(screeningID)
+                else:
+                    self.view.searchFailed("Couldn't Delete Screening From Database.")
+            else:
+                self.view.searchFailed("No Screening With That ID.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+        
+    def searchScreeningByID(self, screeningID):
+        try:
+            if self.model.checkScreeningID(screeningID):
+                screening = self.model.getScreening(screeningID)
+                self.view.screeningSearchSuccess(screening, screeningID)
+            else:
+                self.view.searchFailed("No screening With ID: "+str(screeningID)+" In Database.")
+        except ValueError as error:
+            self.view.searchFailed(error)
+        
+    def editScreening(self, screeningID, updateList):
+        try:
+            if self.model.checkScreeningID(screeningID):
+                screeningInfo = self.model.getScreeningInfo(screeningID)
+                i=0
+                for i in range(len(screeningInfo)):
+                    if updateList[5+i] == "":
+                        updateList[5+i] = str(screeningInfo[i])
+                print(updateList)
+                if self.model.validateTimeSyntax(updateList[0]):
+                    if self.model.validateDateSyntax(updateList[1]):
+                        if self.model.validateCinemaNameSyntax(updateList[3]):
+                            if self.model.validateScreensSyntax(updateList[2]):
+                                if self.model.validateFilmNameSyntax(updateList[4]):
+                                    if self.model.validateScreensSyntax(updateList[5]):
+                                        if self.model.validateScreensSyntax(updateList[6]):
+                                            if self.model.validateScreensSyntax(updateList[7]):   
+                                                self.model.updateScreening(screeningID, updateList)
+                                                self.view.editScreeningSuccess(screeningID)
+                                            else:
+                                                self.view.searchFailed("Invalid VIP Tickets Syntax.")
+                                        else:
+                                            self.view.searchFailed("Invalid Upper Hall Tickets Syntax.")
+                                    else:
+                                        self.view.searchFailed("Invalid Lower Hall Tickets Syntax.")
+                                else:
+                                    self.view.searchFailed("Invalid Film Name Syntax.")
+                            else:
+                                self.view.searchFailed("Invalid Screen Syntax.")
+                        else:
+                            self.view.searchFailed("Invalid Cinema Name Syntax.")
+                    else:
+                        self.view.searchFailed("Invalid Date Syntax.")
+                else:
+                    self.view.searchFailed("Invalid Time Syntax.")
+            else:
+                self.view.searchFailed("No Screening With That ID")
+        except ValueError as error:
+            self.view.searchFailed(error)
+            
