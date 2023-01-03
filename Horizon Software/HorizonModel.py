@@ -310,7 +310,7 @@ class GenerateReportModel:
 
     def validateReportTypeSyntax(self, reportType):
         if len(reportType) > 0:
-            pattern = r'[1-4]' #Numbers, up to 4, increase if you wish to have more reports
+            pattern = r'[1-3]' #Numbers, up to 3, increase if you wish to have more reports
             if re.fullmatch(pattern, reportType):
                 return 1
             else:
@@ -322,18 +322,37 @@ class GenerateReportModel:
         if reportType == "3" and len(reportParameter) == 0:
             return 1
         if len(reportParameter) > 0 and reportType != "3":
-            pattern = r'[1-4]' #Numbers, up to 4, increase if you wish to have more reports
-            if re.fullmatch(pattern, reportType):
-                return 1
-            else:
-                return 0
+            if reportType == "1":
+                query = "SELECT * FROM Cinemas WHERE cinema_name = ?"
+                cur.execute(query, (reportParameter,))
+                result = cur.fetchall()
+                if len(result) > 0:
+                    return 1
+                else:
+                    return 0
+            if reportType == "2":
+                query = "SELECT * FROM FilmScreenings WHERE screeningID = ?"
+                cur.execute(query, (reportParameter,))
+                result = cur.fetchall()
+                if len(result) > 0:
+                    return 1
+                else:
+                    return 0
         else:
             return 0
 
     def checkReportReturnsInfo(self, reportType, reportParameter):
-        #TODO: Make all of these functional, maybe change reports to something easier
         if reportType == "1":
-            pass
+            print("Report type 1")
+            query = "SELECT * FROM Users WHERE user_cinema = ?"
+            cur.execute(query, (reportParameter, ))
+            result = cur.fetchall()
+            print(result)
+            if len(result) > 0:
+                print("Results found.")
+                return 1
+            else:
+                return 0
         if reportType == "2":
             #Getting all bookings for given screening ID to check if any bookings have been made
             print("Report type 2")
@@ -360,7 +379,11 @@ class GenerateReportModel:
     def returnReportInfo(self, reportType, reportParameter):
         #TODO: Make all of these functional, maybe change reports to something easier
         if reportType == "1":
-            pass
+            #Get the staff email for all staff under a given cinema name
+            query = "SELECT email, user_cinema FROM Users WHERE user_cinema = ?"
+            cur.execute(query, (reportParameter, ))
+            reportInfo = cur.fetchall()
+            return reportInfo
         if reportType == "2":
             #Getting the count of bookings under a given screening ID
             query = "SELECT screeningID, COUNT(*) FROM Bookings WHERE screeningID = ?"
@@ -368,7 +391,7 @@ class GenerateReportModel:
             reportInfo = cur.fetchall()
             return reportInfo
         if reportType == "3":
-            #Get the bookings for films
+            #Get the number of bookings for films
             query = """SELECT FilmScreenings.film_name, COUNT(Bookings.screeningID)
                         FROM FilmScreenings INNER JOIN Bookings ON Bookings.screeningID = FilmScreenings.screeningID"""
             cur.execute(query)

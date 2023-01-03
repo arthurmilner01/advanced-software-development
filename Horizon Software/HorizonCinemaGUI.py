@@ -704,7 +704,7 @@ class GenerateReportFrame(ttk.Frame):
         """)
         self.filler_label.grid(row=0, column=0)
         self.report_information_label = ttk.Label(self.content, text="""
-        Report ID 1: List of Staff and The Number of Bookings They Have Created for the Month. (Parameter = Desired Month)
+        Report ID 1: List of Staff for a Given Cinema Name. (Parameter = Cinema Name)
         Report ID 2: Number of Bookings for a Screening. (Parameter: Screening ID)
         Report ID 3: Show films and the Number of Bookings. (Parameter: N/A)
         """, font=('Helvetica bold', 10))
@@ -726,7 +726,10 @@ class GenerateReportFrame(ttk.Frame):
         self.report_listbox.delete(0, tk.END)
         mb.showinfo(title="Report Generating:", message=message)
         if reportType == "1":
-            pass
+            self.report1Title = "Report to Show the Staff for a Given Cinema Name."
+            self.report1Headings = "Staff Email: Staff Cinema:"
+            self.report_listbox.insert(tk.END, self.report1Title)
+            self.report_listbox.insert(tk.END, self.report1Headings)
         elif reportType == "2":
             self.report2Title = "Report to Show the Number of Bookings for a Given Screening."
             self.report2Headings = "Screening ID: Number of Bookings:"
