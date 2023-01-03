@@ -163,7 +163,7 @@ class HomeFrame(ttk.Frame):
             self.current_cinema_combobox.bind("<Enter>", self.comboboxHoverFunction) #event <Enter> changes combobox when hovered over and not when selected
             self.current_cinema_combobox.bind("<<ComboboxSelected>>", self.selectComboboxFunction) #event <<ComboboxSelected>> does function when new value is selected
             self.current_cinema_combobox.current(0)
-            self.current_cinema_combobox.grid(column=2, row=3, padx=10, pady=20)
+            self.current_cinema_combobox.grid(column=0, row=3, padx=10, pady=20)
         if currentUser.accountType == 2:
             view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
             view_admin_button.grid(column=2, row=2, padx=10, pady=20)
