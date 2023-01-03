@@ -377,7 +377,6 @@ class GenerateReportModel:
                 return 0
     
     def returnReportInfo(self, reportType, reportParameter):
-        #TODO: Make all of these functional, maybe change reports to something easier
         if reportType == "1":
             #Get the staff email for all staff under a given cinema name
             query = "SELECT email, user_cinema FROM Users WHERE user_cinema = ?"
