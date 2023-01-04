@@ -136,28 +136,29 @@ class HomeFrame(ttk.Frame):
         self.controller = HomeController(self.model, self.view)
 
     def createWidgets(self):
+        self.__clearWidgets()
         if currentUser.accountType == 0 or currentUser.accountType == 1 or currentUser.accountType == 2:
-            horizon_cinema_label = ttk.Label(self, text="Horizon Cinemas", font=('Helvetica bold', 15))
-            horizon_cinema_label.grid(column=0,row=1)
-            current_user_label = ttk.Label(self, text=currentUser.getEmail(), font=('Helvetica bold', 15))
-            current_user_label.grid(column=0,row=2)
-            listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Films/ Listings")
-            listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
-            create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
-            create_booking_button.grid(column=2, row=1, padx=10, pady=20)
-            cancel_booking_button = ttk.Button(self, command=lambda : app.showFrame("CancelBookingFrame"), text="Cancel Booking")
-            cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
-            logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
-            logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
+            self.horizon_cinema_label = ttk.Label(self, text="Horizon Cinemas", font=('Helvetica bold', 15))
+            self.horizon_cinema_label.grid(column=0,row=1)
+            self.current_user_label = ttk.Label(self, text=currentUser.getEmail(), font=('Helvetica bold', 15))
+            self.current_user_label.grid(column=0,row=2)
+            self.listings_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmListingsFrame"), text="View Films/ Listings")
+            self.listings_button.grid(column=1, row=1, padx=10, pady=20, sticky=tk.W)
+            self.create_booking_button = ttk.Button(self, command=lambda : app.showFrame("CreateBookingFrame"), text="Create Booking")
+            self.create_booking_button.grid(column=2, row=1, padx=10, pady=20)
+            self.cancel_booking_button = ttk.Button(self, command=lambda : app.showFrame("CancelBookingFrame"), text="Cancel Booking")
+            self.cancel_booking_button.grid(column=3, row=1, padx=10, pady=20)
+            self.logout_button = ttk.Button(self, command=lambda : app.showFrame("LoginFrame"), text="Logout")
+            self.logout_button.grid(column=3, columnspan=2, row=3, padx=10, pady=20, sticky=tk.E)
         if currentUser.accountType == 1 or currentUser.accountType == 2:
-            generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
-            generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
-            view_booking_staff_button = ttk.Button(self, command=lambda : app.showFrame("ViewBookingStaffFrame"), text="View Booking Staff")
-            view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
-            view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
-            view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
-            view_cinema_screenings_button = ttk.Button(self, command= lambda:app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
-            view_cinema_screenings_button.grid(column=1, row=3, padx=10, pady=10)
+            self.generate_report_button = ttk.Button(self, command=lambda : app.showFrame("GenerateReportFrame"), text="Generate Report")
+            self.generate_report_button.grid(column=4, row=1, padx=10, pady=20, sticky=tk.E)
+            self.view_booking_staff_button = ttk.Button(self, command=lambda : app.showFrame("ViewBookingStaffFrame"), text="View Booking Staff")
+            self.view_booking_staff_button.grid(column=1, row=2, padx=10, pady=20, sticky=tk.W)
+            self.view_film_button = ttk.Button(self, command=lambda : app.showFrame("ViewFilmFrame"), text="View Film")
+            self.view_film_button.grid(column=4, row=2, padx=10, pady=20, sticky=tk.E)
+            self.view_cinema_screenings_button = ttk.Button(self, command= lambda:app.showFrame("ViewCinemaScreeningsFrame"), text="View Cinema Screenings")
+            self.view_cinema_screenings_button.grid(column=1, row=3, padx=10, pady=10)
             self.current_cinema_combobox = ttk.Combobox(self, state="readonly")
             self.current_cinema_combobox['values'] = self.current_cinema_combobox_values
             self.current_cinema_combobox.bind("<Enter>", self.comboboxHoverFunction) #event <Enter> changes combobox when hovered over and not when selected
@@ -165,12 +166,14 @@ class HomeFrame(ttk.Frame):
             self.current_cinema_combobox.current(0)
             self.current_cinema_combobox.grid(column=0, row=3, padx=10, pady=20)
         if currentUser.accountType == 2:
-            view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
-            view_admin_button.grid(column=2, row=2, padx=10, pady=20)
-            view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
-            view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
+            self.view_admin_button = ttk.Button(self, command=lambda : app.showFrame("ViewAdminFrame"), text="View Admin Staff")
+            self.view_admin_button.grid(column=2, row=2, padx=10, pady=20)
+            self.view_cinema_button = ttk.Button(self, command=lambda : app.showFrame("AddCinemasFrame"), text="Add Cinemas/City")
+            self.view_cinema_button.grid(column=3, row=2, padx=10, pady=20)
 
-    #TODO: When logout reset Frame so doesnt show other user types buttons
+    def __clearWidgets(self):
+        for widgets in self.winfo_children():
+         widgets.destroy()
 
     def logout(self):
         currentUser.setEmail("default")
