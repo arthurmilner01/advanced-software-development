@@ -300,7 +300,7 @@ class CreateBookingModel:
         screeningScreen = cur.fetchone()
         return screeningScreen[0]
 
-    def getBookingIds(self):
+    def getBookingIDs(self):
         cur.execute("SELECT bookingID FROM Bookings")
         bookingIDs = cur.fetchall()
         return bookingIDs
