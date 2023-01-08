@@ -1234,12 +1234,12 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         self.remove_screening_button.grid(row=9, column=2, pady=20, padx=10)
         self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
         self.horizontal_line_label.grid(row=10, column=0, columnspan=3)
-        self.search_label = ttk.Label(self.content, text="Search Screening by ID")
+        self.search_label = ttk.Label(self.content, text="Search Screening by ID:")
         self.search_label.grid(row=11, column=0, pady=10, padx=10)
         self.search_ID_entry = ttk.Entry(self.content, textvariable=self.searchID)
         self.search_ID_entry.grid(row=11, column=1, pady=20, padx=10)
         self.search_ID_button = ttk.Button(self.content, text="Search", command=self.searchScreeningByID)
-        self.search_ID_button.grid(row=11, column=2, pady=10, padx=10)
+        self.search_ID_button.grid(row=11, column=2, columnspan=2, pady=10, padx=10)
         self.text_fill_label = ttk.Label(self.content, text="""
         
 
