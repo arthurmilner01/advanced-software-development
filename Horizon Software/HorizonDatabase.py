@@ -87,33 +87,38 @@ cur.execute('''
 INSERT INTO Users(email, password, user_type)
 VALUES ('henry@gmail.com', 'hello', 1)
 ''')
-
+#Insert manager account
 cur.execute('''
 INSERT INTO Users(email, password, user_type)
 VALUES ('milner@gmail.com', 'bye12', 2)
 ''')
-
+#Insert film data
 cur.execute('''
 INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating)
 VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans and More', 'Superhero', 18, 7.6),
 ('UP', 'balloon on the house', 'Old man and Kid and Dog', 'Family adventure', 7, 10)
 ''')
-
+#Insert cities
 cur.execute('''
 INSERT INTO Cities(city_name, morning_price, afternoon_price, evening_price)
 VALUES ('Bristol', 6.00, 7.00, 8.00)
 ''')
-
+#Insert cinemas
 cur.execute('''
 INSERT INTO Cinemas(cinema_name, city_name)
 VALUES ('Cabot Circus', 'Bristol')
 ''')
-
+#Create cinema screens for each cinema, up to 6
 cur.execute('''
 INSERT INTO CinemaScreens(cinema_name)
-VALUES ('Cabot Circus')
+VALUES ('Cabot Circus'),
+('Cabot Circus'),
+('Cabot Circus'),
+('Cabot Circus'),
+('Cabot Circus'),
+('Cabot Circus')
 ''')
-
+#Insert some random film screenings
 cur.execute('''
 INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name)
 VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
