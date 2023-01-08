@@ -507,8 +507,8 @@ class ViewFilmFrame(ttk.Frame):
 
 
     def searchFailed(self, message):
-        mb.showinfo(title="Film Edit Page Faliure", message=message)
-        print("Film Edit Page faliure.")
+        mb.showinfo(title="Film Edit Page Failure", message=message)
+        print("Film Edit Page failure.")
     
     def addFilmSuccess(self, filmName):
         mb.showinfo(title="Film Added", message= "Film: "+str(filmName)+" Successfully Added To Database.")
@@ -1144,8 +1144,8 @@ class CancelBookingFrame(ttk.Frame):
         app.showFrame("HomeFrame")
     
     def searchFailed(self, message):
-        mb.showinfo(title="Booking Cancelation Faliure", message=message)
-        print("booking cancelation faliure")
+        mb.showinfo(title="Booking Cancellation Failure", message=message)
+        print("booking cancellation failure")
 
 
 class ViewCinemaScreeningsFrame(ttk.Frame):
@@ -1234,7 +1234,7 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         self.remove_screening_button.grid(row=9, column=2, pady=20, padx=10)
         self.horizontal_line_label = ttk.Label(self.content, text="-------------------------------------------------------------------------------------------")
         self.horizontal_line_label.grid(row=10, column=0, columnspan=3)
-        self.search_label = ttk.Label(self.content, text="Search Film Details by Title:")
+        self.search_label = ttk.Label(self.content, text="Search Screening by ID")
         self.search_label.grid(row=11, column=0, pady=10, padx=10)
         self.search_ID_entry = ttk.Entry(self.content, textvariable=self.searchID)
         self.search_ID_entry.grid(row=11, column=1, pady=20, padx=10)
@@ -1250,8 +1250,8 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
 
 
     def searchFailed(self, message):
-        mb.showinfo(title="Screening Edit Page Faliure", message=message)
-        print("Screening Edit Page faliure.")
+        mb.showinfo(title="Screening Edit Page Failure", message=message)
+        print("Screening Edit Page failure.")
     
     def addScreeningSuccess(self, filmName, time, date):
         mb.showinfo(title="Screening Added", message= "Screening Added For Film: "+str(filmName)+" At Time: "+str(time)+" On: "+str(date)+" Successfully Added To Database.")
