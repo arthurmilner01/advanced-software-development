@@ -96,7 +96,8 @@ VALUES ('milner@gmail.com', 'bye12', 2)
 cur.execute('''
 INSERT INTO Films(film_name, film_description, film_actors, film_genre, film_age, film_rating)
 VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans and More', 'Superhero', 18, 7.6),
-('UP', 'balloon on the house', 'Old man and Kid and Dog', 'Family adventure', 7, 10)
+('UP', 'balloon on the house', 'Old man and Kid and Dog', 'Family adventure', 7, 10),
+('The Menu', 'Flim about food', 'Anya Taylor Joy, Ralph Fienes and More', 'Horror', 18, 7.2)
 ''')
 #Insert cities
 cur.execute('''
@@ -118,7 +119,7 @@ VALUES ('Cabot Circus', 'Bristol'),
 ('Stratford', 'London'),
 ('Waterloo', 'London')
 ''')
-#Create cinema screens for each cinema, up to 6
+#Create 6 cinema screens for each cinema, up to 6
 cur.execute('''
 INSERT INTO CinemaScreens(cinema_name)
 VALUES ('Cabot Circus'),
