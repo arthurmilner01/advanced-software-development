@@ -348,7 +348,7 @@ class ViewAdminFrame(ttk.Frame):
         self.admin_email_entry.grid(row=0, column=1, columnspan=2, pady=20, padx=10)
         self.password_label = ttk.Label(self.content, text="Admin Password:")
         self.password_label.grid(row=1, column=0, pady=20, padx=10)
-        self.admin_password_entry = ttk.Entry(self.content, textvariable=self.__password)
+        self.admin_password_entry = ttk.Entry(self.content, show="*", textvariable=self.__password)
         self.admin_password_entry.grid(row=1, column=1, columnspan=2, pady=20, padx=10)
         self.add_admin_button = ttk.Button(self.content, text="Add Admin", command=self.addAdmin)
         self.add_admin_button.grid(row=4, column=0, pady=20, padx=10)
