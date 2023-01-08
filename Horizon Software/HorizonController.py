@@ -450,7 +450,7 @@ class ViewAdminController:
                         accountDetails = self.model.retrieveAccountInfo(email)
                         self.view.searchSuccess(accountDetails)
                     else:
-                        self.view.searchFailed("User is not booking staff.")
+                        self.view.searchFailed("User is not admin.")
                 else:
                     self.view.searchFailed("Account not found under that email.")
             else:
