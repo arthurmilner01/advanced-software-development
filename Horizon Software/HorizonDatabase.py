@@ -101,12 +101,22 @@ VALUES ('Avengers', 'Avengers fight crime.', 'Robert Downey Jr., Chris Evans and
 #Insert cities
 cur.execute('''
 INSERT INTO Cities(city_name, morning_price, afternoon_price, evening_price)
-VALUES ('Bristol', 6.00, 7.00, 8.00)
+VALUES ('Bristol', 6.00, 7.00, 8.00),
+('Birmingham', 5.00, 6.00, 7.00),
+('Cardiff', 5.00, 6.00, 7.00),
+('London', 10.00, 11.00, 12.00)
 ''')
 #Insert cinemas
 cur.execute('''
 INSERT INTO Cinemas(cinema_name, city_name)
-VALUES ('Cabot Circus', 'Bristol')
+VALUES ('Cabot Circus', 'Bristol'),
+('Cribbs Causeway', 'Bristol'),
+('Bullring', 'Birmingham'),
+('Solihul', 'Birmingham'),
+('Canton', 'Cardiff'),
+('Cathays', 'Cardiff'),
+('Stratford', 'London'),
+('Waterloo', 'London')
 ''')
 #Create cinema screens for each cinema, up to 6
 cur.execute('''
@@ -116,13 +126,55 @@ VALUES ('Cabot Circus'),
 ('Cabot Circus'),
 ('Cabot Circus'),
 ('Cabot Circus'),
-('Cabot Circus')
+('Cabot Circus'),
+('Cribbs Causeway'),
+('Cribbs Causeway'),
+('Cribbs Causeway'),
+('Cribbs Causeway'),
+('Cribbs Causeway'),
+('Cribbs Causeway'),
+('Bullring'),
+('Bullring'),
+('Bullring'),
+('Bullring'),
+('Bullring'),
+('Bullring'),
+('Solihul'),
+('Solihul'),
+('Solihul'),
+('Solihul'),
+('Solihul'),
+('Solihul'),
+('Canton'),
+('Canton'),
+('Canton'),
+('Canton'),
+('Canton'),
+('Canton'),
+('Cathays'),
+('Cathays'),
+('Cathays'),
+('Cathays'),
+('Cathays'),
+('Cathays'),
+('Stratford'),
+('Stratford'),
+('Stratford'),
+('Stratford'),
+('Stratford'),
+('Stratford'),
+('Waterloo'),
+('Waterloo'),
+('Waterloo'),
+('Waterloo'),
+('Waterloo'),
+('Waterloo')
 ''')
 #Insert some random film screenings
 cur.execute('''
 INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name)
 VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
-('19:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
+('19:00', '20/01/2023', 13, 'Bullring', 'Avengers'),
 ('19:00', '20/01/2023', 1, 'Cabot Circus', 'UP')
 ''')
 
