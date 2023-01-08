@@ -1,3 +1,5 @@
+#Arthur Milner 21035478
+#Simply gets the database connection, same as examples given
 import sqlite3
 
 conn = sqlite3.connect('HorizonCinemaDB.db')

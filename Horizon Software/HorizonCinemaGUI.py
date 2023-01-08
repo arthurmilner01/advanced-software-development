@@ -1,3 +1,5 @@
+#Arthur Milner 21035478
+#Joseph Cauvy-Foster 21031786
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb

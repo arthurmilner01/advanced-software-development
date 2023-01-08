@@ -1,3 +1,5 @@
+#Arthur Milner 21035478
+#Joseph Cauvy-Foster 21031786
 from HorizonModel import *
 import datetime
 import random
