@@ -257,13 +257,13 @@ class CreateBookingModel:
         screeningID = cur.fetchone()
         return screeningID[0]
 
-    def createBooking(self, bookingID, seatType, seatNums, price, numOfTickets, screeningID):
+    def createBooking(self, seatType, seatNums, price, numOfTickets, screeningID):
         print("Starting process for creating the booking.")
         cur.execute("SELECT bookingID FROM Bookings")
         bookings = cur.fetchall()
-        query = '''INSERT INTO Bookings (bookingID, seat_type, seat_numbers, price, number_of_tickets, screeningID)
-        VALUES (?, ?, ? ,?, ?, ?)'''
-        cur.execute(query, (bookingID, seatType, seatNums, price, numOfTickets, screeningID))
+        query = '''INSERT INTO Bookings (seat_type, seat_numbers, price, number_of_tickets, screeningID)
+        VALUES (?, ? ,?, ?, ?)'''
+        cur.execute(query, (seatType, seatNums, price, numOfTickets, screeningID))
         cur.execute("SELECT bookingID FROM Bookings")
         bookings1 = cur.fetchall()
         if len(bookings1) - len(bookings) == 1:
@@ -307,6 +307,11 @@ class CreateBookingModel:
         cur.execute("SELECT bookingID FROM Bookings")
         bookingIDs = cur.fetchall()
         return bookingIDs
+
+    def getBookingID(self):
+        cur.execute("SELECT last_insert_rowid()")
+        bookingID = cur.fetchone()
+        return bookingID[0]
 
 class GenerateReportModel:
     def __init__(self):

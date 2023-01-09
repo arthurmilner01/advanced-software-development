@@ -172,20 +172,25 @@ class CreateBookingController:
             letter = alphabet[random.randint(0, 24)]
             number = random.randint(0,15)
             ticketSeats = ""
+            print("Giving seats to tickets")
             for ticket in range(numOfTickets):
                 ticketSeats = ticketSeats+"[" + str(letter)+str(number)+"]"
                 number+= 1
-            bookingID = ""
-            match = True
-            while match == True:
-                for i in range(10):
-                    bookingID = bookingID + str(random.randint(0,9))
-                bookingIDs = self.model.getBookingIDs()
-                for ID in bookingIDs:
-                    if ID[0] != bookingID:
-                        match = False
-            if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
+                print(ticketSeats)
+            #bookingID = ""
+            # match = True
+            # while match == True:
+            #     for i in range(10):
+            #         bookingID = bookingID + str(random.randint(0,9))
+            #     bookingIDs = self.model.getBookingIDs()
+            #     for ID in bookingIDs:
+            #         if ID[0] != bookingID:
+            #             match = False
+            #if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
+            if self.model.createBooking(seatType, ticketSeats, price, numOfTickets, screeningID):
                 screeningScreen = self.model.getScreeningScreen(screeningID)
+                bookingID = self.model.getBookingID()
+                print(bookingID)
                 self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen)
             else:
                 self.view.searchFailed("Booking unsuccessful")

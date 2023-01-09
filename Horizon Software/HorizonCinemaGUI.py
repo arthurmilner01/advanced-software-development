@@ -1071,7 +1071,9 @@ class CreateBookingFrame(ttk.Frame):
         self.checkAvailability()
     
     def createBooking(self):
+        print("Checking controller")
         if self.controller:
+            print("Controller found")
             self.controller.createBooking(self.bookingSeatType.get(), self.price, self.bookingNumOfTickets.get(), self.bookingShowing.get(), self.bookingDate.get(), self.bookingFilm.get(), currentUser.getAccountCinema())
         
     def showBooking(self, bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen):

@@ -177,7 +177,11 @@ INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cin
 VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
 ('19:00', '20/01/2023', 13, 'Bullring', 'Avengers'),
 ('19:00', '20/01/2023', 1, 'Cabot Circus', 'UP'),
-('15:00', '21/01/2023', 40, 'Stratford', 'The Menu')
+('15:00', '21/01/2023', 40, 'Stratford', 'The Menu'),
+('10:00', '20/01/2023', 33, 'Cathays', 'Avengers'),
+('10:00', '21/01/2023', 33, 'Cathays', 'Avengers'),
+('15:00', '21/01/2023', 33, 'Cathays', 'Avengers'),
+('10:00', '21/01/2023', 31, 'Cathays', 'The Menu')
 ''')
 
 
