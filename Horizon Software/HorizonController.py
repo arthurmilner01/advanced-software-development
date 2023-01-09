@@ -190,7 +190,7 @@ class CreateBookingController:
             else:
                 self.view.searchFailed("Booking unsuccessful")
         except ValueError as error:
-            pass
+            self.view.searchFailed(error)
 
 
 class GenerateReportController:
