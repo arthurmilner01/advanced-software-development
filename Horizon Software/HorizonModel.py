@@ -440,7 +440,7 @@ class CancelBookingModel():
         bookingsBefore = cur.fetchall()
         query = "DELETE FROM Bookings WHERE bookingID = ?"
         cur.execute(query, (bookingID,))
-        conn.commit
+        conn.commit()
         query = "SELECT * FROM Bookings WHERE bookingID = ?"
         cur.execute(query, (bookingID,))
         bookingsAfter = cur.fetchall()
@@ -891,15 +891,15 @@ class AddCinemasModel:
         cinemasBefore = cur.fetchall()
         query = "INSERT INTO Cinemas(city_name, cinema_name) VALUES (?,?)"
         cur.execute(query, (cityName, cinemaName))
-        # query = """INSERT INTO CinemaScreens(cinema_name)
-        #             VALUES (?),
-        #             (?),
-        #             (?),
-        #             (?),
-        #             (?),
-        #             (?)"""
-        # cur.execute(query, (cinemaName, cinemaName, cinemaName, cinemaName, cinemaName, cinemaName))
-        conn.commit
+        query = """INSERT INTO CinemaScreens(cinema_name)
+                    VALUES (?),
+                    (?),
+                    (?),
+                    (?),
+                    (?),
+                    (?)"""
+        cur.execute(query, (cinemaName, cinemaName, cinemaName, cinemaName, cinemaName, cinemaName))
+        conn.commit()
         query = "SELECT * FROM Cinemas WHERE city_name = ?"
         cur.execute(query, (cityName,))
         cinemasAfter = cur.fetchall()
