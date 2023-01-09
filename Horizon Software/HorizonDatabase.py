@@ -176,7 +176,8 @@ cur.execute('''
 INSERT INTO FilmScreenings(screening_time, screening_date, screening_screen, cinema_name, film_name)
 VALUES ('15:00', '20/01/2023', 1, 'Cabot Circus', 'Avengers'),
 ('19:00', '20/01/2023', 13, 'Bullring', 'Avengers'),
-('19:00', '20/01/2023', 1, 'Cabot Circus', 'UP')
+('19:00', '20/01/2023', 1, 'Cabot Circus', 'UP'),
+('15:00', '21/01/2023', 40, 'Stratford', 'The Menu')
 ''')
 
 
