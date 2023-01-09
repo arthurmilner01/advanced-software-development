@@ -880,20 +880,20 @@ class CreateBookingFrame(ttk.Frame):
         self.__createContentWithWidgets() 
     
     def __createHeaderWithWidgets(self):
-        header = ttk.Frame(self)
-        header.grid(row=0)
-        current_page_label = ttk.Label(header, text="Create Booking", font=('Helvetica bold', 20))
-        current_page_label.grid(row=0, column= 0, padx=50, pady=20)
-        staff_name_label = ttk.Label(header, text="Staff Email:")
-        staff_name_label.grid(row=0, column=1, padx=0, pady=20)
-        staff_cinema_label = ttk.Label(header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
-        staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
-        menu_button = ttk.Button(header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
-        menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
+        self.header = ttk.Frame(self)
+        self.header.grid(row=0)
+        self.current_page_label = ttk.Label(self.header, text="Create Booking", font=('Helvetica bold', 20))
+        self.current_page_label.grid(row=0, column= 0, padx=50, pady=20)
+        self.staff_name_label = ttk.Label(self.header, text="Staff Email:")
+        self.staff_name_label.grid(row=0, column=1, padx=0, pady=20)
+        self.staff_cinema_label = ttk.Label(self.header, text= currentUser.getEmail() + " [" + currentUser.getAccountCinema()+"]")
+        self.staff_cinema_label.grid(row=0, column=2, padx=10, pady=20)
+        self.menu_button = ttk.Button(self.header, command= lambda : app.showFrame("HomeFrame"), text="Menu")
+        self.menu_button.grid(row=0, column=3, padx=50, pady=20, sticky=tk.E)
 
     def __createContentWithWidgets(self):
-        content = ttk.Frame(self)
-        content.grid(row=1)
+        self.content = ttk.Frame(self)
+        self.content.grid(row=1)
 
         self.bookingDate = tk.StringVar()
         self.bookingFilm = tk.StringVar()
@@ -912,9 +912,9 @@ class CreateBookingFrame(ttk.Frame):
 
         
         self.films = ['select movie', 'select cinema on home page']
-        self.select_film_label = ttk.Label(content, text="Select Film:")
+        self.select_film_label = ttk.Label(self.content, text="Select Film:")
         self.select_film_label.grid(row=0, column=0, padx=10, pady=(0, 40))
-        self.select_film_combobox = ttk.Combobox(content, textvariable=self.bookingFilm)
+        self.select_film_combobox = ttk.Combobox(self.content, textvariable=self.bookingFilm)
         self.select_film_combobox.grid(row=0, column=1, padx=5, pady=(0, 40))
         self.select_film_combobox['values'] = self.films
         self.select_film_combobox['state'] = 'readonly'
@@ -923,9 +923,9 @@ class CreateBookingFrame(ttk.Frame):
         self.select_film_combobox.current(0)
 
         self.dates = ('select movie') 
-        self.select_date_label = ttk.Label(content, text="Select Date:")
+        self.select_date_label = ttk.Label(self.content, text="Select Date:")
         self.select_date_label.grid(row=0, column=2, padx=5, pady=(0, 40))
-        self.select_date_combobox = ttk.Combobox(content, textvariable=self.bookingDate)
+        self.select_date_combobox = ttk.Combobox(self.content, textvariable=self.bookingDate)
         self.select_date_combobox.grid(row=0, column=3, padx=5, pady=(0, 40))
         self.select_date_combobox['values'] = self.dates
         self.select_date_combobox['state'] = 'readonly'  
@@ -933,62 +933,62 @@ class CreateBookingFrame(ttk.Frame):
         self.select_date_combobox.current(0) 
 
         self.showings = ('select date')
-        self.select_showing_label = ttk.Label(content, text="Select Showing:")
+        self.select_showing_label = ttk.Label(self.content, text="Select Showing:")
         self.select_showing_label.grid(row=0, column=4, padx=10, pady=(0, 40))
-        self.select_showing_combobox = ttk.Combobox(content, textvariable=self.bookingShowing)
+        self.select_showing_combobox = ttk.Combobox(self.content, textvariable=self.bookingShowing)
         self.select_showing_combobox.grid(row=0, column=5, padx=5, pady=(0, 40))
         self.select_showing_combobox['values'] = self.showings
         self.select_showing_combobox['state'] = 'readonly'
         self.select_showing_combobox.current(0)
 
-        self.select_ticket_type_label = ttk.Label(content, text="Select Ticket Type:")
+        self.select_ticket_type_label = ttk.Label(self.content, text="Select Ticket Type:")
         self.select_ticket_type_label.grid(row=1, column=0, padx=5, pady=(0, 40))
-        self.lower_hall_ticket_radio_button = ttk.Radiobutton(content, text="Lower Hall", value=1, variable=self.bookingSeatType)
+        self.lower_hall_ticket_radio_button = ttk.Radiobutton(self.content, text="Lower Hall", value=1, variable=self.bookingSeatType)
         self.lower_hall_ticket_radio_button.grid(row=1, column=1, padx=5, pady=(0, 40))
-        self.upper_hall_ticket_radio_button = ttk.Radiobutton(content, text="Upper Hall", value=2, variable=self.bookingSeatType)
+        self.upper_hall_ticket_radio_button = ttk.Radiobutton(self.content, text="Upper Hall", value=2, variable=self.bookingSeatType)
         self.upper_hall_ticket_radio_button.grid(row=1, column=2, padx=5, pady=(0, 40))
-        self.VIP_ticket_radio_button = ttk.Radiobutton(content, text="VIP", value=3, variable=self.bookingSeatType)
+        self.VIP_ticket_radio_button = ttk.Radiobutton(self.content, text="VIP", value=3, variable=self.bookingSeatType)
         self.VIP_ticket_radio_button.grid(row=1, column=3, padx=5, pady=(0, 40))
 
-        self.booking_num_of_tickets_label = ttk.Label(content, text="Number of Tickets:")
+        self.booking_num_of_tickets_label = ttk.Label(self.content, text="Number of Tickets:")
         self.booking_num_of_tickets_label.grid(row=1, column=4, padx=5, pady=(0, 40))
-        self.booking_num_of_ticekts_entry = ttk.Entry(content, textvariable=self.bookingNumOfTickets)
+        self.booking_num_of_ticekts_entry = ttk.Entry(self.content, textvariable=self.bookingNumOfTickets)
         self.booking_num_of_ticekts_entry.grid(row=1, column=5, padx=5, pady=(0, 40))
 
-        self.check_availability_price_button = ttk.Button(content, text="Check Availability/Price", command=self.checkAvailabilityAndPrice)
+        self.check_availability_price_button = ttk.Button(self.content, text="Check Availability/Price", command=self.checkAvailabilityAndPrice)
         self.check_availability_price_button.grid(row=2, column=0, columnspan=6, padx=5, pady=(0, 80))
 
-        customer_name_label = ttk.Label(content, text="Customer Name:")
-        customer_name_label.grid(row=3, column=0,padx=5, pady=(0, 40))
-        customer_name_entry = ttk.Entry(content, textvariable=self.bookingCustomerName)
-        customer_name_entry.grid(row=3, column=1, padx=5, pady=(0, 40))
+        self.customer_name_label = ttk.Label(self.content, text="Customer Name:")
+        self.customer_name_label.grid(row=3, column=0,padx=5, pady=(0, 40))
+        self.customer_name_entry = ttk.Entry(self.content, textvariable=self.bookingCustomerName)
+        self.customer_name_entry.grid(row=3, column=1, padx=5, pady=(0, 40))
 
-        customer_phone_label = ttk.Label(content, text="Customer Phone:")
-        customer_phone_label.grid(row=3, column=2,padx=5, pady=(0, 40))
-        customer_phone_entry = ttk.Entry(content, textvariable=self.bookingCustomerPhone)
-        customer_phone_entry.grid(row=3, column=3, padx=5, pady=(0, 40))
+        self.customer_phone_label = ttk.Label(self.content, text="Customer Phone:")
+        self.customer_phone_label.grid(row=3, column=2,padx=5, pady=(0, 40))
+        self.customer_phone_entry = ttk.Entry(self.content, textvariable=self.bookingCustomerPhone)
+        self.customer_phone_entry.grid(row=3, column=3, padx=5, pady=(0, 40))
 
-        customer_email_label = ttk.Label(content, text="Customer Email:")
-        customer_email_label.grid(row=3, column=4, padx=5, pady=(0, 40))
-        customer_email_entry = ttk.Entry(content, textvariable=self.bookingCustomerEmail)
-        customer_email_entry.grid(row=3, column=5, padx=5, pady=(0, 40))
+        self.customer_email_label = ttk.Label(self.content, text="Customer Email:")
+        self.customer_email_label.grid(row=3, column=4, padx=5, pady=(0, 40))
+        self.customer_email_entry = ttk.Entry(self.content, textvariable=self.bookingCustomerEmail)
+        self.customer_email_entry.grid(row=3, column=5, padx=5, pady=(0, 40))
 
-        card_num_label = ttk.Label(content, text="Card #:")
-        card_num_label.grid(row=4, column=0, padx=5, pady=(0, 40))
-        card_num_entry = ttk.Entry(content, textvariable=self.bookingCardNum)
-        card_num_entry.grid(row=4, column=1, padx=5, pady=(0, 40))
+        self.card_num_label = ttk.Label(self.content, text="Card #:")
+        self.card_num_label.grid(row=4, column=0, padx=5, pady=(0, 40))
+        self.card_num_entry = ttk.Entry(self.content, textvariable=self.bookingCardNum)
+        self.card_num_entry.grid(row=4, column=1, padx=5, pady=(0, 40))
 
-        card_exp_label = ttk.Label(content, text="Card Expiry:")
-        card_exp_label.grid(row=5, column=0, padx=5, pady=(0, 40))
-        card_exp_entry = ttk.Entry(content, textvariable=self.bookingExpiry)
-        card_exp_entry.grid(row=5, column=1, padx=5, pady=(0, 40))
+        self.card_exp_label = ttk.Label(self.content, text="Card Expiry:")
+        self.card_exp_label.grid(row=5, column=0, padx=5, pady=(0, 40))
+        self.card_exp_entry = ttk.Entry(self.content, textvariable=self.bookingExpiry)
+        self.card_exp_entry.grid(row=5, column=1, padx=5, pady=(0, 40))
 
-        cvv_label = ttk.Label(content, text="CVV:")
-        cvv_label.grid(row=5, column=2, padx=5, pady=(0, 40))
-        cvv_entry = ttk.Entry(content, textvariable=self.bookingCVV)
-        cvv_entry.grid(row=5, column=3, padx=5, pady=(0, 40))
+        self.cvv_label = ttk.Label(self.content, text="CVV:")
+        self.cvv_label.grid(row=5, column=2, padx=5, pady=(0, 40))
+        self.cvv_entry = ttk.Entry(self.content, textvariable=self.bookingCVV)
+        self.cvv_entry.grid(row=5, column=3, padx=5, pady=(0, 40))
 
-        self.create_booking_button = ttk.Button(content, text="Create Booking/Get Receipt", command=self.createBooking)
+        self.create_booking_button = ttk.Button(self.content, text="Create Booking/Get Receipt", command=self.createBooking)
         self.create_booking_button.grid(row=6, column=0, columnspan=6, padx=5, pady=(0, 80))
 
         if currentUser.getAccountType() == 0:

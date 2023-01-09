@@ -258,6 +258,7 @@ class CreateBookingModel:
         return screeningID[0]
 
     def createBooking(self, bookingID, seatType, seatNums, price, numOfTickets, screeningID):
+        print("Starting process for creating the booking.")
         cur.execute("SELECT bookingID FROM Bookings")
         bookings = cur.fetchall()
         query = '''INSERT INTO Bookings (bookingID, seat_type, seat_numbers, price, number_of_tickets, screeningID)
