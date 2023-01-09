@@ -1081,6 +1081,7 @@ class CreateBookingFrame(ttk.Frame):
         Film Name = '''+str(film)+'''       \n
         Screening Date = '''+str(date)+'''   \n
         Screening Time = '''+str(time)+''' \n
+        Cinema = '''+str(cinema)+'''\n
         Screen = '''+str(screeningScreen)+'''              \n
         Number of Tickets = '''+str(numOfTickets)+''' \n
         Seat Numbers = '''+str(ticketSeats)+''' \n
