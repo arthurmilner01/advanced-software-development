@@ -165,35 +165,41 @@ class CreateBookingController:
         except ValueError as error:
             pass
     
-    def createBooking(self, seatType, price, numOfTickets, time, date, film, cinema):
+    def createBooking(self, seatType, price, numOfTickets, time, date, film, cinema, customerName, customerPhone, customerEmail, bookingCardNum, bookingExpiry, bookingCVV):
         try:
-            screeningID = self.model.getScreeningID(time, date, film, cinema)
-            alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-            letter = alphabet[random.randint(0, 24)]
-            number = random.randint(0,15)
-            ticketSeats = ""
-            print("Giving seats to tickets")
-            for ticket in range(numOfTickets):
-                ticketSeats = ticketSeats+"[" + str(letter)+str(number)+"]"
-                number+= 1
-                print(ticketSeats)
-            #bookingID = ""
-            # match = True
-            # while match == True:
-            #     for i in range(10):
-            #         bookingID = bookingID + str(random.randint(0,9))
-            #     bookingIDs = self.model.getBookingIDs()
-            #     for ID in bookingIDs:
-            #         if ID[0] != bookingID:
-            #             match = False
-            #if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
-            if self.model.createBooking(seatType, ticketSeats, price, numOfTickets, screeningID):
-                screeningScreen = self.model.getScreeningScreen(screeningID)
-                bookingID = self.model.getBookingID()
-                print(bookingID)
-                self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen)
+            if self.model.validateCustomerDetails(customerName, customerPhone, customerEmail, bookingCardNum, bookingExpiry, bookingCVV):
+                screeningID = self.model.getScreeningID(time, date, film, cinema)
+                if screeningID == 0:
+                    self.view.searchFailed("Booking unsuccessful.")
+                else:
+                    alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+                    letter = alphabet[random.randint(0, 24)]
+                    number = random.randint(0,15)
+                    ticketSeats = ""
+                    print("Giving seats to tickets")
+                    for ticket in range(numOfTickets):
+                        ticketSeats = ticketSeats+"[" + str(letter)+str(number)+"]"
+                        number+= 1
+                        print(ticketSeats)
+                    #bookingID = ""
+                    # match = True
+                    # while match == True:
+                    #     for i in range(10):
+                    #         bookingID = bookingID + str(random.randint(0,9))
+                    #     bookingIDs = self.model.getBookingIDs()
+                    #     for ID in bookingIDs:
+                    #         if ID[0] != bookingID:
+                    #             match = False
+                    #if self.model.createBooking(int(bookingID), seatType, ticketSeats, price, numOfTickets, screeningID):
+                    if self.model.createBooking(seatType, ticketSeats, price, numOfTickets, screeningID):
+                        screeningScreen = self.model.getScreeningScreen(screeningID)
+                        bookingID = self.model.getBookingID()
+                        print(bookingID)
+                        self.view.showBooking(bookingID, ticketSeats, price, numOfTickets, time, date, film, cinema, screeningScreen)
+                    else:
+                        self.view.searchFailed("Booking unsuccessful.")
             else:
-                self.view.searchFailed("Booking unsuccessful")
+                self.view.searchFailed("Customer details incorrect.")
         except ValueError as error:
             self.view.searchFailed(error)
 

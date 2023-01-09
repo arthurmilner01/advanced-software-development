@@ -172,6 +172,45 @@ class CreateBookingModel:
                 return 0
         else:
             return 0
+
+    def validateCustomerDetails(self, customerName, customerPhone, customerEmail, bookingCardNum, bookingExpiry, bookingCVV):
+        customerPhone = str(customerPhone)
+        bookingCardNum = str(bookingCardNum)
+        bookingExpiry = str(bookingExpiry)
+        bookingCVV = str(bookingCVV)
+        if len(customerName) > 0 and len(customerPhone) > 0 and len(customerEmail) > 0 and len(bookingCardNum) > 0 and len(bookingExpiry) > 0 and len(bookingCVV) > 0:
+            print("No customer fields blank")
+            namePattern = r'[A-za-z ]{0,100}' #Letters and spaces up to 100 char
+            phonePattern = r'[0-9]{11}' #Numbers length of 11
+            emailPattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b' #Making sure its email
+            cardNumPattern = r'[0-9]{10,16}' #Numbers length of 16
+            expiryPattern = r'(0[1-9]|1[0-2])\/[0-9]{2}$' #0 and 1-9 or 10 11 or 12 / 0-9 twice
+            cvvPattern = r'[0-9]{3}' #Numbers length of 3
+            if re.fullmatch(namePattern, customerName):
+                print("Customer name correct.")
+                if re.fullmatch(phonePattern, customerPhone):
+                    print("Customer phone correct.")
+                    if re.fullmatch(emailPattern, customerEmail):
+                        print("Customer email correct.")
+                        if re.fullmatch(cardNumPattern, bookingCardNum):
+                            print("Card number correct.")
+                            if re.fullmatch(expiryPattern, bookingExpiry):
+                                print("Expiry correct.")
+                                if re.fullmatch(cvvPattern, bookingCVV):
+                                    print("CVV correct.")
+                                    return 1
+                                else:
+                                    return 0
+                            else:
+                                return 0
+                        else:
+                            return 0
+                    else:
+                        return 0
+                else:
+                    return 0
+            else:
+                return 0
    
     def checkForFilms(self, cinemaName):
         query = 'SELECT DISTINCT film_name FROM FilmScreenings WHERE cinema_name = ?'
@@ -255,7 +294,10 @@ class CreateBookingModel:
         query = 'SELECT screeningID FROM FilmScreenings WHERE screening_time = ? AND screening_date = ? AND film_name = ? AND cinema_name = ?'
         cur.execute(query, (time, date, name, cinema))
         screeningID = cur.fetchone()
-        return screeningID[0]
+        if screeningID != None:
+            return screeningID[0]
+        else:
+            return 0
 
     def createBooking(self, seatType, seatNums, price, numOfTickets, screeningID):
         print("Starting process for creating the booking.")
