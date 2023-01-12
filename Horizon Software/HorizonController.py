@@ -235,23 +235,21 @@ class CancelBookingController():
     
     def cancelBooking(self, bookingID):
         try:
-            if len(bookingID) == 10:
-                if self.model.checkBookingID(bookingID):
-                    bookingInfo = self.model.getBooking(bookingID)
-                    if self.model.checkCancelTime(bookingInfo[5]):                        
-                        if self.model.removeBooking(bookingID):
-                            if self.model.updateTickets(bookingInfo[4], bookingInfo[1], bookingInfo[5]):
-                                self.view.cancelSuccess("Cancel success for booking ID: "+str(bookingID)+".")
-                            else:
-                                self.view.searchFailed("Screening tickets remaining couldnt be updated.")
+
+            if self.model.checkBookingID(bookingID):
+                bookingInfo = self.model.getBooking(bookingID)
+                if self.model.checkCancelTime(bookingInfo[5]):                        
+                    if self.model.removeBooking(bookingID):
+                        if self.model.updateTickets(bookingInfo[4], bookingInfo[1], bookingInfo[5]):
+                            self.view.cancelSuccess("Cancel success for booking ID: "+str(bookingID)+".")
                         else:
-                            self.view.searchFailed("Booking could not be removed from database.")
+                            self.view.searchFailed("Screening tickets remaining couldnt be updated.")
                     else:
-                        self.view.searchFailed("Booking can't be canceled less that a day before showing.")
+                        self.view.searchFailed("Booking could not be removed from database.")
                 else:
-                    self.view.searchFailed("No booking connected to that booking ID.")
+                    self.view.searchFailed("Booking can't be canceled less that a day before showing.")
             else:
-                self.view.searchFailed("Booking ID not correct.")
+                self.view.searchFailed("No booking connected to that booking ID.")
         except ValueError as error:
             pass
 

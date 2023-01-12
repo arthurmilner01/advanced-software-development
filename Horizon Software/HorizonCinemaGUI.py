@@ -1224,11 +1224,11 @@ class ViewCinemaScreeningsFrame(ttk.Frame):
         self.LH_tickets_entry.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
         self.UH_tickets_label = ttk.Label(self.content, text="Upper Hall Tickets:")
         self.UH_tickets_label.grid(row=7, column=0, pady=10, padx=10)
-        self.UH_tickets_entry = ttk.Entry(self.content, textvariable=self.LHTickets)
+        self.UH_tickets_entry = ttk.Entry(self.content, textvariable=self.UHTickets)
         self.UH_tickets_entry.grid(row=7, column=1, columnspan=2, pady=10, padx=10)
         self.VIP_tickets_label = ttk.Label(self.content, text="VIP Tickets:")
         self.VIP_tickets_label.grid(row=8, column=0, pady=10, padx=10)
-        self.VIP_tickets_entry = ttk.Entry(self.content, textvariable=self.LHTickets)
+        self.VIP_tickets_entry = ttk.Entry(self.content, textvariable=self.VIPTickets)
         self.VIP_tickets_entry.grid(row=8, column=1, columnspan=2, pady=10, padx=10)
 
         self.add_screening_button = ttk.Button(self.content, text="Add Screening", command=self.addScreening)
