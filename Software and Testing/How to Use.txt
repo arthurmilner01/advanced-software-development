@@ -1,0 +1,9 @@
+No additional python packages needed
+Run the HorizonDatabase.py file to set up the database
+You can now run the HorizonCinemaGUI file and the software should run
+Default users are:
+BOOKING STAFF: email: arthur@gmail.com password: 12345
+ADMIN: email: henry@gmail.com password: hello
+MANAGER: email: milner@gmail.com password: bye12
+Some films should be inserted upon running the DB
+Cinema/Cities are also added
